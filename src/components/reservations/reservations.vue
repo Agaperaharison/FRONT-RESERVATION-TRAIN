@@ -30,6 +30,7 @@ export default {
             id_res: '',
             unpaid: 0,
             paid_update: 0,
+            price: 0,
         }
     },
     created() {
@@ -56,6 +57,9 @@ export default {
                 icon: icon,
                 confirmButtonText: btn
             });
+        },
+        getPrice(prix){
+            this.price = prix
         },
         async getReservations() {
             try {
@@ -110,6 +114,7 @@ export default {
             try {
                 const response = await axios.get('/trips/get-all-trips', { withCredentials: true, });
                 this.trips = response.data.data;
+                console.log(response.data.data);
             } catch (err) {
                 console.log(err.message)
             }
@@ -246,6 +251,7 @@ export default {
                         this.paid_update = '';
                         this.unpaid = '';
                         this.id_res = '';
+                        this.openModal3 = false;
                     } else {
                         this.fireToast('ERROR!', response.data.data.message, 'error', 'ok');
                     }
@@ -462,7 +468,7 @@ export default {
                             <select v-model="trip_id" id="trip_id">
                                 <option value="">Select a trip</option>
                                 <option v-if="trips.length > 0" v-for="trip in trips" :key="trip.id" :value="trip.id">{{
-                                    trip.from[0].localisation_city }} to {{ trip.to[0].localisation_city }}</option>
+                                    trip.from[0].localisation_city }} to {{ trip.to[0].localisation_city }} ( {{ this.formattedDate(trip.departure_date) }} )</option>
                                 <option v-else>emplty</option>
                             </select>
                         </div>
@@ -538,7 +544,9 @@ export default {
 #foot {
     margin-bottom: 2rem;
 }
-
+#modal form h3 {
+    margin-bottom: 1rem;
+}
 .form-group button {
     position: absolute;
     right: 0;

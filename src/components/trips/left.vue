@@ -737,7 +737,7 @@ button.submit {
 .list-trips {
     width: 100%;
     background: var(--color-white);
-    max-height: 74vh;
+    max-height: 76vh;
     overflow: hidden;
     padding-bottom: 1.5rem;
 }

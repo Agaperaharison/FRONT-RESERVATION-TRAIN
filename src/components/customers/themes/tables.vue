@@ -115,6 +115,7 @@ export default {
             }
         },
         filterClientById(id) {
+            this.infoNavActive = 'all'
             const client = this.clients_lists.filter(user => user.id === id);
             this.info_user = client;
             this.info_reservations_principal = this.info_user[0].reservations
@@ -505,7 +506,7 @@ export default {
 }
 
 .info-reservation .container-table {
-    max-height: 350px;
+    max-height: 400px;
     overflow-y: overlay;
 }
 
@@ -722,8 +723,11 @@ nav .count span:nth-child(1) {
     margin-top: 1rem;
     padding-bottom: 1rem;
     width: 100%;
-    max-height: 85vh;
-    overflow-y: auto;
+    max-height: 75vh;
+    overflow: hidden;
+}
+.table-customers:hover {
+    overflow-y: overlay;
 }
 
 .table-customers:hover {

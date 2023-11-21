@@ -15,9 +15,9 @@ export default {
     methods: {
         async getAllSales() {
             try {
-                const response = await axios.get(`/reservations/get-sales/limite/30`, { withCredentials: true, });
+                const response = await axios.get(`/reservations/get-sales/limite/25`, { withCredentials: true, });
                 this.allSales = response.data.data;
-                this.items = 30 - response.data.data.length;
+                this.items = 25 - response.data.data.length;
                 const highestTotalAmount = response.data.data.reduce((maxTotalAmount, currentItem) => {
                     return Math.max(maxTotalAmount, currentItem.totalAmount);
                 }, 0);
@@ -33,7 +33,7 @@ export default {
 <template>
     <div class="charts">
         <div class="head">
-            <h2><i class="ri-bar-chart-grouped-fill"></i> Bar chart group</h2>
+            <h2><i class="ri-bar-chart-grouped-fill"></i> Graph representing the last 30 days of activity.</h2>
             <div class="legende">
                 <h3>
                     <i class="ri-stop-mini-fill"></i>
@@ -126,7 +126,7 @@ h3:nth-child(3) {
 .container-chart {
     display: grid;
     gap: 10px;
-    grid-template-columns: repeat(30, 1fr);
+    grid-template-columns: repeat(25, 1fr);
     height: calc(100% - 4rem);
 }
 

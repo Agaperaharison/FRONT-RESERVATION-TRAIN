@@ -38,22 +38,22 @@ export default {
                     nationality: this.nationality,
 
                 }, { withCredentials: true, });
+                console.log(response.data.data)
                 if (response.data.status) {
                     this.fireToast("Success", response.data.data.message, 'success', 'ok')
                     this.nationality = ''
                     this.first_name = ''
                     this.last_name = ''
                     this.email = ''
-                    this.phone_number = ''
-                    //this.sexe= '',
-                    this.date_of_birth = ''
+                    this.phone_number = '';
+                    this.sexe = this.sexe;
+                    this.date_of_birth = '';
                     this.domicile = ''
                     this.city = ''
                     this.code = ''
                 } else {
                     this.fireToast("ERROR!", response.data.data.message, 'error', 'ok')
                 }
-
             } catch (err) {
                 console.log(err.message)
             }
@@ -68,6 +68,9 @@ export default {
             }
             numero = numero.replace(/(\+\d{3})(\d{2})(\d{2})(\d{3})(\d{2})/, '$1 $2 $3 $4 $5');
             return numero;
+        },
+        selectOption(option) {
+            this.sexe = option
         }
 
     }
@@ -110,12 +113,12 @@ export default {
                             <label for="">Sexe</label>
                             <div class="input-radio">
                                 <div class="homme">
-                                    <input type="radio" name="sexe" id="homme" value="homme">
-                                    <label for="homme">homme</label>
+                                    <p for="homme" id="sexeee" :class="{ selected: this.sexe === 'homme' }"
+                                        @click="selectOption('homme')">homme</p>
                                 </div>
                                 <div class="homme">
-                                    <input type="radio" name="sexe" id="femme" value="femme">
-                                    <label for="femme">femme</label>
+                                    <p for="femme" id="sexeee" :class="{ selected: this.sexe === 'femme' }"
+                                        @click="selectOption('femme')">femme</p>
                                 </div>
                             </div>
                         </div>
@@ -144,8 +147,24 @@ export default {
 </template>
 
 <style scoped>
+.input-radio p {
+    font-size: 1.1rem;
+}
+
 .container {
     width: 100%;
+}
+
+#sexeee.selected {
+    background: var(--color-light);
+    color: var(--color-primary);
+}
+
+#sexeee {
+    margin-top: 1rem;
+    padding: 3px 1rem;
+    border-radius: 50rem;
+    font-weight: 600;
 }
 
 .return {
@@ -200,7 +219,8 @@ h1 {
 .form-group label {
     font-size: 1.2rem;
     font-weight: 500;
-    color: var(--color-dark);
+    cursor: pointer;
+    transition: all .3s ease;
 }
 
 input[type="text"],
@@ -219,7 +239,6 @@ input[type="number"] {
     display: flex;
     gap: 10px;
     align-items: center;
-    margin-bottom: 19px;
 }
 
 .input-radio input {

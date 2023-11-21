@@ -26,13 +26,8 @@ export default {
                 if (response.data.status && response.data.data.role === "ADMIN") {
                     this.$router.push('/admin-page/dashboard');
                     this.email = '';
-                    this.password = '';
-                /* } else if (response.data.status && response.data.data.role === "CLIENT") {
-                    this.$router.push('/client-page/home-page');
-                    this.email = '';
-                    this.password = ''; */
                 } else {
-                    this.fireToast('ERROR!', response.data.message, 'error', 'ok')
+                    this.password = '';
                 }
             } catch (err) {
                 console.log(err.message)

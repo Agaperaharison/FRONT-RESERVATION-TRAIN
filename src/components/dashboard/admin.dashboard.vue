@@ -77,7 +77,8 @@ export default {
         async customers_count() {
             try {
                 const response = await axios.get('/users/count-users', { withCredentials: true, });
-                this.total_customers = response.data.data.total;
+                console.log(response.data.data)
+                this.total_customers = response.data.data.total_invalid;
                 this.valid_customer = response.data.data.total_valid;
             } catch (err) {
                 console.log(err.message)

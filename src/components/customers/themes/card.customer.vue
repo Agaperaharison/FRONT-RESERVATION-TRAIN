@@ -11,10 +11,10 @@ export default {
                 <img src="../../../assets/imgs/pexels-mtcd-5588646.jpg" alt="">
             </div>
             <div class="activity">
-                <div class="info-activity">
+                <!-- <div class="info-activity">
                     <h3>Old</h3>
                     <h2>{{ old }}</h2>
-                </div>
+                </div> -->
                 <div class="info-activity">
                     <h3>Tâches</h3>
                     <h2>{{ tache }}</h2>
@@ -29,10 +29,10 @@ export default {
             <h3>{{ last_name }}</h3>
             <p>{{ email }}</p>
         </div>
-        <div class="card-footer">
+        <!-- <div class="card-footer">
             <button>Message</button>
             <button>More info</button>
-        </div>
+        </div> -->
     </div>
 </template>
 
@@ -75,6 +75,7 @@ export default {
 .card-header .activity {
     width: 100%;
     display: grid;
+    gap: 1rem;
     grid-template-columns: 1fr 1fr 2fr;
     align-items: center;
 }

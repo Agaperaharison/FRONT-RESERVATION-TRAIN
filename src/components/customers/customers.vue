@@ -43,12 +43,12 @@ export default {
                                 <span>Clients</span>
                             </li>
                         </router-link>
-                        <router-link to="/admin-page/customers/agents">
+                        <!-- <router-link to="/admin-page/customers/agents">
                             <li :class="{ active: $route.path === '/admin-page/customers/agents' }">
                                 <i class="ri-customer-service-2-line"></i>
                                 <span>Agents</span>
                             </li>
-                        </router-link>
+                        </router-link> -->
                     </ul>
                 </div>
             </div>
@@ -58,9 +58,13 @@ export default {
 </template>
 
 <style scoped>
+.main {
+    overflow: hidden;
+}
 .container h1:nth-child(1) {
     margin-top: .6rem;
     text-transform: uppercase;
+    overflow: hidden;
 }
 
 .header {

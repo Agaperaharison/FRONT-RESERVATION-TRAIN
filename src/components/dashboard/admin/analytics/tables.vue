@@ -90,11 +90,12 @@ export default {
     border-radius: 10px;
     box-shadow: var(--box-shadow);
     transition: all 0.3s ease;
-    overflow-y: auto;
+    overflow: hidden;
 }
 
 .table-analytiques:hover {
     box-shadow: none;
+    overflow-y: overlay;
 }
 
 table {
@@ -123,7 +124,7 @@ tr:nth-child(2) th {
 }
 
 td {
-    height: 3rem;
+    height: 3.3rem;
     border-bottom: 1px solid var(--color-light);
     color: var(--color-dark);
     font-size: 1rem;
