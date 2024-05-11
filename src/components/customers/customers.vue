@@ -8,16 +8,16 @@
             <h1>Custommers lists</h1>
             <div class="liste-style">
                 <ul>
-                    <router-link to="/admin-page/customers">
-                        <li :class="{ active : $route.path === '/admin-page/customers' }">
-                            <i class="ri-table-line"></i>
-                            <span>table</span>
+                    <router-link to="/admin-page/customers/clients">
+                        <li :class="{ active : $route.path === '/admin-page/customers/clients' }">
+                            <i class="ri-team-line"></i>
+                            <span>Clients</span>
                         </li>
                     </router-link>
-                    <router-link to="/admin-page/customers/ ">
-                        <li :class="{ active : $route.path === '/admin-page/customers/ ' }">
-                            <i class="ri-function-line"></i>
-                            <span>Grid</span>
+                    <router-link to="/admin-page/customers/agents">
+                        <li :class="{ active : $route.path === '/admin-page/customers/agents' }">
+                            <i class="ri-customer-service-2-line"></i>
+                            <span>Agents</span>
                         </li>
                     </router-link>
                 </ul>
@@ -39,7 +39,7 @@
     justify-content: space-between;
     padding-bottom: 1rem;
     margin-bottom: 1rem;
-    border-bottom: 2px solid var(--color-info-dark);
+    /* border-bottom: 2px solid var(--color-info-dark); */
 }
 
 .liste-style ul {

@@ -37,8 +37,8 @@ const routes = [
             { 
                 path: 'customers', component: customers,
                 children: [
-                    { path: '', component: styleTable },
-                    { path: ' ', component: styleGrid },
+                    { path: 'clients', component: styleTable },
+                    { path: 'agents', component: styleGrid },
                 ]
             },
             { path: 'customers/more-info', component: moreInfo },

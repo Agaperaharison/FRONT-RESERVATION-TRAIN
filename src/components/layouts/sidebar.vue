@@ -77,20 +77,20 @@ export default {
                 </router-link>
                 <span class="tooltip">Dashboard</span>
             </li>
-            <li :class="{ active : $route.path === '/admin-page/customers' || $route.path === '/admin-page/customers/ ' || $route.path === '/admin-page/customers/more-info' }">
-                <router-link to="/admin-page/customers">
+            <li :class="{ active : $route.path === '/admin-page/customers/clients' || $route.path === '/admin-page/customers/agents' || $route.path === '/admin-page/customers/more-info' }">
+                <router-link to="/admin-page/customers/clients">
                     <i class="ri-team-line"></i>
                     <span class="link_name">Customers</span>
                 </router-link>
                 <span class="tooltip">Customers</span>
             </li>
-            <li :class="{ active : $route.path === '/admin-page/analytiques' }">
+            <!-- <li :class="{ active : $route.path === '/admin-page/analytiques' }">
                 <router-link to="/admin-page/analytiques">
                     <i class="ri-pie-chart-line"></i>
                     <span class="link_name">Analytiques</span>
                 </router-link>
                 <span class="tooltip">Analytiques</span>
-            </li>
+            </li> -->
             <li :class="{ active : $route.path === '/admin-page/trips' }">
                 <router-link to="/admin-page/trips">
                     <i class="ri-map-pin-line"></i>
@@ -220,7 +220,7 @@ export default {
 }
 
 #sidebar i {
-    color: var(--color-info-dark);
+    color: var(--color-dark);
     height: 60px;
     line-height: 60px;
     min-width: 50px;
@@ -238,6 +238,7 @@ export default {
     margin: 8px 0;
     list-style: none;
     height: 45px;
+    transition: all .3s ease;
 }
 
 #sidebar li .tooltip {
@@ -287,7 +288,7 @@ export default {
 }
 
 #sidebar li a .link_name {
-    color: var(--color-info-dark);
+    color: var(--color-dark);
     font-size: 1.1rem;
     font-weight: 600;
     white-space: nowrap;
@@ -472,8 +473,8 @@ export default {
     height: 22px;
     width: 44px;
     border-radius: 25px;
-    border: 1px solid var(--color-info-dark);
-    background: var(--color-info-light);
+    background: var(--color-white);
+    border: 2px solid var(--color-info-dark);
 }
 
 .switch::before {
@@ -491,10 +492,11 @@ export default {
 
 .mode.dark .toggle-switch .switch {
     background: var(--color-primary);
+    border: 2px solid var(--color-dark);
 }
 
 .mode.dark .switch::before {
-    background: var(--color-white);
-    left: 25px;
+    background: var(--color-dark);
+    left: 21px;
 }
 </style>

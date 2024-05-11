@@ -22,6 +22,7 @@
     --card-padding: 1.8rem;
     --padding-1: 1.2rem;
     --box-shadow: 0 2rem 3rem var(--color-light);
+    --color-item-sidebar: #1b1b1b00;
 }
 .dark-theme-variables {
     --color-background: #181a1e;
@@ -34,4 +35,5 @@
     --box-shadow: 0 2rem 3rem var(--color-light);
     --color-primary-variant: #49dbff;
     --color-nav: #333;
+    --color-item-sidebar: #ececec00;
 }
