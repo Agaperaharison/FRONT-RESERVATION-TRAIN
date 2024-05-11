@@ -100,6 +100,7 @@ nav .count span {
 nav .count span:nth-child(1) {
     color: var(--color-info-dark);
 }
+
 .menu {
     display: flex;
     align-items: center;
@@ -108,8 +109,8 @@ nav .count span:nth-child(1) {
 
 .cards {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 3rem;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
     margin-top: .6rem;
     max-height: 80vh;
     overflow-y: auto;
