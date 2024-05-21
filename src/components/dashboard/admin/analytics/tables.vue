@@ -1,0 +1,203 @@
+<script>
+
+</script>
+
+<template>
+    <div class="table-analytiques">
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="2">#</th>
+                    <th rowspan="2">Train design</th>
+                    <th rowspan="2">Departure date & time</th>
+                    <th rowspan="2">Departure</th>
+                    <th rowspan="2">Destination</th>
+                    <th rowspan="1" colspan="3">Seats</th>
+                    <th rowspan="2">%</th>
+                    <th rowspan="2">Status</th>
+                </tr>
+                <tr>
+                    <th>Total</th>
+                    <th>available</th>
+                    <th>unavailable</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Train Turbo</td>
+                    <td>24 Mey 2024 à 05:30</td>
+                    <td>Fianarantsoa</td>
+                    <td>Manakara</td>
+                    <td>120</td>
+                    <td>56</td>
+                    <td>64</td>
+                    <td>65% <i class="ri-arrow-up-fill"></i></td>
+                    <td><span class="pending">pending</span></td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Train Turbo</td>
+                    <td>24 Mey 2024 à 05:30</td>
+                    <td>Fianarantsoa</td>
+                    <td>Manakara</td>
+                    <td>120</td>
+                    <td>56</td>
+                    <td>64</td>
+                    <td>45% <i class="ri-arrow-down-fill"></i></td>
+                    <td><span class="pending">pending</span></td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Train Turbo</td>
+                    <td>24 Mey 2024 à 05:30</td>
+                    <td>Fianarantsoa</td>
+                    <td>Manakara</td>
+                    <td>120</td>
+                    <td>56</td>
+                    <td>64</td>
+                    <td>65% <i class="ri-arrow-up-fill"></i></td>
+                    <td><span class="pending">pending</span></td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Train Turbo</td>
+                    <td>24 Mey 2024 à 05:30</td>
+                    <td>Fianarantsoa</td>
+                    <td>Manakara</td>
+                    <td>120</td>
+                    <td>56</td>
+                    <td>64</td>
+                    <td>65% <i class="ri-arrow-up-fill"></i></td>
+                    <td><span class="unavailable">unavailable</span></td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Train Turbo</td>
+                    <td>24 Mey 2024 à 05:30</td>
+                    <td>Fianarantsoa</td>
+                    <td>Manakara</td>
+                    <td>120</td>
+                    <td>56</td>
+                    <td>64</td>
+                    <td>45% <i class="ri-arrow-down-fill"></i></td>
+                    <td><span class="unavailable">unavailable</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</template>
+
+<style scoped>
+.table-analytiques {
+    background: var(--color-white);
+    margin-top: 1rem;
+    padding-bottom: 1rem;
+    width: 100%;
+    max-height: 300px;
+    border-radius: 10px;
+    box-shadow: var(--box-shadow);
+    transition: all 0.3s ease;
+    overflow-y: auto;
+}
+
+table {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+table {
+    box-shadow: none;
+}
+
+thead {
+    position: sticky;
+    top: 0;
+    border-bottom: 1px solid var(--color-dark);
+    background: var(--color-white);
+}
+
+th {
+    font-size: 1.1rem;
+}
+
+tr:nth-child(1) th {
+    padding: 10px 0 0 0;
+}
+
+tr:nth-child(2) th {
+    padding: 10px 0;
+}
+
+td {
+    height: 3rem;
+    border-bottom: 1px solid var(--color-light);
+    color: var(--color-dark);
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+th:first-child,
+td:first-child {
+    padding-left: 1rem;
+}
+
+tr:last-child td {
+    border: none;
+}
+
+td:nth-child(2),
+td:nth-child(6) {
+    font-weight: 600;
+}
+
+td:nth-child(7) {
+    font-weight: 600;
+    color: var(--color-primary-variant);
+}
+
+td:nth-child(8) {
+    font-weight: 600;
+    color: var(--color-info-dark);
+}
+
+td span {
+    padding: 0.3rem 1rem;
+    color: var(--color-white);
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+.pending {
+    background: var(--color-primary-variant);
+}
+
+.unavailable {
+    background: var(--color-info-dark);
+    color: #fff;
+}
+
+td.disabled {
+    height: 75px;
+    font-size: 1.3rem;
+    color: var(--color-info-dark);
+}
+
+.recent-Reservations a {
+    text-align: center;
+    display: block;
+    margin: 1rem auto;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+.ri-arrow-up-fill {
+    color: var(--color-success);
+}
+
+.ri-arrow-down-fill {
+    color: var(--color-danger);
+}
+</style>

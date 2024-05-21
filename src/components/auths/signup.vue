@@ -1,0 +1,153 @@
+<script>
+export default {
+
+}
+</script>
+
+<template>
+    <div class="container">
+        <div class="main">
+            <div class="header">
+                <h2>Sign Up</h2>
+                <p>Contact us and get more info</p>
+            </div>
+            <div class="contactus">
+                <form action="#">
+                    <div class="user-box">
+                        <input type="text" name="" required>
+                        <label for="">Enter your username</label>
+                    </div>
+                    <div class="user-box">
+                        <input type="email" name="" required>
+                        <label for="">Enter your email address</label>
+                    </div>
+                    <div class="user-box">
+                        <input type="password" name="" required>
+                        <label for="">Enter your password</label>
+                    </div>
+                    <div class="user-box">
+                        <input type="password" name="" required>
+                        <label for="">Rewrite your password</label>
+                    </div>
+                    <div class="form-group">
+                        <a href="">Help?</a>
+                        <router-link to="/">sign in</router-link>
+                    </div>
+                    <center><button>submit</button></center>
+                </form>
+            </div>
+        </div>
+    </div>
+</template>
+
+<style scoped>
+.container {
+    background-image: url("../../assets/imgs/pexels-mtcd-5588646.jpg");
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 100vh;
+    justify-content: center;
+    align-content: center;
+}
+
+.main {
+    width: 400px;
+    border: 1px solid #000;
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.25);
+    box-shadow: 0 8px 32px 0 rgba(3, 38, 135, 0.37);
+    backdrop-filter: blur(3.5px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.header h2 {
+    color: var(--color-white);
+    font-size: 3rem;
+    font-weight: bold;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.header p {
+    color: var(--color-white);
+    font-size: 14px;
+}
+
+form .user-box {
+    position: relative;
+    margin-top: 35px;
+}
+
+form .user-box input {
+    width: 100%;
+    padding: .8rem 1rem;
+    color: var(--color-white);
+    background: transparent;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: 2px solid var(--color-info-dark);
+    border-radius: 8px;
+}
+
+form .user-box input:focus {
+    border: 2px solid var(--color-white);
+}
+
+form .user-box label {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    font-size: 1.2rem;
+    color: var(--color-info-dark);
+    pointer-events: none;
+    transition: all .5s ease;
+}
+
+form .user-box input:focus~label,
+form .user-box input:valid~label {
+    top: -23px;
+    left: 0rem;
+    color: var(--color-white);
+    font-size: 14px;
+    font-weight: bold;
+}
+.form-group {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+}
+a {
+    font-size: 1.2rem;
+    color: var(--color-info-dark);
+    font-weight: 500;
+    transition: .3s ease;
+}
+a:hover {
+    color: var(--color-white);
+}
+button {
+    height: 40px;
+    width: 100%;
+    margin-top: 15px;
+    border-radius: 7px;
+    cursor: pointer;
+    background: #3287FC;
+    font-weight: bold;
+    font-size: 16px;
+    color: white;
+    border: none;
+    transition: all .5s ease-in-out;
+}
+
+button:hover {
+    background: #3287cc;
+}
+</style>

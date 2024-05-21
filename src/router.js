@@ -1,22 +1,39 @@
 import { createRouter, createWebHistory } from "vue-router";
-import page1 from './pages/page1.vue'
-import page2 from './pages/page2.vue'
-import composant1 from './components/composant1.vue'
-import composant2 from './components/composant2.vue'
+import authPage from './pages/auth.page.vue'
+import signin from './components/auths/signin.vue'
+import signup from './components/auths/signup.vue'
+
+
+import appPage from './pages/admin.page.vue'
+import dashboardAdmin from './components/dashboard/admin.dashboard.vue'
+import customers from './components/customers/customers.vue'
+import analytiques from './components/analytiques/analytiques.vue'
+import trips from './components/trips/trips.vue'
+import reservations from './components/reservations/reservations.vue'
+import setting from './components/setting/setting.vue'
+import help from './components/helps/helps.vue'
 
 const routes = [
     {
         path: '/',
-        component: page1,
+        component: authPage,
         children: [
-            { path: '', component: composant1 },
+            { path: '', component: signin },
+            { path: 'sign-in', component: signin },
+            { path: 'sign-up', component: signup },
         ]
     },
     {
-        path: '/page2',
-        component: page2,
+        path: '/audmin-page',
+        component: appPage,
         children: [
-            { path: '', component: composant2 },
+            { path: 'dashboard', component: dashboardAdmin },
+            { path: 'customers', component: customers },
+            { path: 'analytiques', component: analytiques },
+            { path: 'trips', component: trips },
+            { path: 'reservations', component: reservations },
+            { path: 'setting', component: setting },
+            { path: 'help', component: help },
         ]
     }
 ];
