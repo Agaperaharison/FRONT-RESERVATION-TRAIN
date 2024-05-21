@@ -101,14 +101,14 @@
     overflow-y: auto;
 }
 
+.table-analytiques:hover {
+    box-shadow: none;
+}
+
 table {
     width: 100%;
     text-align: center;
     border-collapse: collapse;
-}
-
-table {
-    box-shadow: none;
 }
 
 thead {
@@ -169,6 +169,7 @@ td span {
     font-size: 0.9rem;
     font-weight: 600;
 }
+
 .pending {
     background: var(--color-primary-variant);
 }

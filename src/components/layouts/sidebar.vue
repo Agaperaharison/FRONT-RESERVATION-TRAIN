@@ -70,50 +70,50 @@ export default {
             <i id="btn" class="ri-menu-4-fill" @click="toggleSidebar"></i>
         </div>
         <ul class="nav-list">
-            <li :class="{ active : $route.path === '/audmin-page/dashboard' }">
-                <router-link to="/audmin-page/dashboard">
+            <li :class="{ active : $route.path === '/admin-page/dashboard' }">
+                <router-link to="/admin-page/dashboard">
                     <i class="ri-dashboard-3-line"></i>
                     <span class="link_name">Dashboard</span>
                 </router-link>
                 <span class="tooltip">Dashboard</span>
             </li>
-            <li :class="{ active : $route.path === '/audmin-page/customers' }">
-                <router-link to="/audmin-page/customers">
+            <li :class="{ active : $route.path === '/admin-page/customers' || $route.path === '/admin-page/customers/ ' || $route.path === '/admin-page/customers/more-info' }">
+                <router-link to="/admin-page/customers">
                     <i class="ri-team-line"></i>
                     <span class="link_name">Customers</span>
                 </router-link>
                 <span class="tooltip">Customers</span>
             </li>
-            <li :class="{ active : $route.path === '/audmin-page/analytiques' }">
-                <router-link to="/audmin-page/analytiques">
+            <li :class="{ active : $route.path === '/admin-page/analytiques' }">
+                <router-link to="/admin-page/analytiques">
                     <i class="ri-pie-chart-line"></i>
                     <span class="link_name">Analytiques</span>
                 </router-link>
                 <span class="tooltip">Analytiques</span>
             </li>
-            <li :class="{ active : $route.path === '/audmin-page/trips' }">
-                <router-link to="/audmin-page/trips">
+            <li :class="{ active : $route.path === '/admin-page/trips' }">
+                <router-link to="/admin-page/trips">
                     <i class="ri-map-pin-line"></i>
                     <span class="link_name">Trips</span>
                 </router-link>
                 <span class="tooltip">Trips</span>
             </li>
-            <li :class="{ active : $route.path === '/audmin-page/reservations' }">
-                <router-link to="/audmin-page/reservations">
+            <li :class="{ active : $route.path === '/admin-page/reservations' }">
+                <router-link to="/admin-page/reservations">
                     <i class="ri-calendar-todo-fill"></i>
                     <span class="link_name">Reservations</span>
                 </router-link>
                 <span class="tooltip">Reservations</span>
             </li>
-            <li :class="{ active : $route.path === '/audmin-page/setting' }">
-                <router-link to="/audmin-page/setting">
+            <li :class="{ active : $route.path === '/admin-page/setting' }">
+                <router-link to="/admin-page/setting">
                     <i class="ri-settings-4-line"></i>
                     <span class="link_name">Setting</span>
                 </router-link>
                 <span class="tooltip">Setting</span>
             </li>
-            <li :class="{ active : $route.path === '/audmin-page/help' }">
-                <router-link to="/audmin-page/help">
+            <li :class="{ active : $route.path === '/admin-page/help' }">
+                <router-link to="/admin-page/help">
                     <i class="ri-lightbulb-fill"></i>
                     <span class="link_name">help?</span>
                 </router-link>

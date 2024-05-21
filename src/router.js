@@ -7,11 +7,17 @@ import signup from './components/auths/signup.vue'
 import appPage from './pages/admin.page.vue'
 import dashboardAdmin from './components/dashboard/admin.dashboard.vue'
 import customers from './components/customers/customers.vue'
+import styleGrid from './components/customers/themes/grid.vue'
+import styleTable from './components/customers/themes/tables.vue'
+import moreInfo from './components/customers/more.info.vue'
+
+
 import analytiques from './components/analytiques/analytiques.vue'
 import trips from './components/trips/trips.vue'
 import reservations from './components/reservations/reservations.vue'
 import setting from './components/setting/setting.vue'
 import help from './components/helps/helps.vue'
+
 
 const routes = [
     {
@@ -24,11 +30,18 @@ const routes = [
         ]
     },
     {
-        path: '/audmin-page',
+        path: '/admin-page',
         component: appPage,
         children: [
             { path: 'dashboard', component: dashboardAdmin },
-            { path: 'customers', component: customers },
+            { 
+                path: 'customers', component: customers,
+                children: [
+                    { path: '', component: styleTable },
+                    { path: ' ', component: styleGrid },
+                ]
+            },
+            { path: 'customers/more-info', component: moreInfo },
             { path: 'analytiques', component: analytiques },
             { path: 'trips', component: trips },
             { path: 'reservations', component: reservations },

@@ -3,9 +3,72 @@
 </script>
 
 <template>
-    <h1>CUSTOMERS</h1>
+    <div class="container">
+        <div class="header">
+            <h1>Custommers lists</h1>
+            <div class="liste-style">
+                <ul>
+                    <router-link to="/admin-page/customers">
+                        <li :class="{ active : $route.path === '/admin-page/customers' }">
+                            <i class="ri-table-line"></i>
+                            <span>table</span>
+                        </li>
+                    </router-link>
+                    <router-link to="/admin-page/customers/ ">
+                        <li :class="{ active : $route.path === '/admin-page/customers/ ' }">
+                            <i class="ri-function-line"></i>
+                            <span>Grid</span>
+                        </li>
+                    </router-link>
+                </ul>
+            </div>
+        </div>
+        <router-view></router-view>
+    </div>
 </template>
 
 <style scoped>
+.container h1:nth-child(1) {
+    margin-top: .6rem;
+    text-transform: uppercase;
+}
 
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--color-info-dark);
+}
+
+.liste-style ul {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-radius: 25px;
+    height: 40px;
+}
+
+.liste-style ul li {
+    display: flex;
+    align-items: center;
+    font-size: 1.3rem;
+    height: 100%;
+    padding: .5rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    color: var(--color-info-dark);
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+.liste-style ul li.active {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.liste-style ul li i {
+    min-width: 30px;
+}
 </style>

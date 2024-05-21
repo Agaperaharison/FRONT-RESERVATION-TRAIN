@@ -9,6 +9,7 @@
     --color-white: #fff;
     --color-info-dark: #7d8da1;
     --color-info-light: #dce1eb;
+    --color-nav: #dce1eb;
     --color-dark: #363949;
     --color-light: rgba(132, 139, 200, 0.18);
     --color-primary-variant: #3e4edf;
@@ -32,4 +33,5 @@
     --color-info-light: #dce1eb;
     --box-shadow: 0 2rem 3rem var(--color-light);
     --color-primary-variant: #49dbff;
+    --color-nav: #333;
 }
