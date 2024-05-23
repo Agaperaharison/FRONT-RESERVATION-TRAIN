@@ -84,13 +84,6 @@ export default {
                 </router-link>
                 <span class="tooltip">Customers</span>
             </li>
-            <!-- <li :class="{ active : $route.path === '/admin-page/analytiques' }">
-                <router-link to="/admin-page/analytiques">
-                    <i class="ri-pie-chart-line"></i>
-                    <span class="link_name">Analytiques</span>
-                </router-link>
-                <span class="tooltip">Analytiques</span>
-            </li> -->
             <li :class="{ active : $route.path === '/admin-page/trips' }">
                 <router-link to="/admin-page/trips">
                     <i class="ri-map-pin-line"></i>
@@ -139,7 +132,7 @@ export default {
                     </div>
                     <div class="profile_content">
                         <div class="name">Joshué Agapé</div>
-                        <div class="designation">Web Developer</div>
+                        <div class="designation">joshueagape@gmail.com</div>
                     </div>
                     <i class="ri-logout-circle-r-line" id="log_out"></i>
                 </div>

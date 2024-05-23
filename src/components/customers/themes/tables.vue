@@ -1,18 +1,31 @@
 <script>
+import bookingVue from './nav-items/booking.vue'
+import chatVue from './nav-items/chat.vue'
+import personalInfoVue from './nav-items/personal-info.vue'
+import personalStoryVue from './nav-items/personal-story.vue'
+import statisticsVue from './nav-items/statistics.vue'
+
 export default {
+    components: {
+        bookingVue, chatVue, personalInfoVue, personalStoryVue, statisticsVue
+    },
     data() {
         return {
             active_item_nav_bar: 'all',
             openModal: false,
+            titleInfo: 'Statistiques',
         }
     },
     methods: {
         activeItemBar(navItem) {
             this.active_item_nav_bar = navItem
         },
-        toggleModal(){
+        toggleModal() {
             this.openModal = !this.openModal
-        }
+        },
+        activeNavItemMOreInfo(navItem) {
+            this.titleInfo = navItem
+        },
     }
 }
 </script>
@@ -23,43 +36,43 @@ export default {
             <ul>
                 <li :class="{ active: active_item_nav_bar == 'all' }" @click="activeItemBar('all')">
                     <span>All</span>
-                    <span>5</span>
+                    <span>1</span>
                     <span class="line"></span>
                 </li>
                 <li :class="{ active: active_item_nav_bar == 'recente' }" @click="activeItemBar('recente')">
                     <span>Recent</span>
-                    <span>5</span>
+                    <span>1</span>
                     <span class="line"></span>
                 </li>
                 <li :class="{ active: active_item_nav_bar == 'debs' }" @click="activeItemBar('debs')">
                     <span>Have a debs</span>
-                    <span>5</span>
+                    <span>1</span>
                     <span class="line"></span>
                 </li>
                 <li :class="{ active: active_item_nav_bar == 'is_validate' }" @click="activeItemBar('is_validate')">
                     <span>Is validate</span>
-                    <span>5</span>
+                    <span>1</span>
                     <span class="line"></span>
                 </li>
                 <li :class="{ active: active_item_nav_bar == 'not_validate' }" @click="activeItemBar('not_validate')">
                     <span>Is not validate</span>
-                    <span>5</span>
+                    <span>0</span>
                     <span class="line"></span>
                 </li>
                 <li :class="{ active: active_item_nav_bar == 'femme' }" @click="activeItemBar('femme')">
-                    <span>Femme</span>
-                    <span>5</span>
+                    <span>Woman</span>
+                    <span>0</span>
                     <span class="line"></span>
                 </li>
                 <li :class="{ active: active_item_nav_bar == 'homme' }" @click="activeItemBar('homme')">
-                    <span>Homme</span>
-                    <span>5</span>
+                    <span>Man</span>
+                    <span>1</span>
                     <span class="line"></span>
                 </li>
             </ul>
             <div class="count">
                 <span>COUNT : </span>
-                <span>34</span>
+                <span>1</span>
             </div>
         </nav>
         <div class="menu">
@@ -93,9 +106,9 @@ export default {
                                 <img src="../../../assets/imgs/1869679.png" alt="">
                             </div>
                         </td>
-                        <td>Ambalapaiso Fianarantsoa</td>
+                        <td>LOT EO73/3702<br>Ambalapaiso Fianarantsoa</td>
                         <td>034 35 626 26</td>
-                        <td>homme</td>
+                        <td>Man</td>
                         <td>true</td>
                         <td>true</td>
                         <td class="btn">
@@ -105,7 +118,7 @@ export default {
                             </button>
                         </td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <td>122</td>
                         <td>Joshué Agapé</td>
                         <td>
@@ -124,7 +137,7 @@ export default {
                                 <i class="ri-arrow-right-circle-line"></i>
                             </button>
                         </td>
-                    </tr>
+                    </tr> -->
                 </tbody>
             </table>
         </div>
@@ -136,16 +149,25 @@ export default {
                         <img src="../../../assets/imgs/pexels-mtcd-5588646.jpg" alt="">
                     </div>
                     <h3>Joshué Agapé</h3>
+                    <hr>
                     <ul>
-                        <li class="active">Personal information</li>
-                        <li>Personal information</li>
-                        <li>Personal information</li>
-                        <li>Personal information</li>
-                        <li>Personal information</li>
+                        <li :class="{ active: titleInfo == 'Statistiques' }"
+                            @click="activeNavItemMOreInfo('Statistiques')">Statistiques</li>
+                        <li :class="{ active: titleInfo == 'Basic information' }"
+                            @click="activeNavItemMOreInfo('Basic information')">Personal information</li>
+                        <li :class="{ active: titleInfo == 'Booking story' }"
+                            @click="activeNavItemMOreInfo('Booking story')">Booking story</li>
+                        <li :class="{ active: titleInfo == 'Story personal' }"
+                            @click="activeNavItemMOreInfo('Story personal')">Personal story </li>
+                        <li :class="{ active: titleInfo == 'Chat' }" @click="activeNavItemMOreInfo('Chat')">Chat</li>
                     </ul>
                 </div>
                 <div class="container-info-client">
-                    <h1>About</h1>
+                    <statistics-vue v-if="titleInfo == 'Statistiques'" />
+                    <personal-info-vue v-if="titleInfo == 'Basic information'" />
+                    <booking-vue v-if="titleInfo == 'Booking story'" />
+                    <personal-story-vue v-if="titleInfo == 'Story personal'"/>
+                    <chat-vue v-if="titleInfo == 'Chat'"/>
                 </div>
             </div>
         </div>
@@ -202,24 +224,30 @@ export default {
 }
 
 .nav .avatar-client {
-    width: 60px;
-    height: 60px;
+    width: 75px;
+    height: 75px;
     border-radius: 50%;
     overflow: hidden;
     margin: 1rem auto;
 }
 
 .nav h3 {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     font-weight: 600;
     color: var(--color-white);
     text-align: center;
 }
 
+hr {
+    width: 100%;
+    border: 1px solid var(--color-info-light);
+    margin-top: 2rem;
+}
+
 .nav ul {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 10px;
     margin-top: 2rem;
 }
 
@@ -230,26 +258,18 @@ export default {
     color: var(--color-white);
     border-radius: 7px;
     cursor: pointer;
+    transition: all .3s ease;
 }
 
+.nav ul li:hover,
 .nav ul li.active {
-    background: var(--color-info-light);
-    color: var(--color-dark);
-}
-
-.dark-theme-variables .nav ul li.active {
-    color: var(--color-white);
+    background: var(--color-primary);
+    color: #ffff;
 }
 
 .container-info-client {
     width: 100%;
     padding: 2rem 3rem 2rem 1.5rem;
-}
-
-.container-info-client h1 {
-    width: 100%;
-    padding-bottom: 5px;
-    border-bottom: 2px solid var(--color-info-dark);
 }
 
 .container {
@@ -373,7 +393,7 @@ nav .count span:nth-child(1) {
     padding: 6px 16px 6px 32px;
     border: 2px solid var(--color-info-light);
     color: var(--color-info-dark);
-    border-radius: 10px;
+    border-radius: 7px;
     transition: all .3s ease;
     width: 200px;
 }

@@ -10,59 +10,26 @@
             </div>
             <div class="activity">
                 <div class="info-activity">
-                    <h3>Post</h3>
+                    <h3>Old</h3>
                     <h2>21</h2>
                 </div>
                 <div class="info-activity">
-                    <h3>Followers</h3>
+                    <h3>Tâches</h3>
                     <h2>621</h2>
                 </div>
                 <div class="info-activity">
-                    <h3>Following</h3>
-                    <h2>210</h2>
+                    <h3>Mattricule</h3>
+                    <h2>EP-1658</h2>
                 </div>
             </div>
         </div>
         <div class="card-body">
             <h3>Joshué Agapé</h3>
             <p>joshueagape@gmail.com</p>
-            <div class="link-social">
-                <a href="#">
-                    <i class="ri-facebook-circle-line"></i>
-                </a>
-                <a href="#">
-                    <i class="ri-instagram-line"></i>
-                </a>
-                <a href="#">
-                    <i class="ri-linkedin-fill"></i>
-                </a>
-                <a href="#">
-                    <i class="ri-skype-fill"></i>
-                </a>
-                <a href="#">
-                    <i class="ri-whatsapp-line"></i>
-                </a>
-            </div>
         </div>
-        <!-- <div class="card-body">
-            <h3>About</h3>
-            <p><span>Domicile : </span> <span>LOT EO73/3702 AMBALAPAISO</span></p>
-            <p><span>Habite à : </span> <span>FIANARANTSOA</span></p>
-            <p><span>Contact : </span> <span>+261 34 35 626 26</span></p>
-            <p><span>Sexe : </span> <span>Homme</span></p>
-        </div>
-        <div class="card-body">
-            <h3>Compte</h3>
-            <p><span>Is validate : </span> <span>true</span></p>
-            <p><span>Have a debs : </span> <span>false</span></p>
-            <p><span>Created at : </span> <span>21 May 2024</span></p>
-        </div> -->
-
         <div class="card-footer">
-            <div class="actions">
-                <button>Message</button>
-                <button>More info</button>
-            </div>
+            <button>Message</button>
+            <button>More info</button>
         </div>
     </div>
 </template>
@@ -104,12 +71,14 @@
 }
 
 .card-header .activity {
-    display: flex;
-    gap: 1.5rem;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr;
     align-items: center;
 }
 
 .card-header h3 {
+    font-size: 1.06rem;
     color: var(--color-info-dark);
 }
 
@@ -124,43 +93,20 @@
 }
 
 .card-body p {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
     font-size: 1rem;
     letter-spacing: 1px;
     cursor: pointer;
+    margin-bottom: 6px;
 }
-
-.card-body p:hover {
-    color: var(--color-dark);
-}
-
-.link-social {
+.card-footer {
     display: flex;
-    align-items: center;
-    justify-content: space-around;
-    padding: 1.5rem 1rem 0;
+    gap: .5rem;
 }
-
-.link-social a i {
-    font-size: 1.6rem;
-    color: var(--color-info-dark);
-}
-
-.link-social a:hover i {
-    color: var(--color-primary);
-}
-
-.dark-theme-variables .link-social a:hover i {
-    color: var(--color-dark);
-}
-
-.card-footer .actions {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-}
-
 button {
-    padding: .6rem 1rem;
+    padding: .6rem 1.5rem;
     border-radius: .5rem;
     cursor: pointer;
     font-size: 1.1rem;

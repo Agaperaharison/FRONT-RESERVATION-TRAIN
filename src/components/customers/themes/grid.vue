@@ -25,11 +25,11 @@ export default {
                 <span>5</span>
             </li>
             <li :class="{ active: active_item_nav_bar == 'femme' }" @click="activeItemBar('femme')">
-                <span>Femme</span>
+                <span>Woman</span>
                 <span>5</span>
             </li>
             <li :class="{ active: active_item_nav_bar == 'homme' }" @click="activeItemBar('homme')">
-                <span>Homme</span>
+                <span>Man</span>
                 <span>5</span>
             </li>
         </ul>
@@ -109,8 +109,8 @@ nav .count span:nth-child(1) {
 
 .cards {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
     margin-top: .6rem;
     max-height: 80vh;
     overflow-y: auto;

@@ -9,7 +9,6 @@ import dashboardAdmin from './components/dashboard/admin.dashboard.vue'
 import customers from './components/customers/customers.vue'
 import styleGrid from './components/customers/themes/grid.vue'
 import styleTable from './components/customers/themes/tables.vue'
-import moreInfo from './components/customers/more.info.vue'
 
 
 import analytiques from './components/analytiques/analytiques.vue'
@@ -41,7 +40,6 @@ const routes = [
                     { path: 'agents', component: styleGrid },
                 ]
             },
-            { path: 'customers/more-info', component: moreInfo },
             { path: 'analytiques', component: analytiques },
             { path: 'trips', component: trips },
             { path: 'reservations', component: reservations },

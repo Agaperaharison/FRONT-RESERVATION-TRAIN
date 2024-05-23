@@ -3,9 +3,9 @@
 </script>
 
 <template>
-    <h1>more info</h1>
+    <h1>Personal story</h1>
 </template>
 
-<style scoped>
+<style>
 
 </style>
