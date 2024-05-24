@@ -8,10 +8,11 @@ import reservationVue from './admin/insights/reservation.vue'
 import tripsVue from './admin/insights/trips.vue'
 import analyticsTableVue from './admin/analytics/tables.vue'
 import recentTripsVue from './admin/right/recent.trips.vue'
+import notificationVue from './admin/right/notification.vue'
 
 export default {
     components: {
-        insightVue, amountVue, paidVue, unpaidVue, customersVue, reservationVue, tripsVue, analyticsTableVue, recentTripsVue
+        insightVue, amountVue, paidVue, unpaidVue, customersVue, reservationVue, tripsVue, analyticsTableVue, recentTripsVue, notificationVue
     },
 }
 </script>
@@ -35,8 +36,7 @@ export default {
             </div>
         </main>
         <div class="right">
-            <h2>The recent trips</h2>
-            <recent-trips-vue />
+            <notification-vue/>
         </div>
     </div>
     <div class="recent-Reservations">
@@ -79,11 +79,7 @@ export default {
 }
 
 .right {
-    padding-top: 1rem;
     padding-left: 0.8rem;
-    padding-right: 1.6rem;
-    max-height: 100vh;
-    overflow: overlay;
 }
 
 h2 {

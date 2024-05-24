@@ -285,7 +285,7 @@ nav {
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: 50px;
+    height: 40px;
     margin-top: .5rem;
     margin-bottom: .7rem;
     border-bottom: 2px solid var(--color-light);
@@ -304,7 +304,7 @@ nav ul li {
     height: 100%;
     color: var(--color-info-dark);
     align-items: center;
-    padding: 0 1.5rem;
+    padding: .6rem 1.5rem 0;
     font-size: 1rem;
     font-weight: 600;
     border-bottom: 2px solid transparent;
@@ -334,7 +334,7 @@ nav ul li.active {
     bottom: -4px;
     background: transparent;
     border: 1px solid transparent;
-    border-radius: 90px;
+    border-radius: 50%;
     transition: all .3s ease;
 }
 

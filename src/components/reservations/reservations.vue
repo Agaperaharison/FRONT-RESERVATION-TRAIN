@@ -57,7 +57,7 @@ export default {
                         <td><span>29 Mey 2024</span><br> <small>05h 00</small></td>
                         <td>Fianarantsoa</td>
                         <td>Manakara</td>
-                        <td><span class="unpaid">unpaid</span></td>
+                        <td><span class="paid">paid</span></td>
                         <td class="action">
                             <i class="ri-eye-line"></i>
                             <i class="ri-edit-circle-line"></i>
@@ -260,9 +260,15 @@ td i {
     font-size: 1.4rem;
     cursor: pointer;
     color: var(--color-info-dark);
+    transition: all .3s ease;
 }
-
-td i:hover {
+.ri-eye-line:hover {
+    color: var(--color-dark);
+}
+.ri-edit-circle-line:hover {
+    color: var(--color-success);
+}
+.ri-download-2-line:hover {
     color: var(--color-primary);
 }
 </style>
