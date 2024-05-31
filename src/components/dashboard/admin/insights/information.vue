@@ -10,7 +10,7 @@ export default {
             <i class="ri-folder-3-line"></i>
             <div class="left">
                 <h1>Information</h1>
-                <h1>{{ value }} %</h1>
+                <h1>{{ value.toLocaleString('fr-FR') }} %</h1>
             </div>
         </div>
     </div>

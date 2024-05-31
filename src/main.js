@@ -23,7 +23,7 @@ var mySwal = Swal.mixin({
     cancelButtonText: 'annuler',
 });
 
-axios.defaults.baseURL = `http://localhost:7576/api/product`;
+axios.defaults.baseURL = `http://localhost:8081/project-IHM/reservation-train/api`;
 
 createApp(App).use(router).mount('#app')
 

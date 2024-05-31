@@ -29,6 +29,14 @@
             <h4>Email</h4>
             <h3>joshueagape@gmail.com</h3>
         </div>
+        <div class="basic-item">
+            <h4>Relationship</h4>
+            <h3>Alone</h3>
+        </div>
+        <div class="basic-item">
+            <h4>Nationality</h4>
+            <h3>Malagasy</h3>
+        </div>
     </div>
     <h1>Address</h1>
     <div class="basic">

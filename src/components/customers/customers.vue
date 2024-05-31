@@ -1,7 +1,3 @@
-<script>
-
-</script>
-
 <template>
     <div class="container">
         <div class="header">
@@ -38,7 +34,6 @@
     align-items: center;
     justify-content: space-between;
     padding-bottom: 1rem;
-    margin-bottom: 1rem;
     /* border-bottom: 2px solid var(--color-info-dark); */
 }
 

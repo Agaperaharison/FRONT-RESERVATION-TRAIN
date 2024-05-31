@@ -1,5 +1,4 @@
 <script>
-import insightVue from './admin/insights/insight.vue'
 import amountVue from './admin/insights/amount.vue'
 import paidVue from './admin/insights/paid.vue'
 import unpaidVue from './admin/insights/unpaid.vue'
@@ -12,36 +11,85 @@ import notificationVue from './admin/right/notification.vue'
 
 export default {
     components: {
-        insightVue, amountVue, paidVue, unpaidVue, customersVue, reservationVue, tripsVue, analyticsTableVue, recentTripsVue, notificationVue
+        amountVue, paidVue, unpaidVue, customersVue, reservationVue, tripsVue, analyticsTableVue, recentTripsVue, notificationVue
     },
+    data() {
+        return {
+            amount: 0,
+            paid: 0,
+            unpaid: 0,
+            total_customers: 0,
+            valid_customer: 0,
+            total_trips: 0,
+            total_reservation: 0,
+        }
+    },
+    mounted() {
+        this.customers_count();
+        this.trips_count();
+        this.reservations_count();
+    },
+    methods: {
+        
+        // response.data.data : total, total_valid, total_invalid
+        async customers_count() {
+            try {
+                const response = await axios.get('/users/count-users');
+                this.total_customers = response.data.data.total;
+                this.valid_customer = response.data.data.total_valid;
+            } catch (err) {
+                console.log(err.message)
+            }
+        },
+        // response.data.data : total, tripsDeleted, tripsNotDeleted
+        async trips_count() {
+            try {
+                const response = await axios.get('/trips/count-trips');
+                this.total_trips = response.data.data.total;
+            } catch (err) {
+                console.log(err.message);
+            }
+        },
+        // response.data.data : isNotReset, isReset, total
+        async reservations_count() {
+            try {
+                const response = await axios.get('/reservations/count-reservations');
+                this.total_reservation = response.data.data.total
+            } catch (err) {
+                console.log(err.message);
+            }
+        }
+    }
 }
 </script>
 
 <template>
-    <div class="container">
-        <main>
-            <div class="header">
-                <h1>DASHBOARD</h1>
-                <div class="date">
-                    <input type="date">
+    <div>
+        <div class="container">
+            <main>
+                <div class="header">
+                    <h1>DASHBOARD</h1>
+                    <div class="date">
+                        <input type="date">
+                    </div>
                 </div>
+                <div class="insights">
+                    <amount-vue :value="amount" />
+                    <paid-vue :value="paid" />
+                    <unpaid-vue :value="unpaid" />
+                    <customers-vue :total="total_customers" :valid="valid_customer" />
+                    <trips-vue :value="total_trips" />
+                    <reservation-vue :value="total_reservation" />
+                </div>
+            </main>
+            <div class="right">
+                <notification-vue />
             </div>
-            <div class="insights">
-                <amount-vue :value="570000" />
-                <paid-vue :value="400000" />
-                <unpaid-vue :value="170000" />
-                <customers-vue :total="599" :valid="500" :invalid="99" />
-                <trips-vue :value="45" />
-                <reservation-vue :value="1579" />
-            </div>
-        </main>
-        <div class="right">
-            <notification-vue/>
         </div>
-    </div>
-    <div class="recent-Reservations">
-        <h2>Analytiques</h2>
-        <analytics-table-vue />
+        <div class="recent-Reservations">
+            <h2>Analytiques</h2>
+            <analytics-table-vue />
+        </div>
     </div>
 </template>
 

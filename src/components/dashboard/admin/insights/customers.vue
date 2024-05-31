@@ -1,6 +1,6 @@
 <script>
 export default {
-    props: ["total", "valid", "invalid"],
+    props: ["total", "valid"],
 }
 </script>
 
@@ -13,15 +13,11 @@ export default {
                 <div class="value-item">
                     <div>
                         <small>Total</small>
-                        <h3>{{ total }}</h3>
+                        <h3>{{ total.toLocaleString('fr-FR') }}</h3>
                     </div>
                     <div>
-                        <small>Valid</small>
-                        <h3>{{ valid }}</h3>
-                    </div>
-                    <div>
-                        <small>Invalid</small>
-                        <h3>{{ invalid }}</h3>
+                        <small>Validate</small>
+                        <h3>{{ valid.toLocaleString('fr-FR') }}</h3>
                     </div>
                 </div>
             </div>
@@ -49,7 +45,9 @@ export default {
     align-items: center;
     gap: 1.5rem;
 }
-
+.left {
+    width: 100%;
+}
 i {
     padding: 0.5rem;
     border-radius: 50%;
@@ -68,7 +66,8 @@ h1 {
 }
 .value-item {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
     gap: 5px;
 }
 .value-item div {

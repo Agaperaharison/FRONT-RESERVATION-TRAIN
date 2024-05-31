@@ -1,7 +1,24 @@
 <script>
 export default {
-
-}
+    data() {
+        return {
+            email: '',
+            password: ''
+        }
+    },
+    methods: {
+        async login() {
+            try {
+                const response = await axios.post('/auth/login', {
+                    email: this.email, password: this.password
+                }, { withCredentials: true });
+                console.log(response.data)
+            } catch (err) {
+                console.log(err.message)
+            }
+        }
+    }
+} 
 </script>
 
 <template>
@@ -12,17 +29,17 @@ export default {
                 <p>Contact us and get more info</p>
             </div>
             <div class="contactus">
-                <form action="#">
+                <form>
                     <div class="user-box">
-                        <input type="text" name="" required>
-                        <label for="">Enter your username</label>
+                        <input type="text" v-model="email" required>
+                        <label for="email">Enter your address email</label>
                     </div>
                     <div class="user-box">
-                        <input type="password" name="" required>
-                        <label for="">Enter your password</label>
+                        <input type="password" v-model="password" required>
+                        <label for="password">Enter your password</label>
                     </div>
                     <div class="form-group">
-                        <a href="">Forgot password?</a>
+                        <a href="#">Forgot password?</a>
                         <router-link to="/sign-up">sign up</router-link>
                     </div>
                     <center><button>submit</button></center>
@@ -111,20 +128,24 @@ form .user-box input:valid~label {
     font-size: 14px;
     font-weight: bold;
 }
+
 .form-group {
     margin-top: 1rem;
     display: flex;
     justify-content: space-between;
 }
+
 a {
     font-size: 1.2rem;
     color: var(--color-info-dark);
     font-weight: 500;
     transition: .3s ease;
 }
+
 a:hover {
     color: var(--color-white);
 }
+
 button {
     height: 40px;
     width: 100%;

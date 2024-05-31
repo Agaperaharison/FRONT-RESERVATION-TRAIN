@@ -10,7 +10,7 @@ export default {
             <i class="ri-calendar-todo-fill"></i>
             <div class="left">
                 <h1>Reservations</h1>
-                <h1>{{ value }}</h1>
+                <h1>{{ value.toLocaleString('fr-FR') }}</h1>
             </div>
         </div>
     </div>

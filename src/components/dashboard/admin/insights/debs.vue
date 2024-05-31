@@ -10,7 +10,7 @@ export default {
             <i class="ri-alarm-warning-line"></i>
             <div class="left">
                 <h1>Debs</h1>
-                <h1>{{ value }} Ar</h1>
+                <h1>{{ value.toLocaleString('fr-FR') }} Ar</h1>
             </div>
         </div>
     </div>

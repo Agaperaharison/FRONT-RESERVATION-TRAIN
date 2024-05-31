@@ -10,7 +10,7 @@ export default {
             <i class="ri-pin-distance-line" :id="id"></i>
             <div class="left">
                 <h1>Total trips</h1>
-                <h1>{{ value }}</h1>
+                <h1>{{ value.toLocaleString('fr-FR') }}</h1>
             </div>
         </div>
     </div>

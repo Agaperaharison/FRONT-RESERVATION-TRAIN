@@ -1,5 +1,7 @@
 <script>
-
+export default {
+    props: ['old', 'tache', 'matricule', 'last_name', 'email'],
+}
 </script>
 
 <template>
@@ -11,21 +13,21 @@
             <div class="activity">
                 <div class="info-activity">
                     <h3>Old</h3>
-                    <h2>21</h2>
+                    <h2>{{ old }}</h2>
                 </div>
                 <div class="info-activity">
                     <h3>Tâches</h3>
-                    <h2>621</h2>
+                    <h2>{{ tache }}</h2>
                 </div>
                 <div class="info-activity">
                     <h3>Mattricule</h3>
-                    <h2>EP-1658</h2>
+                    <h2>{{ matricule }}</h2>
                 </div>
             </div>
         </div>
         <div class="card-body">
-            <h3>Joshué Agapé</h3>
-            <p>joshueagape@gmail.com</p>
+            <h3>{{ last_name }}</h3>
+            <p>{{ email }}</p>
         </div>
         <div class="card-footer">
             <button>Message</button>
@@ -58,7 +60,7 @@
 }
 
 .card-header .avatar {
-    width: 50px;
+    width: 60px;
     height: 50px;
     border-radius: 50%;
     overflow: hidden;
@@ -101,10 +103,12 @@
     cursor: pointer;
     margin-bottom: 6px;
 }
+
 .card-footer {
     display: flex;
     gap: .5rem;
 }
+
 button {
     padding: .6rem 1.5rem;
     border-radius: .5rem;

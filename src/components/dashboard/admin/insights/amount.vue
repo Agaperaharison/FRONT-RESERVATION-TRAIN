@@ -10,7 +10,7 @@ export default {
             <div class="left">
                 <i class="ri-wallet-3-fill"></i>
                 <h3>Total amount</h3>
-                <h1>{{ value }} Ar</h1>
+                <h1>{{ value.toLocaleString('fr-FR') }} Ar</h1>
             </div>
             <div class="chart">
                 <div class="container-chart">

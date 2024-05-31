@@ -10,7 +10,7 @@ export default {
             <div class="left">
                 <i class="ri-money-euro-circle-line"></i>
                 <h3>Total paid</h3>
-                <h1>{{ value }} Ar</h1>
+                <h1>{{ value.toLocaleString('fr-FR') }} Ar</h1>
             </div>
             <div class="progress">
                 <svg>
@@ -48,7 +48,8 @@ i {
 }
 
 .diddle {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 6rem;
     align-items: center;
     justify-content: space-between;
 }

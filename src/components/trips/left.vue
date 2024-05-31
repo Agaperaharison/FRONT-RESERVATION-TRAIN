@@ -4,14 +4,60 @@ export default {
         return {
             navItemActive: 'All',
             openFilter: false,
+            trips_lists: [],
+            trips: [],
+            search: '',
         }
+    },
+    mounted() {
+        this.allTrips()
     },
     methods: {
         setActiveNavItem(navItem) {
             this.navItemActive = navItem;
+            if (navItem === 'Available') {
+                this.availableTrips(1);
+            } else if (navItem === 'Unavalaible') {
+                this.availableTrips(0);
+            } else {
+                this.allTrips();
+            }
         },
         openModalFilter() {
             this.openFilter = !this.openFilter
+        },
+        async allTrips() {
+            try {
+                const response = await axios.get('/trips/get-all-trips');
+                this.trips_lists = response.data.data;
+                this.trips = response.data.data;
+            } catch (err) {
+                console.log(err.message)
+            }
+        },
+        availableTrips(is_available) {
+            try {
+                const availableTrips = this.trips_lists.filter(trip => trip.is_available === is_available);
+                this.trips = availableTrips
+            } catch (err) {
+                console.log(err.message)
+            }
+        },
+        filterTrips() {
+            try {
+                const searchValue = this.search.toLowerCase();
+                const tripsFiltered = this.trips_lists.filter(trip => {
+                    return trip.train.design.toLowerCase().includes(searchValue) ||
+                        trip.train.train_matricule.toLowerCase().includes(searchValue) ||
+                        trip.departure_date.includes(searchValue) ||
+                        trip.departure_time.includes(searchValue) ||
+                        trip.from.toLowerCase().includes(searchValue) ||
+                        trip.to.toLowerCase().includes(searchValue);
+                });
+                this.trips = tripsFiltered;
+            } catch (err) {
+                console.log(err.message);
+            }
         }
     }
 }
@@ -28,17 +74,17 @@ export default {
                 <ul>
                     <li :class="{ active: navItemActive == 'All' }" @click="setActiveNavItem('All')">
                         <span>All</span>
-                        <span>56</span>
+                        <span>{{ trips_lists.length }}</span>
                         <span class="line"></span>
                     </li>
                     <li :class="{ active: navItemActive == 'Available' }" @click="setActiveNavItem('Available')">
                         <span>Available</span>
-                        <span>46</span>
+                        <span>{{ trips_lists.filter(trip => trip.is_available === 1).length }}</span>
                         <span class="line"></span>
                     </li>
                     <li :class="{ active: navItemActive == 'Unavalaible' }" @click="setActiveNavItem('Unavalaible')">
                         <span>Unavalaible</span>
-                        <span>10</span>
+                        <span>{{ trips_lists.filter(trip => trip.is_available === 0).length }}</span>
                         <span class="line"></span>
                     </li>
                 </ul>
@@ -80,7 +126,7 @@ export default {
                 </div>
                 <div class="imput-search">
                     <i class="ri-search-line"></i>
-                    <input type="search" name="" id="">
+                    <input type="search" v-model="search" @input="filterTrips">
                 </div>
             </div>
             <div class="list-trips">
@@ -97,45 +143,31 @@ export default {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
+                        <tr v-if="trips.length > 0" v-for="trip in trips" :key="trip.id">
+                            <td>{{ trip.id }}</td>
                             <td>
                                 <div>
-                                    <span>TRAIN N°564</span> <br> <small>mat: FE456 FD</small>
+                                    <span>{{ trip.train.design }}</span> <br> <small>mat: {{ trip.train.train_matricule
+                                        }}</small>
                                 </div>
                             </td>
                             <td>
                                 <div>
-                                    <span>24 MEY 2024</span> <br> <small>07h 30</small>
+                                    <span>{{ trip.departure_date }}</span> <br> <small>{{ trip.departure_time }}</small>
                                 </div>
                             </td>
-                            <td>Fianarantsoa</td>
-                            <td>Manakara</td>
-                            <td><span class="avalaible">avalaible</span></td>
+                            <td>{{ trip.from }}</td>
+                            <td>{{ trip.to }}</td>
+                            <td><span
+                                    :class="{ available: trip.is_available === 1, unavailable: trip.is_available !== 1 }">{{
+                                        trip.is_available === 1 ? 'available' : 'unavailable' }}</span></td>
                             <td class="action">
                                 <i class="ri-pages-line"></i>
                                 <i class="ri-delete-bin-3-line"></i>
                             </td>
                         </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>
-                                <div>
-                                    <span>TRAIN N°564</span> <br> <small>mat: FE456 FD</small>
-                                </div>
-                            </td>
-                            <td>
-                                <div>
-                                    <span>24 MEY 2024</span> <br> <small>07h 30</small>
-                                </div>
-                            </td>
-                            <td>Fianarantsoa</td>
-                            <td>Manakara</td>
-                            <td><span class="avalaible">avalaible</span></td>
-                            <td class="action">
-                                <i class="ri-pages-line"></i>
-                                <i class="ri-delete-bin-3-line"></i>
-                            </td>
+                        <tr v-else>
+                            <td colspan="7" class="empty">Trip not found or database is empty!</td>
                         </tr>
                     </tbody>
                 </table>
@@ -490,6 +522,7 @@ td span.unavalaible {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding-top: .9rem;
     gap: 1.4rem;
 }
 
@@ -506,5 +539,10 @@ td span.unavalaible {
 
 .action i.ri-delete-bin-3-line:hover {
     color: var(--color-danger);
+}
+
+.empty {
+    text-align: center;
+    color: var(--color-info-dark);
 }
 </style>

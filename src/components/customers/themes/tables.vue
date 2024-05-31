@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios'
 import bookingVue from './nav-items/booking.vue'
 import chatVue from './nav-items/chat.vue'
 import personalInfoVue from './nav-items/personal-info.vue'
@@ -12,19 +13,85 @@ export default {
     data() {
         return {
             active_item_nav_bar: 'all',
+            clients_lists: [],
+            clients: [],
+            searchClient: '',
+
             openModal: false,
             titleInfo: 'Statistiques',
         }
     },
+    mounted() {
+        this.showAllClients()
+    },
     methods: {
         activeItemBar(navItem) {
-            this.active_item_nav_bar = navItem
+            this.active_item_nav_bar = navItem;
+            if (navItem == 'all') {
+                this.showAllClients()
+            } else if (navItem == 'debs') {
+                this.filterHaveDebs();
+            } else if (navItem == 'is_validate' || navItem == 'not_validate') {
+                this.filterClientByValidation(navItem);
+            } else {
+                this.filterClientBySexe(navItem);
+            }
         },
         toggleModal() {
             this.openModal = !this.openModal
         },
         activeNavItemMOreInfo(navItem) {
             this.titleInfo = navItem
+        },
+        async showAllClients() {
+            try {
+                const response = await axios.get('/users/get-customers-lists/CLIENT');
+                this.clients_lists = response.data.data;
+                this.clients = response.data.data;
+                //console.log(response.data.data);
+            } catch (err) {
+                console.log(err.message)
+            }
+        },
+        filterHaveDebs() {
+            try {
+                const clients_haveDebs = this.clients_lists.filter(client => client.debs === true);
+                this.clients = clients_haveDebs
+            } catch (err) {
+                console.log(err.message)
+            }
+        },
+        filterClientByValidation(value) {
+            try {
+                const condition = value == 'is_validate' ? 1 : 0;
+                const clients_validate = this.clients_lists.filter(client => client.is_validate === condition);
+                this.clients = clients_validate
+            } catch (err) {
+                console.log(err.message)
+            }
+        },
+        filterClientBySexe(value) {
+            try {
+                const clients = this.clients_lists.filter(client => client.sexe === value);
+                this.clients = clients
+            } catch (err) {
+                console.log(err.message)
+            }
+        },
+        filterClient() {
+            try {
+                const search = this.searchClient.toLowerCase();
+                const clientFiltered = this.clients_lists.filter(client => {
+                    return client.last_name.toLowerCase().includes(search) ||
+                        client.address.toLowerCase().includes(search) ||
+                        client.phone_number.includes(search) ||
+                        client.city.toLowerCase().includes(search) ||
+                        client.postal_code.includes(search)
+                });
+                this.clients = clientFiltered;
+            } catch (err) {
+                console.log(err.message);
+            }
         },
     }
 }
@@ -36,50 +103,45 @@ export default {
             <ul>
                 <li :class="{ active: active_item_nav_bar == 'all' }" @click="activeItemBar('all')">
                     <span>All</span>
-                    <span>1</span>
-                    <span class="line"></span>
-                </li>
-                <li :class="{ active: active_item_nav_bar == 'recente' }" @click="activeItemBar('recente')">
-                    <span>Recent</span>
-                    <span>1</span>
+                    <span>{{ clients_lists.length }}</span>
                     <span class="line"></span>
                 </li>
                 <li :class="{ active: active_item_nav_bar == 'debs' }" @click="activeItemBar('debs')">
                     <span>Have a debs</span>
-                    <span>1</span>
+                    <span>{{ this.clients_lists.filter(client => client.debs === true).length }}</span>
                     <span class="line"></span>
                 </li>
                 <li :class="{ active: active_item_nav_bar == 'is_validate' }" @click="activeItemBar('is_validate')">
                     <span>Is validate</span>
-                    <span>1</span>
+                    <span>{{ this.clients_lists.filter(client => client.is_validate === 1).length }}</span>
                     <span class="line"></span>
                 </li>
                 <li :class="{ active: active_item_nav_bar == 'not_validate' }" @click="activeItemBar('not_validate')">
                     <span>Is not validate</span>
-                    <span>0</span>
+                    <span>{{ this.clients_lists.filter(client => client.is_validate === 0).length }}</span>
                     <span class="line"></span>
                 </li>
                 <li :class="{ active: active_item_nav_bar == 'femme' }" @click="activeItemBar('femme')">
                     <span>Woman</span>
-                    <span>0</span>
+                    <span>{{ this.clients_lists.filter(client => client.sexe === 'femme').length }}</span>
                     <span class="line"></span>
                 </li>
                 <li :class="{ active: active_item_nav_bar == 'homme' }" @click="activeItemBar('homme')">
                     <span>Man</span>
-                    <span>1</span>
+                    <span>{{ this.clients_lists.filter(client => client.sexe === 'homme').length }}</span>
                     <span class="line"></span>
                 </li>
             </ul>
             <div class="count">
                 <span>COUNT : </span>
-                <span>1</span>
+                <span>{{ clients_lists.length }}</span>
             </div>
         </nav>
         <div class="menu">
             <div></div>
             <div class="imput-search">
                 <i class="ri-search-line"></i>
-                <input type="search" name="" id="">
+                <input type="search" v-model="searchClient" @input="filterClient">
             </div>
         </div>
         <div class="table-customers">
@@ -98,19 +160,19 @@ export default {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>122</td>
-                        <td>Joshué Agapé</td>
+                    <tr v-if="clients.length > 0" v-for="client in clients" :key="client.id">
+                        <td>{{ client.id }}</td>
+                        <td>{{ client.last_name }}</td>
                         <td>
                             <div class="avatar">
                                 <img src="../../../assets/imgs/1869679.png" alt="">
                             </div>
                         </td>
-                        <td>LOT EO73/3702<br>Ambalapaiso Fianarantsoa</td>
-                        <td>034 35 626 26</td>
-                        <td>Man</td>
-                        <td>true</td>
-                        <td>true</td>
+                        <td>{{ client.address }}<br>{{ client.city }}</td>
+                        <td>{{ client.phone_number }}</td>
+                        <td>{{ client.sexe }}</td>
+                        <td>{{ client.is_validate === 1 ? true : false }}</td>
+                        <td>{{ client.debs }}</td>
                         <td class="btn">
                             <button @click="toggleModal">
                                 <span>more info</span>
@@ -118,26 +180,9 @@ export default {
                             </button>
                         </td>
                     </tr>
-                    <!-- <tr>
-                        <td>122</td>
-                        <td>Joshué Agapé</td>
-                        <td>
-                            <div class="avatar">
-                                <img src="../../../assets/imgs/1869679.png" alt="">
-                            </div>
-                        </td>
-                        <td>Ambalapaiso Fianarantsoa</td>
-                        <td>034 35 626 26</td>
-                        <td>homme</td>
-                        <td>true</td>
-                        <td>true</td>
-                        <td class="btn">
-                            <button @click="toggleModal">
-                                <span>more info</span>
-                                <i class="ri-arrow-right-circle-line"></i>
-                            </button>
-                        </td>
-                    </tr> -->
+                    <tr v-else>
+                        <td colspan="9">User not found or database is empty!</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -166,8 +211,8 @@ export default {
                     <statistics-vue v-if="titleInfo == 'Statistiques'" />
                     <personal-info-vue v-if="titleInfo == 'Basic information'" />
                     <booking-vue v-if="titleInfo == 'Booking story'" />
-                    <personal-story-vue v-if="titleInfo == 'Story personal'"/>
-                    <chat-vue v-if="titleInfo == 'Chat'"/>
+                    <personal-story-vue v-if="titleInfo == 'Story personal'" />
+                    <chat-vue v-if="titleInfo == 'Chat'" />
                 </div>
             </div>
         </div>

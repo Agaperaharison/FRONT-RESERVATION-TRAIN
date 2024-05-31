@@ -6,20 +6,52 @@ export default {
     },
     data() {
         return {
-            itemNavActive: 'gare',
+            itemNavActive: 'train',
+            train_lists: [],
+            stations_lists: [],
+            count: 0,
+            name: '',
         }
+    },
+    mounted(){
+        this.getListsStations();
+        this.getListsTrain();
     },
     methods: {
         activeItemNav(itemNav) {
             this.itemNavActive = itemNav
-        }
+            if(itemNav=='gare'){
+                this.getListsStations();
+            }else{
+                this.getListsTrain();
+            }
+        },
+        async getListsTrain(){
+            try{
+                const response = await axios.get('/trips/get-all-trains');
+                this.train_lists = response.data.data;
+                this.count = response.data.data.length
+                this.name = 'trains'
+            }catch(err){
+                console.log(err.message)
+            }
+        },
+        async getListsStations(){
+            try{
+                const response = await axios.get('/trips/get-all-stations');
+                this.stations_lists = response.data.data;
+                this.count = response.data.data.length
+                this.name = 'stations'
+            }catch(err){
+                console.log(err.message)
+            }
+        },
     }
 }
 </script>
 
 <template>
     <div class="right">
-        <trips-insight-vue :value="45" />
         <div class="div">
             <ul class="nav">
                 <li :class="{ active: itemNavActive == 'gare' }" @click="activeItemNav('gare')">
@@ -31,9 +63,26 @@ export default {
                     <span>Train</span>
                 </li>
             </ul>
-            <h3>COUNT : <span>05 stations</span></h3>
+            <h3>COUNT : <span>{{ count }} {{ name }}</span></h3>
             <div id="lists" :class="{ show: itemNavActive == 'gare' }">
-                <div class="card">
+                <div class="card" v-for="station in stations_lists" :key="station.id">
+                    <div class="card-header">
+                        <h4 class="card-title">Gare de {{ station.localisation_city }}</h4>
+                        <h4 class="card-title">{{ station.localisation_postal_code }}</h4>
+                    </div>
+                    <div class="card-body">
+                        <h4>Localisation</h4>
+                        <p>
+                            <span>Latitude :</span>
+                            <span>{{ station.latitude }}</span>
+                        </p>
+                        <p>
+                            <span>Longitude :</span>
+                            <span>{{ station.longitude }}</span>
+                        </p>
+                    </div>
+                </div>
+                <!-- <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">Gare de FIANARANTSOA</h4>
                         <h4 class="card-title">301</h4>
@@ -49,61 +98,27 @@ export default {
                             <span>545545.6656</span>
                         </p>
                     </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">Gare de FIANARANTSOA</h4>
-                        <h4 class="card-title">301</h4>
-                    </div>
-                    <div class="card-body">
-                        <h4>Localisation</h4>
-                        <p>
-                            <span>Latitude :</span>
-                            <span>545545.6656</span>
-                        </p>
-                        <p>
-                            <span>Longitude :</span>
-                            <span>545545.6656</span>
-                        </p>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">Gare de FIANARANTSOA</h4>
-                        <h4 class="card-title">301</h4>
-                    </div>
-                    <div class="card-body">
-                        <h4>Localisation</h4>
-                        <p>
-                            <span>Latitude :</span>
-                            <span>545545.6656</span>
-                        </p>
-                        <p>
-                            <span>Longitude :</span>
-                            <span>545545.6656</span>
-                        </p>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">Gare de FIANARANTSOA</h4>
-                        <h4 class="card-title">301</h4>
-                    </div>
-                    <div class="card-body">
-                        <h4>Localisation</h4>
-                        <p>
-                            <span>Latitude :</span>
-                            <span>545545.6656</span>
-                        </p>
-                        <p>
-                            <span>Longitude :</span>
-                            <span>545545.6656</span>
-                        </p>
-                    </div>
-                </div>
+                </div> -->
             </div>
             <div id="lists" :class="{ show: itemNavActive == 'train' }">
-                <div class="card">
+                <div class="card" v-for="train in train_lists" :key="train.id">
+                    <div class="card-header">
+                        <h4 class="card-title">{{ train.design }}</h4>
+                        <h4 class="card-title">{{ train.train_matricule }}</h4>
+                    </div>
+                    <div class="card-body">
+                        <h4>About</h4>
+                        <p>
+                            <span>Total siege :</span>
+                            <span>{{ train.siege }}</span>
+                        </p>
+                        <p>
+                            <span>Color :</span>
+                            <span>{{ train.color }}</span>
+                        </p>
+                    </div>
+                </div>
+                <!-- <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">TRAIN TURBO</h4>
                         <h4 class="card-title">FD-0015TR</h4>
@@ -119,58 +134,7 @@ export default {
                             <span>red-blue-white</span>
                         </p>
                     </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">TRAIN TURBO</h4>
-                        <h4 class="card-title">FD-0015TR</h4>
-                    </div>
-                    <div class="card-body">
-                        <h4>About</h4>
-                        <p>
-                            <span>Total siege :</span>
-                            <span>545545.6656</span>
-                        </p>
-                        <p>
-                            <span>Color :</span>
-                            <span>red-blue-white</span>
-                        </p>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">TRAIN TURBO</h4>
-                        <h4 class="card-title">FD-0015TR</h4>
-                    </div>
-                    <div class="card-body">
-                        <h4>About</h4>
-                        <p>
-                            <span>Total siege :</span>
-                            <span>545545.6656</span>
-                        </p>
-                        <p>
-                            <span>Color :</span>
-                            <span>red-blue-white</span>
-                        </p>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">TRAIN TURBO</h4>
-                        <h4 class="card-title">FD-0015TR</h4>
-                    </div>
-                    <div class="card-body">
-                        <h4>About</h4>
-                        <p>
-                            <span>Total siege :</span>
-                            <span>545545.6656</span>
-                        </p>
-                        <p>
-                            <span>Color :</span>
-                            <span>red-blue-white</span>
-                        </p>
-                    </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -178,7 +142,6 @@ export default {
 
 <style scoped>
 .div {
-    margin-top: 2rem;
     background: var(--color-white);
     padding: 1rem 1rem 2rem;
     border-top-left-radius: 30px;
@@ -241,6 +204,9 @@ h3 span {
     flex-direction: column;
     gap: 1rem;
     display: none;
+    max-height: 78vh;
+    overflow-y: auto;
+    padding-right: 1rem;
 }
 
 #lists.show {
@@ -248,6 +214,7 @@ h3 span {
 }
 
 .card {
+    margin-top: 1rem;
     width: 100%;
     border: 1px solid var(--color-info-light);
     border-radius: 7px;

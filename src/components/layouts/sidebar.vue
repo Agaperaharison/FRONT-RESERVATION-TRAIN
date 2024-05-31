@@ -105,13 +105,13 @@ export default {
                 </router-link>
                 <span class="tooltip">Setting</span>
             </li>
-            <li :class="{ active : $route.path === '/admin-page/help' }">
+            <!-- <li :class="{ active : $route.path === '/admin-page/help' }">
                 <router-link to="/admin-page/help">
                     <i class="ri-lightbulb-fill"></i>
                     <span class="link_name">help?</span>
                 </router-link>
                 <span class="tooltip">help?</span>
-            </li>
+            </li> -->
             <li>
                 <div class="mode" :class="{ dark: modeDark }">
                     <div class="moon-sun">
