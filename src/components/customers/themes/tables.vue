@@ -19,6 +19,7 @@ export default {
 
             openModal: false,
             titleInfo: 'Statistiques',
+            info_user: [],
         }
     },
     mounted() {
@@ -93,6 +94,12 @@ export default {
                 console.log(err.message);
             }
         },
+        filterClientById(id) {
+            const client = this.clients_lists.filter(user => user.id === id);
+            this.info_user = client;
+            //console.log(this.info_user[0]);
+            this.toggleModal();
+        }
     }
 }
 </script>
@@ -174,7 +181,7 @@ export default {
                         <td>{{ client.is_validate === 1 ? true : false }}</td>
                         <td>{{ client.debs }}</td>
                         <td class="btn">
-                            <button @click="toggleModal">
+                            <button @click="filterClientById(client.id)">
                                 <span>more info</span>
                                 <i class="ri-arrow-right-circle-line"></i>
                             </button>
@@ -186,6 +193,7 @@ export default {
                 </tbody>
             </table>
         </div>
+
         <div id="modal" :class="{ open: openModal }" @click="toggleModal">
             <div class="modal-wrapper" @click="toggleModal">
                 <i class="ri-close-fill" @click="toggleModal"></i>
@@ -193,7 +201,7 @@ export default {
                     <div class="avatar-client">
                         <img src="../../../assets/imgs/pexels-mtcd-5588646.jpg" alt="">
                     </div>
-                    <h3>Joshué Agapé</h3>
+                    <h3>{{ info_user.length > 0 ? info_user[0].last_name : null }}</h3>
                     <hr>
                     <ul>
                         <li :class="{ active: titleInfo == 'Statistiques' }"
@@ -209,8 +217,10 @@ export default {
                 </div>
                 <div class="container-info-client">
                     <statistics-vue v-if="titleInfo == 'Statistiques'" />
-                    <personal-info-vue v-if="titleInfo == 'Basic information'" />
-                    <booking-vue v-if="titleInfo == 'Booking story'" />
+
+                    <personal-info-vue v-if="titleInfo == 'Basic information'" :first_name="info_user[0].first_name" :last_name="info_user[0].last_name" :title="info_user[0].title" :birth="info_user[0].date_of_birth" :phone_number="info_user[0].phone_number" :email="info_user[0].email" :address="info_user[0].address" :city="info_user[0].city" :code="info_user[0].postal_code" :nationality="info_user[0].nationality" />
+
+                    <booking-vue v-if="titleInfo == 'Booking story'" :data="info_user[0].reservations"/>
                     <personal-story-vue v-if="titleInfo == 'Story personal'" />
                     <chat-vue v-if="titleInfo == 'Chat'" />
                 </div>

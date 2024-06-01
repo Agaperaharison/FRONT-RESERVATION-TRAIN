@@ -77,7 +77,7 @@ export default {
                 </router-link>
                 <span class="tooltip">Dashboard</span>
             </li>
-            <li :class="{ active : $route.path === '/admin-page/customers/clients' || $route.path === '/admin-page/customers/agents' || $route.path === '/admin-page/customers/more-info' }">
+            <li :class="{ active : $route.path === '/admin-page/new-agent' || $route.path === '/admin-page/customers/clients' || $route.path === '/admin-page/customers/agents' || $route.path === '/admin-page/customers/more-info' }">
                 <router-link to="/admin-page/customers/clients">
                     <i class="ri-team-line"></i>
                     <span class="link_name">Customers</span>

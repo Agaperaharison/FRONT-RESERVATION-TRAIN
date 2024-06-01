@@ -8,15 +8,11 @@ export default {
         return {
             active_item_nav_bar: 'all',
             lists_agents: [],
-
-            count_all: 0,
-            count_woman: 0,
-            count_man: 0,
+            agents: [],
         }
     },
     mounted() {
         this.agentsLists();
-        this.showNumber();
     },
     methods: {
         activeItemBar(navItem) {
@@ -29,29 +25,21 @@ export default {
         },
         async agentsLists() {
             try {
-                const response = await axios.get('/users/lists-customers/agents');
+                const response = await axios.get('/users/get-customers-lists/AGENT');
                 this.lists_agents = response.data.data;
-                this.count_all = response.data.data.length;
+                this.agents = response.data.data;
             } catch (err) {
                 console.log(err.message)
             }
         },
         async filter(value) {
             try {
-                const response = await axios.get(`/users/filter-agent-by/sexe/${value}`);
-                this.lists_agents = response.data.data;
+                const agentFiltered = this.lists_agents.filter(agent => agent.sexe === value);
+                this.agents = agentFiltered
             } catch (err) {
                 console.log(err.message)
             }
         },
-        async count(value){
-            const response = await axios.get(`/users/filter-agent-by/sexe/${value}`);
-            return response.data.data.length
-        },
-        async showNumber(){
-            this.count_woman = await this.count('femme');
-            this.count_man = await this.count('homme');
-        }
     }
 }
 </script>
@@ -61,34 +49,35 @@ export default {
         <ul>
             <li :class="{ active: active_item_nav_bar == 'all' }" @click="activeItemBar('all')">
                 <span>All</span>
-                <span>{{ count_all }}</span>
+                <span>{{ lists_agents.length }}</span>
             </li>
             <li :class="{ active: active_item_nav_bar == 'femme' }" @click="activeItemBar('femme')">
                 <span>Woman</span>
-                <span>{{ count_woman }}</span>
+                <span>{{ this.lists_agents.filter(agent => agent.sexe === "femme").length }}</span>
             </li>
             <li :class="{ active: active_item_nav_bar == 'homme' }" @click="activeItemBar('homme')">
                 <span>Man</span>
-                <span>{{ count_man }}</span>
+                <span>{{ this.lists_agents.filter(agent => agent.sexe === "homme").length }}</span>
             </li>
         </ul>
         <div class="count">
             <span>COUNT : </span>
-            <span>{{ count_all }}</span>
+            <span>{{ lists_agents.length }}</span>
         </div>
     </nav>
     <div class="cards">
-        <card-customer-vue v-if="lists_agents.length > 0" v-for="agent in lists_agents" :key="agent.id"
+        <card-customer-vue v-if="agents.length > 0" v-for="agent in agents" :key="agent.id"
             :old="agent.title" :tache="0" :matricule="agent.matricule" :last_name="agent.last_name"
             :email="agent.email" />
 
         <div class="card-add-new-agent">
-            <a href="#">
+            <router-link to="/admin-page/new-agent">
                 <i class="ri-user-add-line"></i>
                 <span>New Agent</span>
-            </a>
+            </router-link>
         </div>
     </div>
+    .
 </template>
 
 <style scoped>

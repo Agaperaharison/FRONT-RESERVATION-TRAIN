@@ -22,15 +22,24 @@ export default {
             valid_customer: 0,
             total_trips: 0,
             total_reservation: 0,
+            date_value: '',
         }
     },
     mounted() {
         this.customers_count();
         this.trips_count();
         this.reservations_count();
+        this.sales();
     },
     methods: {
-        
+        async sales(date) {
+            try {
+                const response = await axios.get(`/reservations/total-sales/${date}`)
+                console.log(response.data.data);
+            } catch (err) {
+                console.log(err.message)
+            }
+        },
         // response.data.data : total, total_valid, total_invalid
         async customers_count() {
             try {
@@ -58,7 +67,7 @@ export default {
             } catch (err) {
                 console.log(err.message);
             }
-        }
+        },
     }
 }
 </script>
@@ -70,7 +79,7 @@ export default {
                 <div class="header">
                     <h1>DASHBOARD</h1>
                     <div class="date">
-                        <input type="date">
+                        <input type="date" v-model="date_value">
                     </div>
                 </div>
                 <div class="insights">

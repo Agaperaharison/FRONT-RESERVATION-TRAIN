@@ -1,5 +1,40 @@
 <script>
-
+export default {
+    data() {
+        return {
+            listes: [],
+            analytics: []
+        }
+    },
+    mounted() {
+        this.getLists();
+    },
+    methods: {
+        async getLists() {
+            try {
+                const response = await axios.get(`/dashboard/get-data-in-analytics`);
+                this.listes = response.data.data;
+                this.analytics = response.data.data;
+            } catch (err) {
+                console.log(err.message)
+            }
+        },
+        formattedDate(date) {
+            return new Date(date).toLocaleDateString('en-US', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+            });
+        },
+        formattedTime(time) {
+            return new Date(time).toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+            });
+        },
+    }
+}
 </script>
 
 <template>
@@ -23,65 +58,24 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Train Turbo</td>
-                    <td>24 Mey 2024 à 05:30</td>
-                    <td>Fianarantsoa</td>
-                    <td>Manakara</td>
-                    <td>120</td>
-                    <td>56</td>
-                    <td>64</td>
-                    <td>65% <i class="ri-arrow-up-fill"></i></td>
+                <tr v-if="analytics.length > 0" v-for="analytic in analytics" :key="analytic.id">
+                    <td>{{ analytic.id }}</td>
+                    <td>{{ analytic.train.design }}</td>
+                    <td>{{ formattedDate(analytic.departure_date) }} à {{ analytic.departure_time }}</td>
+                    <td>{{ analytic.from.localisation_city }}</td>
+                    <td>{{ analytic.to.localisation_city }}</td>
+                    <td>{{ analytic.train.siege }}</td>
+                    <td>{{ analytic.train.siege - (analytic.seatUnavailable ? analytic.seatUnavailable : 0) }}</td>
+                    <td>{{ analytic.seatUnavailable ? analytic.seatUnavailable : 0 }}</td>
+                    <td>{{ ((analytic.seatUnavailable ? analytic.seatUnavailable : 0) * 100) / analytic.train.siege }}%
+                        <i v-if="((analytic.seatUnavailable ? analytic.seatUnavailable : 0) * 100) / analytic.train.siege > 50"
+                            class="ri-arrow-up-fill"></i>
+                        <i v-else
+                            class="ri-arrow-down-fill"></i></td>
                     <td><span class="pending">pending</span></td>
                 </tr>
-                <tr>
-                    <td>1</td>
-                    <td>Train Turbo</td>
-                    <td>24 Mey 2024 à 05:30</td>
-                    <td>Fianarantsoa</td>
-                    <td>Manakara</td>
-                    <td>120</td>
-                    <td>56</td>
-                    <td>64</td>
-                    <td>45% <i class="ri-arrow-down-fill"></i></td>
-                    <td><span class="pending">pending</span></td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>Train Turbo</td>
-                    <td>24 Mey 2024 à 05:30</td>
-                    <td>Fianarantsoa</td>
-                    <td>Manakara</td>
-                    <td>120</td>
-                    <td>56</td>
-                    <td>64</td>
-                    <td>65% <i class="ri-arrow-up-fill"></i></td>
-                    <td><span class="pending">pending</span></td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>Train Turbo</td>
-                    <td>24 Mey 2024 à 05:30</td>
-                    <td>Fianarantsoa</td>
-                    <td>Manakara</td>
-                    <td>120</td>
-                    <td>56</td>
-                    <td>64</td>
-                    <td>65% <i class="ri-arrow-up-fill"></i></td>
-                    <td><span class="unavailable">unavailable</span></td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>Train Turbo</td>
-                    <td>24 Mey 2024 à 05:30</td>
-                    <td>Fianarantsoa</td>
-                    <td>Manakara</td>
-                    <td>120</td>
-                    <td>56</td>
-                    <td>64</td>
-                    <td>45% <i class="ri-arrow-down-fill"></i></td>
-                    <td><span class="unavailable">unavailable</span></td>
+                <tr v-else>
+                    <td colspan="10" style="text-align:center;">Data not found or database is empty!</td>
                 </tr>
             </tbody>
         </table>

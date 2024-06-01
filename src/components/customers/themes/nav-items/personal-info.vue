@@ -1,5 +1,14 @@
 <script>
+    export default {
+        props: [
+            "first_name", "last_name", "title", "birth", "phone_number", "email", "address", "city", "code", "nationality"
+        ],
+        data(){
+            return {
 
+            }
+        }
+    }
 </script>
 
 <template>
@@ -7,54 +16,46 @@
     <div class="basic">
         <div class="basic-item">
             <h4>First name</h4>
-            <h3>RAHARISON</h3>
+            <h3>{{ first_name }}</h3>
         </div>
         <div class="basic-item">
             <h4>Last name</h4>
-            <h3>Joshué Agapé</h3>
+            <h3>{{ last_name }}</h3>
         </div>
         <div class="basic-item">
             <h4>Title</h4>
-            <h3>Mr</h3>
+            <h3>{{ title }}</h3>
         </div>
         <div class="basic-item">
             <h4>Date of birth</h4>
-            <h3>10/10/2001</h3>
+            <h3>{{ birth }}</h3>
         </div>
         <div class="basic-item">
             <h4>Phone number</h4>
-            <h3>+261 34 35 626 26</h3>
+            <h3>{{ phone_number }}</h3>
         </div>
         <div class="basic-item">
             <h4>Email</h4>
-            <h3>joshueagape@gmail.com</h3>
-        </div>
-        <div class="basic-item">
-            <h4>Relationship</h4>
-            <h3>Alone</h3>
-        </div>
-        <div class="basic-item">
-            <h4>Nationality</h4>
-            <h3>Malagasy</h3>
+            <h3>{{ email }}</h3>
         </div>
     </div>
     <h1>Address</h1>
     <div class="basic">
         <div class="basic-item">
             <h4>Address</h4>
-            <h3>Lot EO73/3702</h3>
-        </div>
-        <div class="basic-item">
-            <h4>Address field</h4>
-            <h3>Ambalapaiso</h3>
+            <h3>{{ address }}</h3>
         </div>
         <div class="basic-item">
             <h4>Contry</h4>
-            <h3>Fianarantsoa</h3>
+            <h3>{{ city }}</h3>
         </div>
         <div class="basic-item">
             <h4>Postal code</h4>
-            <h3>301</h3>
+            <h3>{{ code }}</h3>
+        </div>
+        <div class="basic-item">
+            <h4>Nationality</h4>
+            <h3>{{ nationality }}</h3>
         </div>
     </div>
 </template>
@@ -64,7 +65,7 @@
     margin-top: 1rem;
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.8rem;
     margin-bottom: 2.5rem;
 }

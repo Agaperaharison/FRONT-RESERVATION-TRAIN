@@ -1,0 +1,214 @@
+<script>
+export default {
+    data(){
+        return {
+            nationality: '',
+            first_name: '',
+            last_name: '',
+            email: '',
+            phone_number: '',
+            sexe: 'homme',
+            date_of_birth: '',
+            domicile: '',
+            city: '',
+            code: '',
+        }
+    },
+    methods: {
+        async addAgent(){
+            try{
+                const response = await axios.post('/users/add-new-agent', {
+                    email: this.email,
+                    first_name: this.first_name,
+                    last_name: this.last_name,
+                    sexe: this.sexe,
+                    phone_number: this.phone_number,
+                    date_of_birth: this.date_of_birth,
+                    address: this.domicile,
+                    city: this.city,
+                    postal_code: this.code,
+                    nationality: this.nationality,
+
+                });
+                console.log(response.data.data);
+            }catch(err){
+                console.log(err.message)
+            }
+        }
+    }
+}
+</script>
+
+<template>
+    <div class="container">
+        <router-link to="/admin-page/customers/agents" class="return">
+            <i class="ri-arrow-left-circle-line"> </i> <span>back</span>
+        </router-link>
+        <form>
+            <h1>ADDITIONAL FORM</h1>
+            <div class="form-container">
+                <div class="left">
+                    <div class="form-group">
+                        <label for="">Nationality</label>
+                        <input type="text" v-model="nationality" id="">
+                    </div>
+                    <div class="form-group">
+                        <label for="">First name</label>
+                        <input type="text" v-model="first_name" id="">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Last name</label>
+                        <input type="text" v-model="last_name" id="">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Address e-mail</label>
+                        <input type="text" v-model="email" id="">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Phone number</label>
+                        <input type="text" v-model="phone_number" id="">
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="form-group">
+                        <label for="">Sexe</label>
+                        <div class="input-radio">
+                            <div class="homme">
+                                <input type="radio" name="sexe" id="homme" value="homme">
+                                <label for="homme">homme</label>
+                            </div>
+                            <div class="homme">
+                                <input type="radio" name="sexe" id="femme" value="femme">
+                                <label for="femme">femme</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Date of birth</label>
+                        <input type="date" v-model="date_of_birth" id="">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Domicile</label>
+                        <input type="text" v-model="domicile" id="">
+                    </div>
+                    <div class="form-group">
+                        <label for="">City</label>
+                        <input type="text" v-model="city" id="">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Postal code</label>
+                        <input type="number" v-model="code" id="">
+                    </div>
+                </div>
+            </div>
+            <button class="btn-add" @click.prevent="addAgent">save</button>
+        </form>
+    </div>
+</template>
+
+<style scoped>
+.container {
+    width: 100%;
+}
+.return {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--color-info-dark);
+    cursor: pointer;
+    transition: all .3s ease;
+}
+.return:hover {
+    color: var(--color-dark);
+}
+.ri-arrow-left-circle-line {
+    font-size: 2rem;
+}
+
+span {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+form {
+    background: var(--color-white);
+    width: 730px;
+    padding: 2rem 2.6rem;
+    margin-top: 2rem;
+    border-radius: 12px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--color-info-dark);
+}
+
+.form-container {
+    display: grid;
+    gap: 4rem;
+    grid-template-columns: repeat(2, 300px);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.form-group label {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--color-dark);
+}
+
+input[type="text"],
+input[type="date"],
+input[type="number"] {
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: 10px 1rem;
+    border-radius: 6px;
+    border: 1px solid var(--color-info-dark);
+    background: var(--color-white);
+    color: var(--color-dark);
+}
+
+.homme {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 19px;
+}
+
+.input-radio input {
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: 10px 1rem;
+}
+
+.input-radio {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+}
+
+.btn-add {
+    margin-top: .5rem;
+    padding: 10px 1rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--color-light);
+    border-radius: 10px;
+    width: 150Px;
+    color: var(--color-dark);
+    transition: all .3s ease;
+}
+
+.btn-add:hover {
+    background: var(--color-primary);
+    color: #fff;
+}
+</style>

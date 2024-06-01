@@ -1,9 +1,16 @@
 <script>
 export default {
+    props: [
+        "data"
+    ],
     data() {
         return {
             itemActive: 'all',
+            reservations_lists: this.data,
+            reservations: this.data,
         }
+    },
+    mounted(){
     },
     methods: {
         activeItem(item) {
@@ -19,18 +26,18 @@ export default {
         <ul>
             <li :class="{ active: itemActive == 'all' }" @click="activeItem('all')">
                 <span>all</span>
-                <span>12</span>
+                <span>{{ reservations_lists.length }}</span>
             </li>
             <li :class="{ active: itemActive == 'paid' }" @click="activeItem('paid')">
                 <span>paid</span>
-                <span>12</span>
+                <span>0</span>
             </li>
             <li :class="{ active: itemActive == 'unpaid' }" @click="activeItem('unpaid')">
                 <span>unpaid</span>
-                <span>12</span>
+                <span>0</span>
             </li>
         </ul>
-        <span class="count">13</span>
+        <span class="count">{{ reservations_lists.length }}</span>
     </div>
     <div class="lists-booking">
         <table>
@@ -46,8 +53,8 @@ export default {
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td><span>24 Mey 2024</span><br><small>à 14h34</small></td>
+                <tr v-if="reservations.length > 0" v-for="reservation in reservations" :key="reservation.id">
+                    <td><span>{{ reservation.createdAt }}</span><br><small>à {{ reservation.createdAt }}</small></td>
                     <td>Fianarantsoa</td>
                     <td>Manakara</td>
                     <td>02 seats</td>
@@ -55,14 +62,8 @@ export default {
                     <td>15 000 Ar</td>
                     <td>10 000 Ar</td>
                 </tr>
-                <tr>
-                    <td><span>24 Mey 2024</span><br><small>à 14h34</small></td>
-                    <td>Fianarantsoa</td>
-                    <td>Manakara</td>
-                    <td>02 seats</td>
-                    <td>25 000 Ar x 2</td>
-                    <td>15 000 Ar</td>
-                    <td>10 000 Ar</td>
+                <tr v-else>
+                    <td colspan="7">Empty!</td>
                 </tr>
             </tbody>
         </table>
