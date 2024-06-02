@@ -323,7 +323,7 @@ export default {
                                         : 'paid' }}</span></td>
                                 </tr>
                                 <tr v-else>
-                                    <td colspan="6">This client has never made any bookings with this company.</td>
+                                    <td colspan="10">This client has never made any bookings with this company.</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -477,7 +477,7 @@ export default {
 }
 
 .nav-plus li span {
-    background: var(--color-info-light);
+    background: var(--color-light);
     padding: 0 4px;
     border-radius: 6px;
     color: var(--color-dark);

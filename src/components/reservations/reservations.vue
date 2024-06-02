@@ -55,7 +55,7 @@ export default {
                 })
             } else {
                 this.reservations = this.reservations_lists.filter(res => {
-                    this.formattedDate(res.createdAt) === this.formattedDate(this.date_value) && res.unpaid > 0
+                    return this.formattedDate(res.createdAt) === this.formattedDate(this.date_value) && res.unpaid > 0
                 })
             }
         },
