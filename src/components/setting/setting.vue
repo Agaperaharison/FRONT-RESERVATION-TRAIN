@@ -3,9 +3,9 @@
 </script>
 
 <template>
-    <h1>SETTING</h1>
+    <div class="main">
+        <h1>SETTING</h1>
+    </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -85,185 +85,192 @@ export default {
 </script>
 
 <template>
-    <div class="container">
-        <div class="header">
-            <h1>{{ filter ? filter : 'All' }} reservations</h1>
-            <div class="filter">
-                <div class="input-search">
-                    <input type="search" v-model="searchValue" placeholder="search" @input="search">
-                    <i class="ri-search-line"></i>
-                </div>
-                <div class="option">
-                    <select v-model="filter" @change="filterByOption">
-                        <option value="" disabled selected>Filter</option>
-                        <option value="All">All</option>
-                        <option value="Paid">Paid</option>
-                        <option value="Unpaid">Unpaid</option>
-                    </select>
-                    <i class="ri-equalizer-fill"></i>
-                </div>
-                <div class="date">
-                    <input type="date" v-model="date_value" @input="filterByDate">
+    <div class="main">
+        <div class="container">
+            <div class="header">
+                <h1>{{ filter ? filter : 'All' }} reservations</h1>
+                <div class="filter">
+                    <div class="input-search">
+                        <input type="search" v-model="searchValue" placeholder="search" @input="search">
+                        <i class="ri-search-line"></i>
+                    </div>
+                    <div class="option">
+                        <select v-model="filter" @change="filterByOption">
+                            <option value="" disabled selected>Filter</option>
+                            <option value="All">All</option>
+                            <option value="Paid">Paid</option>
+                            <option value="Unpaid">Unpaid</option>
+                        </select>
+                        <i class="ri-equalizer-fill"></i>
+                    </div>
+                    <div class="date">
+                        <input type="date" v-model="date_value" @input="filterByDate">
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="body">
-            <table>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Client</th>
-                        <th>Date reservation</th>
-                        <th>Departure date</th>
-                        <th>from</th>
-                        <th>to</th>
-                        <th>status</th>
-                        <th>actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-if="reservations.length > 0" v-for="reservation in reservations" :key="reservation.id">
-                        <td>{{ reservation.id }}</td>
-                        <td>{{ reservation.client[0].last_name }}</td>
-                        <td><span>{{ formattedDate(reservation.createdAt) }}</span><br> <small>{{
-                            formattedTime(reservation.createdAt) }}</small></td>
-                        <td><span>{{ formattedDate(reservation.trip[0].departure_date) }}</span><br> <small>{{
-                            reservation.trip[0].departure_time }}</small></td>
-                        <td>{{ reservation.trip[0].from[0].localisation_city }} {{
-                            reservation.trip[0].from[0].localisation_postal_code }}</td>
-                        <td>{{ reservation.trip[0].to[0].localisation_city }} {{
-                            reservation.trip[0].to[0].localisation_postal_code }}</td>
-                        <td><span :class="reservation.unpaid > 0 ? 'unpaid' : 'paid'">{{ reservation.unpaid > 0 ?
-                            'unpaid' : 'paid' }}</span></td>
-                        <td class="action">
-                            <i class="ri-eye-line" @click="filterMoreInfo(reservation.id)"></i>
-                            <i class="ri-edit-circle-line"></i>
-                            <i class="ri-download-2-line"></i>
-                        </td>
-                    </tr>
-                    <tr v-else>
-                        <td colspan="8">No reseravtion found!</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+            <div class="body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Client</th>
+                            <th>Date reservation</th>
+                            <th>Departure date</th>
+                            <th>from</th>
+                            <th>to</th>
+                            <th>status</th>
+                            <th>actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-if="reservations.length > 0" v-for="reservation in reservations" :key="reservation.id">
+                            <td>{{ reservation.id }}</td>
+                            <td>{{ reservation.client[0].last_name }}</td>
+                            <td><span>{{ formattedDate(reservation.createdAt) }}</span><br> <small>{{
+                                formattedTime(reservation.createdAt) }}</small></td>
+                            <td><span>{{ formattedDate(reservation.trip[0].departure_date) }}</span><br> <small>{{
+                                reservation.trip[0].departure_time }}</small></td>
+                            <td>{{ reservation.trip[0].from[0].localisation_city }} {{
+                                reservation.trip[0].from[0].localisation_postal_code }}</td>
+                            <td>{{ reservation.trip[0].to[0].localisation_city }} {{
+                                reservation.trip[0].to[0].localisation_postal_code }}</td>
+                            <td><span :class="reservation.unpaid > 0 ? 'unpaid' : 'paid'">{{ reservation.unpaid > 0 ?
+                                'unpaid' : 'paid' }}</span></td>
+                            <td class="action">
+                                <i class="ri-eye-line" @click="filterMoreInfo(reservation.id)"></i>
+                                <i class="ri-edit-circle-line"></i>
+                                <i class="ri-download-2-line"></i>
+                            </td>
+                        </tr>
+                        <tr v-else>
+                            <td colspan="8">No reseravtion found!</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-        <div id="modal" :class="{ open: openModal }" @click="toggleModal">
-            <div class="modal-wrapper1" @click="toggleModal">
-                <i class="ri-close-fill" @click="toggleModal"></i>
-                <h2>MORE INFO</h2>
-                <div class="info-client">
-                    <div class="avatar-client">
-                        <img src="../../assets/imgs/1869679.png" alt="">
+            <div id="modal" :class="{ open: openModal }" @click="toggleModal">
+                <div class="modal-wrapper1" @click="toggleModal">
+                    <i class="ri-close-fill" @click="toggleModal"></i>
+                    <h2>MORE INFO</h2>
+                    <div class="info-client">
+                        <div class="avatar-client">
+                            <img src="../../assets/imgs/1869679.png" alt="">
+                        </div>
+                        <div class="name-client">
+                            <h3>
+                                <span>{{ moreInfo.length > 0 ? moreInfo[0].client[0].first_name : null }} {{
+                                    moreInfo.length
+                                        > 0 ?
+                                    moreInfo[0].client[0].last_name : null }}</span><br>
+                                <small>{{ moreInfo.length > 0 ? moreInfo[0].client[0].email : null }}</small>
+                            </h3>
+                        </div>
                     </div>
-                    <div class="name-client">
-                        <h3>
-                            <span>{{ moreInfo.length > 0 ? moreInfo[0].client[0].first_name : null }} {{ moreInfo.length
-                                > 0 ?
-                                moreInfo[0].client[0].last_name : null }}</span><br>
-                            <small>{{ moreInfo.length > 0 ? moreInfo[0].client[0].email : null }}</small>
-                        </h3>
+                    <div class="more-info-user">
+                        <div class="div">
+                            <h3>
+                                <span>Habite à : </span>
+                                <small>{{ moreInfo.length > 0 ? moreInfo[0].client[0].city : null }}</small>
+                            </h3>
+                            <h3>
+                                <span>Domicile : </span>
+                                <small>{{ moreInfo.length > 0 ? moreInfo[0].client[0].address : null }}</small>
+                            </h3>
+                            <h3>
+                                <span>phone numbre : </span>
+                                <small>{{ moreInfo.length > 0 ? moreInfo[0].client[0].phone_number : null }}</small>
+                            </h3>
+                            <h3>
+                                <span>Nationality : </span>
+                                <small>{{ moreInfo.length > 0 ? moreInfo[0].client[0].nationality : null }}</small>
+                            </h3>
+                            <h3>
+                                <span>Sexe : </span>
+                                <small>{{ moreInfo.length > 0 ? moreInfo[0].client[0].sexe : null }}</small>
+                            </h3>
+                        </div>
+                        <div class="verify" v-if="moreInfo.length > 0">
+                            <h3
+                                :class="{ 'invalide': moreInfo[0].client[0].is_validate === 0, 'validate': moreInfo[0].client[0].is_validate === 1 }">
+                                <i
+                                    :class="{ 'ri-alert-line': moreInfo[0].client[0].is_validate === 0, 'ri-check-fill': moreInfo[0].client[0].is_validate === 1 }"></i>
+                                <small>{{ moreInfo[0].client[0].is_validate === 0 ? 'unvalidate' : 'validate' }}</small>
+                            </h3>
+                        </div>
                     </div>
-                </div>
-                <div class="more-info-user">
-                    <div class="div">
-                        <h3>
-                            <span>Habite à : </span>
-                            <small>{{ moreInfo.length > 0 ? moreInfo[0].client[0].city : null }}</small>
-                        </h3>
-                        <h3>
-                            <span>Domicile : </span>
-                            <small>{{ moreInfo.length > 0 ? moreInfo[0].client[0].address : null }}</small>
-                        </h3>
-                        <h3>
-                            <span>phone numbre : </span>
-                            <small>{{ moreInfo.length > 0 ? moreInfo[0].client[0].phone_number : null }}</small>
-                        </h3>
-                        <h3>
-                            <span>Nationality : </span>
-                            <small>{{ moreInfo.length > 0 ? moreInfo[0].client[0].nationality : null }}</small>
-                        </h3>
-                        <h3>
-                            <span>Sexe : </span>
-                            <small>{{ moreInfo.length > 0 ? moreInfo[0].client[0].sexe : null }}</small>
-                        </h3>
+                    <div class="activity">
+                        <div class="div">
+                            <i class="ri-calendar-todo-line"></i>
+                            <h2>0</h2>
+                        </div>
+                        <div class="div">
+                            <i class="ri-money-euro-circle-line"></i>
+                            <h2>{{ moreInfo.length > 0 ? (moreInfo[0].paid).toLocaleString('fr-FR') : null }} Ar</h2>
+                        </div>
+                        <div class="div">
+                            <i class="ri-money-euro-circle-line"></i>
+                            <h2>{{ moreInfo.length > 0 ? (moreInfo[0].unpaid).toLocaleString('fr-FR') : null }} Ar</h2>
+                        </div>
                     </div>
-                    <div class="verify" v-if="moreInfo.length > 0">
-                        <h3
-                            :class="{ 'invalide': moreInfo[0].client[0].is_validate === 0, 'validate': moreInfo[0].client[0].is_validate === 1 }">
-                            <i
-                                :class="{ 'ri-alert-line': moreInfo[0].client[0].is_validate === 0, 'ri-check-fill': moreInfo[0].client[0].is_validate === 1 }"></i>
-                            <small>{{ moreInfo[0].client[0].is_validate === 0 ? 'unvalidate' : 'validate' }}</small>
-                        </h3>
-                    </div>
-                </div>
-                <div class="activity">
-                    <div class="div">
-                        <i class="ri-calendar-todo-line"></i>
-                        <h2>0</h2>
-                    </div>
-                    <div class="div">
-                        <i class="ri-money-euro-circle-line"></i>
-                        <h2>{{ moreInfo.length > 0 ? (moreInfo[0].paid).toLocaleString('fr-FR') : null }} Ar</h2>
-                    </div>
-                    <div class="div">
-                        <i class="ri-money-euro-circle-line"></i>
-                        <h2>{{ moreInfo.length > 0 ? (moreInfo[0].unpaid).toLocaleString('fr-FR') : null }} Ar</h2>
-                    </div>
-                </div>
-                <div class="info-trip">
-                    <div class="div">
-                        <h3>TRAIN INFO:</h3>
-                        <table>
-                            <tr>
-                                <th>matricule</th>
-                                <th>design</th>
-                                <th>Seat</th>
-                            </tr>
-                            <tr>
-                                <td>{{ moreInfo.length > 0 ? moreInfo[0].trip[0].trains[0].train_matricule : null }}
-                                </td>
-                                <td>{{ moreInfo.length > 0 ? moreInfo[0].trip[0].trains[0].design : null }}</td>
-                                <td>{{ moreInfo.length > 0 ? moreInfo[0].trip[0].trains[0].siege : null }}</td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="div">
-                        <h3>TRIP INFO:</h3>
-                        <table>
-                            <tr>
-                                <!-- <th>#</th> -->
-                                <th>date</th>
-                                <th>time</th>
-                                <th>price</th>
-                            </tr>
-                            <tr>
-                                <!-- <td>{{ moreInfo.length > 0 ? moreInfo[0].trip[0].id : null }}</td> -->
-                                <td>{{ moreInfo.length > 0 ? formattedDate(moreInfo[0].trip[0].departure_date) : null }} </td>
-                                <td>{{ moreInfo.length > 0 ? moreInfo[0].trip[0].departure_time : null }}</td>
-                                <td>{{ moreInfo.length > 0 ? (moreInfo[0].trip[0].price).toLocaleString('fr-FR') : null
-                                    }} Ar</td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="div">
-                        <h3>RESERVATION INFO:</h3>
-                        <table>
-                            <tr>
-                                <th>N°</th>
-                                <th>Seats</th>
-                                <th>Rate</th>
-                                <th>Total</th>
-                            </tr>
-                            <tr>
-                                <td>{{ moreInfo.length > 0 ? moreInfo[0].id : null }}</td>
-                                <td>{{ moreInfo.length > 0 ? moreInfo[0].number_of_seats : null }}</td>
-                                <td>{{ moreInfo.length > 0 ? (moreInfo[0].trip[0].price).toLocaleString('fr-FR') : null }} Ar x {{ moreInfo.length
-                                    > 0 ? moreInfo[0].number_of_seats : null }}</td>
-                                <td>{{ moreInfo.length > 0 ? (moreInfo[0].trip[0].price * moreInfo[0].number_of_seats).toLocaleString('fr-FR') :
-                                    null }} Ar</td>
-                            </tr>
-                        </table>
+                    <div class="info-trip">
+                        <div class="div">
+                            <h3>TRAIN INFO:</h3>
+                            <table>
+                                <tr>
+                                    <th>matricule</th>
+                                    <th>design</th>
+                                    <th>Seat</th>
+                                </tr>
+                                <tr>
+                                    <td>{{ moreInfo.length > 0 ? moreInfo[0].trip[0].trains[0].train_matricule : null }}
+                                    </td>
+                                    <td>{{ moreInfo.length > 0 ? moreInfo[0].trip[0].trains[0].design : null }}</td>
+                                    <td>{{ moreInfo.length > 0 ? moreInfo[0].trip[0].trains[0].siege : null }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="div">
+                            <h3>TRIP INFO:</h3>
+                            <table>
+                                <tr>
+                                    <!-- <th>#</th> -->
+                                    <th>date</th>
+                                    <th>time</th>
+                                    <th>price</th>
+                                </tr>
+                                <tr>
+                                    <!-- <td>{{ moreInfo.length > 0 ? moreInfo[0].trip[0].id : null }}</td> -->
+                                    <td>{{ moreInfo.length > 0 ? formattedDate(moreInfo[0].trip[0].departure_date) :
+                                        null }} </td>
+                                    <td>{{ moreInfo.length > 0 ? moreInfo[0].trip[0].departure_time : null }}</td>
+                                    <td>{{ moreInfo.length > 0 ? (moreInfo[0].trip[0].price).toLocaleString('fr-FR') :
+                                        null
+                                        }} Ar</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="div">
+                            <h3>RESERVATION INFO:</h3>
+                            <table>
+                                <tr>
+                                    <th>N°</th>
+                                    <th>Seats</th>
+                                    <th>Rate</th>
+                                    <th>Total</th>
+                                </tr>
+                                <tr>
+                                    <td>{{ moreInfo.length > 0 ? moreInfo[0].id : null }}</td>
+                                    <td>{{ moreInfo.length > 0 ? moreInfo[0].number_of_seats : null }}</td>
+                                    <td>{{ moreInfo.length > 0 ? (moreInfo[0].trip[0].price).toLocaleString('fr-FR') :
+                                        null }} Ar x {{ moreInfo.length
+                                            > 0 ? moreInfo[0].number_of_seats : null }}</td>
+                                    <td>{{ moreInfo.length > 0 ? (moreInfo[0].trip[0].price *
+                                        moreInfo[0].number_of_seats).toLocaleString('fr-FR') :
+                                        null }} Ar</td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

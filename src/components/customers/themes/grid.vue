@@ -45,42 +45,54 @@ export default {
 </script>
 
 <template>
-    <nav>
-        <ul>
-            <li :class="{ active: active_item_nav_bar == 'all' }" @click="activeItemBar('all')">
-                <span>All</span>
+    <div>
+        <nav>
+            <ul>
+                <li :class="{ active: active_item_nav_bar == 'all' }" @click="activeItemBar('all')">
+                    <span>All</span>
+                    <span>{{ lists_agents.length }}</span>
+                </li>
+                <li :class="{ active: active_item_nav_bar == 'femme' }" @click="activeItemBar('femme')">
+                    <span>Woman</span>
+                    <span>{{ this.lists_agents.filter(agent => agent.sexe === "femme").length }}</span>
+                </li>
+                <li :class="{ active: active_item_nav_bar == 'homme' }" @click="activeItemBar('homme')">
+                    <span>Man</span>
+                    <span>{{ this.lists_agents.filter(agent => agent.sexe === "homme").length }}</span>
+                </li>
+            </ul>
+            <div class="count">
+                <span>COUNT : </span>
                 <span>{{ lists_agents.length }}</span>
-            </li>
-            <li :class="{ active: active_item_nav_bar == 'femme' }" @click="activeItemBar('femme')">
-                <span>Woman</span>
-                <span>{{ this.lists_agents.filter(agent => agent.sexe === "femme").length }}</span>
-            </li>
-            <li :class="{ active: active_item_nav_bar == 'homme' }" @click="activeItemBar('homme')">
-                <span>Man</span>
-                <span>{{ this.lists_agents.filter(agent => agent.sexe === "homme").length }}</span>
-            </li>
-        </ul>
-        <div class="count">
-            <span>COUNT : </span>
-            <span>{{ lists_agents.length }}</span>
-        </div>
-    </nav>
-    <div class="cards">
-        <card-customer-vue v-if="agents.length > 0" v-for="agent in agents" :key="agent.id"
-            :old="agent.title" :tache="agent.nombre_de_tache" :matricule="agent.matricule" :last_name="agent.last_name"
-            :email="agent.email" />
+            </div>
+        </nav>
+        <div class="cards">
+            <card-customer-vue v-if="agents.length > 0" v-for="agent in agents" :key="agent.id" :old="agent.title"
+                :tache="agent.nombre_de_tache" :matricule="agent.matricule" :last_name="agent.last_name"
+                :email="agent.email" />
 
-        <div class="card-add-new-agent">
-            <router-link to="/admin-page/new-agent">
-                <i class="ri-user-add-line"></i>
-                <span>New Agent</span>
-            </router-link>
+            <div class="card-add-new-agent">
+                <router-link to="/admin-page/new-agent">
+                    <i class="ri-user-add-line"></i>
+                    <span>New Agent</span>
+                </router-link>
+            </div>
         </div>
     </div>
-    .
 </template>
 
 <style scoped>
+@media screen and (max-width: 1350px) {
+    .cards {
+        display: grid;
+        gap: 2rem;
+        margin-top: .6rem;
+        max-height: 80vh;
+        overflow-y: auto;
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 nav {
     display: flex;
     align-items: center;

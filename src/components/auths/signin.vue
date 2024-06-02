@@ -23,7 +23,7 @@ export default {
                 const response = await axios.post('/auth/login', {
                     email: this.email, password: this.password
                 }, { withCredentials: true });
-                if(response.data.status && response.data.data){
+                if(response.data.status && response.data.data.role==="ADMIN"){
                     this.$router.push('/admin-page/dashboard');
                     this.email= '';
                     this.password = '';
@@ -38,7 +38,7 @@ export default {
             try {
                 const response = await axios.get('/auth/verify-session-admin', { withCredentials: true, });
                 console.log(response.data)
-                if (response.data.status === 200) {
+                if (response.data.status && response.data.data.role==="ADMIN") {
                     this.$router.push('/admin-page/dashboard');
                 } else {
                     this.$router.push('/');

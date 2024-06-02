@@ -1,25 +1,27 @@
 <template>
-    <div class="container">
-        <div class="header">
-            <h1>Custommers lists</h1>
-            <div class="liste-style">
-                <ul>
-                    <router-link to="/admin-page/customers/clients">
-                        <li :class="{ active : $route.path === '/admin-page/customers/clients' }">
-                            <i class="ri-team-line"></i>
-                            <span>Clients</span>
-                        </li>
-                    </router-link>
-                    <router-link to="/admin-page/customers/agents">
-                        <li :class="{ active : $route.path === '/admin-page/customers/agents' }">
-                            <i class="ri-customer-service-2-line"></i>
-                            <span>Agents</span>
-                        </li>
-                    </router-link>
-                </ul>
+    <div class="main">
+        <div class="container">
+            <div class="header">
+                <h1>Custommers lists</h1>
+                <div class="liste-style">
+                    <ul>
+                        <router-link to="/admin-page/customers/clients">
+                            <li :class="{ active: $route.path === '/admin-page/customers/clients' }">
+                                <i class="ri-team-line"></i>
+                                <span>Clients</span>
+                            </li>
+                        </router-link>
+                        <router-link to="/admin-page/customers/agents">
+                            <li :class="{ active: $route.path === '/admin-page/customers/agents' }">
+                                <i class="ri-customer-service-2-line"></i>
+                                <span>Agents</span>
+                            </li>
+                        </router-link>
+                    </ul>
+                </div>
             </div>
+            <router-view></router-view>
         </div>
-        <router-view></router-view>
     </div>
 </template>
 
@@ -66,4 +68,12 @@
 .liste-style ul li i {
     min-width: 30px;
 }
+@media screen and (max-width: 760px) {
+.header {
+    flex-direction: column;
+    gap: 1rem;
+    /* border-bottom: 2px solid var(--color-info-dark); */
+}
+}
+
 </style>

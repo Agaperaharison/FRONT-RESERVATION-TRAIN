@@ -10,9 +10,11 @@ export default {
 </script>
 
 <template>
-    <div class="container">
-        <left-vue/>
-        <right-vue/>
+    <div class="main">
+        <div class="container">
+            <left-vue />
+            <right-vue />
+        </div>
     </div>
 </template>
 

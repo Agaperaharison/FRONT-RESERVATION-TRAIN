@@ -16,7 +16,7 @@ export default {
     data() {
         return {
             currentDate: new Date(),
-            date_value:  new Date().toISOString().substr(0, 10),
+            date_value: new Date().toISOString().substr(0, 10),
             salesArray: [],
             amountArray: [],
             graphValue: [],
@@ -111,7 +111,7 @@ export default {
 </script>
 
 <template>
-    <div>
+    <div class="main">
         <div class="container">
             <main>
                 <div class="header">
@@ -179,5 +179,39 @@ export default {
 
 h2 {
     margin-bottom: 0.8rem;
+}
+
+@media screen and (max-width: 1475px) {
+    .container {
+        grid-template-columns: auto;
+    }
+
+    .right {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1184px) {
+    .insights {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 720px) {
+    .insights {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 560px) {
+    .header {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+        justify-content: space-between;
+    }
+
 }
 </style>

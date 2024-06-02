@@ -61,13 +61,15 @@ export default {
                     <td>{{ analytic.to[0].localisation_city }} {{ analytic.to[0].localisation_postal_code }}</td>
                     <td>{{ formattedDate(analytic.departure_date) }} à {{ analytic.departure_time }}</td>
                     <td>{{ (analytic.train[0].siege).toLocaleString('fr-FR') }}</td>
-                    <td>{{ (analytic.train[0].siege - (analytic.seatUnavailable ? analytic.seatUnavailable : 0)).toLocaleString('fr-FR') }}</td>
+                    <td>{{ (analytic.train[0].siege - (analytic.seatUnavailable ? analytic.seatUnavailable :
+                        0)).toLocaleString('fr-FR') }}</td>
                     <td>{{ analytic.seatUnavailable ? (analytic.seatUnavailable).toLocaleString('fr-FR') : 0 }}</td>
-                    <td>{{ (((analytic.seatUnavailable ? analytic.seatUnavailable : 0) * 100) / analytic.train[0].siege).toFixed(2) }}%
+                    <td>{{ (((analytic.seatUnavailable ? analytic.seatUnavailable : 0) * 100) /
+                        analytic.train[0].siege).toFixed(2) }}%
                         <i v-if="((analytic.seatUnavailable ? analytic.seatUnavailable : 0) * 100) / analytic.train.siege > 50"
                             class="ri-arrow-up-fill"></i>
-                        <i v-else
-                            class="ri-arrow-down-fill"></i></td>
+                        <i v-else class="ri-arrow-down-fill"></i>
+                    </td>
                     <!-- <td><span class="pending">pending</span></td> -->
                 </tr>
                 <tr v-else>
@@ -190,5 +192,46 @@ td.disabled {
 
 .ri-arrow-down-fill {
     color: var(--color-danger);
+}
+
+@media screen and (max-width: 1425px) {
+
+    tr th:nth-child(6),
+    tr td:nth-child(6) {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1145px) {
+
+    tr:nth-child(1) th:nth-child(3),
+    tr td:nth-child(3) {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1125px) {
+    tr:nth-child(1) th:nth-child(4),
+    tr td:nth-child(4),
+    tr:nth-child(1) th:nth-child(5),
+    tr td:nth-child(5) {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    tr:nth-child(1) th:nth-child(1),
+    tr td:nth-child(1) {
+        display: none;
+    }
+
+    tr:nth-child(2) th:nth-child(1),
+    tr td:nth-child(7) {
+        display: none;
+    }
+    tr:nth-child(1) th:nth-child(8),
+    tr td:nth-child(10) {
+        display: none;
+    }
 }
 </style>

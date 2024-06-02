@@ -3,20 +3,19 @@ import authPage from './pages/auth.page.vue'
 import signin from './components/auths/signin.vue'
 import signup from './components/auths/signup.vue'
 
-
 import appPage from './pages/admin.page.vue'
 import dashboardAdmin from './components/dashboard/admin.dashboard.vue'
 import customers from './components/customers/customers.vue'
 import styleGrid from './components/customers/themes/grid.vue'
 import styleTable from './components/customers/themes/tables.vue'
 import addAgent from './components/customers/themes/add-agent.vue'
-
-
 import analytiques from './components/analytiques/analytiques.vue'
 import trips from './components/trips/trips.vue'
 import reservations from './components/reservations/reservations.vue'
 import setting from './components/setting/setting.vue'
 import help from './components/helps/helps.vue'
+
+import appPageClient from './pages/client.page.vue'
 
 
 const routes = [
@@ -48,6 +47,11 @@ const routes = [
             { path: 'setting', component: setting },
             { path: 'help', component: help },
         ]
+    },
+    {
+        path: '/client-page',
+        component: appPageClient
+
     }
 ];
 

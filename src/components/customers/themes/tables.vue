@@ -312,9 +312,12 @@ export default {
                                         <small>{{ info.trips[0].departure_time }}</small>
                                     </td>
                                     <td>{{ info.trips[0].trains[0].design }} <br>
-                                    <small>{{ info.trips[0].trains[0].train_matricule }}</small></td>
-                                    <td>{{ info.trips[0].from[0].localisation_city }} {{ info.trips[0].from[0].localisation_postal_code }}</td>
-                                    <td>{{ info.trips[0].to[0].localisation_city }} {{ info.trips[0].to[0].localisation_postal_code }}</td>
+                                        <small>{{ info.trips[0].trains[0].train_matricule }}</small>
+                                    </td>
+                                    <td>{{ info.trips[0].from[0].localisation_city }} {{
+                                        info.trips[0].from[0].localisation_postal_code }}</td>
+                                    <td>{{ info.trips[0].to[0].localisation_city }} {{
+                                        info.trips[0].to[0].localisation_postal_code }}</td>
                                     <td>{{ info.number_of_seats }}</td>
                                     <td>{{ (info.paid + info.unpaid).toLocaleString('fr-FR') }} Ar</td>
                                     <td>{{ (info.paid).toLocaleString('fr-FR') }} Ar</td>
@@ -335,9 +338,70 @@ export default {
 </template>
 
 <style scoped>
+@media screen and (max-width: 1200px) {
+
+    tr th:nth-child(6),
+    tr td:nth-child(6) {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1100px) {
+
+    nav ul li:nth-child(3),
+    nav ul li:nth-child(4),
+    tr th:nth-child(7),
+    tr td:nth-child(7) {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 980px) {
+
+    tr th:nth-child(3),
+    tr td:nth-child(3) {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 800px) {
+
+    tr th:nth-child(4),
+    tr td:nth-child(4) {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 635px) {
+
+    nav ul li:nth-child(5),
+    nav ul li:nth-child(6),
+    tr th:nth-child(5),
+    tr td:nth-child(5) {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 570px) {
+
+    tr th:nth-child(1),
+    tr td:nth-child(1) {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1166px) {
+
+    .count,
+    .count span {
+        display: none;
+    }
+}
+
 .container {
     background: var(--color-white);
 }
+
 #modal {
     position: absolute;
     display: none;

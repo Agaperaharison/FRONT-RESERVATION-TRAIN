@@ -65,7 +65,7 @@ export default {
             try {
                 const response = await axios.get('/auth/verify-session-admin', { withCredentials: true, });
 
-                if (response.data.status !== 200) {
+                if (!response.data.status || response.data.data.role !== "ADMIN") {
                     this.$router.push('/');
                 }
             } catch (err) {
@@ -449,13 +449,13 @@ export default {
 #section {
     position: relative;
     background: var(--color-background);
-    min-height: 100vh;
-    padding: 1rem 2rem;
+    height: 100vh;
     top: 0;
     left: 78px;
     width: calc(100% - 78px);
     transition: all .5s ease;
     z-index: 2;
+    overflow-y: overlay;
 }
 
 .mode {
@@ -546,5 +546,61 @@ export default {
 .mode.dark .switch::before {
     background: var(--color-dark);
     left: 21px;
+}
+
+@media screen and (max-width: 900px) {
+    #sidebar.open {
+        width: 76px;
+    }
+
+    #sidebar.open~#section {
+        left: 76px;
+        width: calc(100% - 76px);
+    }
+
+    #sidebar .logo_details .logo_name,
+    #sidebar .logo_details #btn {
+        display: none;
+    }
+
+    #sidebar.open li a .link_name {
+        opacity: 0;
+    }
+
+    #sidebar.open li:hover .tooltip {
+        opacity: 1;
+    }
+
+    #sidebar.open li .tooltip {
+        display: block;
+    }
+
+    #sidebar.open .mode-text {
+        opacity: 0;
+    }
+
+    #sidebar.open li.profile {
+        width: 78px;
+    }
+
+    #sidebar.open li.profile .name,
+    #sidebar.open li.profile .designation {
+        opacity: 0;
+    }
+
+    #sidebar.open .profile #log_out {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+        background-color: var(--color-light);
+        color: var(--color-danger);
+        width: 100%;
+        height: 100%;
+        line-height: 50px;
+        border-radius: 0;
+        cursor: pointer;
+        transition: all .5s ease;
+    }
 }
 </style>
