@@ -6,15 +6,45 @@ export default {
             password: ''
         }
     },
+    mounted(){
+        this.verifySession();
+    },
     methods: {
+        fireToast(title, message, icon, btn) {
+            Toast.fire({
+                title: title,
+                text: message,
+                icon: icon,
+                confirmButtonText: btn
+            });
+        },
         async login() {
             try {
                 const response = await axios.post('/auth/login', {
                     email: this.email, password: this.password
                 }, { withCredentials: true });
-                console.log(response.data)
+                if(response.data.status && response.data.data){
+                    this.$router.push('/admin-page/dashboard');
+                    this.email= '';
+                    this.password = '';
+                }else{
+                    this.fireToast('ERROR!', response.data.message, 'error', 'ok')
+                }
             } catch (err) {
                 console.log(err.message)
+            }
+        },
+        async verifySession() {
+            try {
+                const response = await axios.get('/auth/verify-session-admin', { withCredentials: true, });
+                console.log(response.data)
+                if (response.data.status === 200) {
+                    this.$router.push('/admin-page/dashboard');
+                } else {
+                    this.$router.push('/');
+                }
+            } catch (err) {
+                console.log(err.message);
             }
         }
     }
@@ -31,7 +61,7 @@ export default {
             <div class="contactus">
                 <form>
                     <div class="user-box">
-                        <input type="text" v-model="email" required>
+                        <input type="email" v-model="email" required>
                         <label for="email">Enter your address email</label>
                     </div>
                     <div class="user-box">
@@ -42,7 +72,7 @@ export default {
                         <a href="#">Forgot password?</a>
                         <router-link to="/sign-up">sign up</router-link>
                     </div>
-                    <center><button>submit</button></center>
+                    <center><button @click.prevent="login">submit</button></center>
                 </form>
             </div>
         </div>

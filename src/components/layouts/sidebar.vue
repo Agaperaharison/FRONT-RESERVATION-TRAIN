@@ -4,12 +4,15 @@ export default {
         return {
             open: true,
             modeDark: false,
-            theme: 'Dark mode'
+            theme: 'Dark mode',
+            info_user_connected: []
         }
     },
     mounted() {
         this.getTheme();
         this.getThemeSidebar();
+        this.verifySession();
+        this.infoAdmin();
     },
     methods: {
         getThemeSidebar() {
@@ -57,6 +60,56 @@ export default {
             }
             this.getTheme();
             this.setNameTheme();
+        },
+        async verifySession() {
+            try {
+                const response = await axios.get('/auth/verify-session-admin', { withCredentials: true, });
+
+                if (response.data.status !== 200) {
+                    this.$router.push('/');
+                }
+            } catch (err) {
+                console.log(err.message);
+            }
+        },
+        async logout() {
+            const result = await mySwal.fire({
+                icon: 'warning',
+                title: 'Logout',
+                text: 'Are you sure you want to log out?',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Logout',
+            });
+
+            if (result.isConfirmed) {
+                try {
+                    const response = await axios.get('/auth/session-admin-log-out', { withCredentials: true, });
+                    if (response.data.status === 200) {
+                        this.$router.push('/');
+                    } else {
+                        toast.fire({
+                            icon: 'warning',
+                            title: 'An error occurred during the log out process!',
+                        });
+                    }
+                } catch (error) {
+                    Toast.fire({
+                        icon: 'warning',
+                        title: 'An error occurred during the log out process!',
+                    });
+                }
+            }
+        },
+        async infoAdmin() {
+            try {
+                const response = await axios.get(`/auth/get-info-admin`, { withCredentials: true });
+                console.log(response.data.data)
+                this.info_user_connected = response.data.data;
+            } catch (err) {
+                console.log(err.message);
+            }
         }
     }
 }
@@ -70,35 +123,36 @@ export default {
             <i id="btn" class="ri-menu-4-fill" @click="toggleSidebar"></i>
         </div>
         <ul class="nav-list">
-            <li :class="{ active : $route.path === '/admin-page/dashboard' }">
+            <li :class="{ active: $route.path === '/admin-page/dashboard' }">
                 <router-link to="/admin-page/dashboard">
                     <i class="ri-dashboard-3-line"></i>
                     <span class="link_name">Dashboard</span>
                 </router-link>
                 <span class="tooltip">Dashboard</span>
             </li>
-            <li :class="{ active : $route.path === '/admin-page/new-agent' || $route.path === '/admin-page/customers/clients' || $route.path === '/admin-page/customers/agents' || $route.path === '/admin-page/customers/more-info' }">
+            <li
+                :class="{ active: $route.path === '/admin-page/new-agent' || $route.path === '/admin-page/customers/clients' || $route.path === '/admin-page/customers/agents' || $route.path === '/admin-page/customers/more-info' }">
                 <router-link to="/admin-page/customers/clients">
                     <i class="ri-team-line"></i>
                     <span class="link_name">Customers</span>
                 </router-link>
                 <span class="tooltip">Customers</span>
             </li>
-            <li :class="{ active : $route.path === '/admin-page/trips' }">
+            <li :class="{ active: $route.path === '/admin-page/trips' }">
                 <router-link to="/admin-page/trips">
                     <i class="ri-map-pin-line"></i>
                     <span class="link_name">Trips</span>
                 </router-link>
                 <span class="tooltip">Trips</span>
             </li>
-            <li :class="{ active : $route.path === '/admin-page/reservations' }">
+            <li :class="{ active: $route.path === '/admin-page/reservations' }">
                 <router-link to="/admin-page/reservations">
                     <i class="ri-calendar-todo-fill"></i>
                     <span class="link_name">Reservations</span>
                 </router-link>
                 <span class="tooltip">Reservations</span>
             </li>
-            <li :class="{ active : $route.path === '/admin-page/setting' }">
+            <li :class="{ active: $route.path === '/admin-page/setting' }">
                 <router-link to="/admin-page/setting">
                     <i class="ri-settings-4-line"></i>
                     <span class="link_name">Setting</span>
@@ -131,10 +185,11 @@ export default {
                         <img src="../../assets/imgs/pexels-mtcd-5588646.jpg" alt="profile image">
                     </div>
                     <div class="profile_content">
-                        <div class="name">Joshué Agapé</div>
-                        <div class="designation">joshueagape@gmail.com</div>
+                        <div class="name">{{ info_user_connected ? info_user_connected.last_name : null }}
+                        </div>
+                        <div class="designation">{{ info_user_connected ? info_user_connected.email : null }}</div>
                     </div>
-                    <i class="ri-logout-circle-r-line" id="log_out"></i>
+                    <i class="ri-logout-circle-r-line" id="log_out" @click="logout"></i>
                 </div>
             </li>
         </ul>

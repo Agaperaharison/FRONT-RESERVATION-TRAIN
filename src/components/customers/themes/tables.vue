@@ -335,6 +335,9 @@ export default {
 </template>
 
 <style scoped>
+.container {
+    background: var(--color-white);
+}
 #modal {
     position: absolute;
     display: none;
