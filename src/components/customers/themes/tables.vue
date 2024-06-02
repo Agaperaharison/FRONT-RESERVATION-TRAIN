@@ -20,6 +20,10 @@ export default {
             openModal: false,
             titleInfo: 'Statistiques',
             info_user: [],
+            info_reservations_principal: [],
+            info_reservations: [],
+
+            infoNavActive: 'all',
         }
     },
     mounted() {
@@ -42,7 +46,14 @@ export default {
             this.openModal = !this.openModal
         },
         activeNavItemMOreInfo(navItem) {
-            this.titleInfo = navItem
+            if (navItem === 'all') {
+                this.filterAll();
+            } else if (navItem === "paid") {
+                this.filterPaidMoreInfo();
+            } else {
+                this.filterUnpaidMoreInfo();
+            }
+            this.infoNavActive = navItem;
         },
         async showAllClients() {
             try {
@@ -86,8 +97,7 @@ export default {
                     return client.last_name.toLowerCase().includes(search) ||
                         client.address.toLowerCase().includes(search) ||
                         client.phone_number.includes(search) ||
-                        client.city.toLowerCase().includes(search) ||
-                        client.postal_code.includes(search)
+                        client.city.toLowerCase().includes(search)
                 });
                 this.clients = clientFiltered;
             } catch (err) {
@@ -97,9 +107,34 @@ export default {
         filterClientById(id) {
             const client = this.clients_lists.filter(user => user.id === id);
             this.info_user = client;
-            //console.log(this.info_user[0]);
+            this.info_reservations_principal = this.info_user[0].reservations
+            this.info_reservations = this.info_user[0].reservations
+            console.log(this.info_reservations)
             this.toggleModal();
-        }
+        },
+        filterAll() {
+            this.info_reservations = this.info_reservations_principal;
+        },
+        filterPaidMoreInfo() {
+            this.info_reservations = this.info_reservations_principal.filter(res => res.unpaid > 0);
+        },
+        filterUnpaidMoreInfo() {
+            this.info_reservations = this.info_reservations_principal.filter(res => res.unpaid === 0);
+        },
+        formattedDate(date) {
+            return new Date(date).toLocaleDateString('en-US', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+            });
+        },
+        formattedTime(time) {
+            return new Date(time).toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+            });
+        },
     }
 }
 </script>
@@ -197,32 +232,102 @@ export default {
         <div id="modal" :class="{ open: openModal }" @click="toggleModal">
             <div class="modal-wrapper" @click="toggleModal">
                 <i class="ri-close-fill" @click="toggleModal"></i>
-                <div class="nav">
-                    <div class="avatar-client">
-                        <img src="../../../assets/imgs/pexels-mtcd-5588646.jpg" alt="">
+                <h2>MORE INFORMATION ABOUT THE CUSTOMER</h2>
+                <div class="info">
+                    <div class="image-profile">
+                        <img src="../../../assets/imgs/1869679.png" alt />
                     </div>
-                    <h3>{{ info_user.length > 0 ? info_user[0].last_name : null }}</h3>
-                    <hr>
-                    <ul>
-                        <li :class="{ active: titleInfo == 'Statistiques' }"
-                            @click="activeNavItemMOreInfo('Statistiques')">Statistiques</li>
-                        <li :class="{ active: titleInfo == 'Basic information' }"
-                            @click="activeNavItemMOreInfo('Basic information')">Personal information</li>
-                        <li :class="{ active: titleInfo == 'Booking story' }"
-                            @click="activeNavItemMOreInfo('Booking story')">Booking story</li>
-                        <li :class="{ active: titleInfo == 'Story personal' }"
-                            @click="activeNavItemMOreInfo('Story personal')">Personal story </li>
-                        <li :class="{ active: titleInfo == 'Chat' }" @click="activeNavItemMOreInfo('Chat')">Chat</li>
-                    </ul>
+                    <div class="info-customer">
+                        <h3>{{ info_user.length > 0 ? info_user[0].title : null }} {{ info_user.length > 0 ?
+                            info_user[0].first_name : null }} {{ info_user.length > 0 ? info_user[0].last_name : null }}
+                        </h3>
+                        <p>
+                            <span class="ri-map-pin-user-line"></span> {{ info_user.length > 0 ? info_user[0].address :
+                                null }} {{ info_user.length > 0 ? info_user[0].city : null }} {{ info_user.length > 0 ?
+                                info_user[0].postal_code : null }}
+                        </p>
+                        <p>
+                            <span class="ri-map-pin-user-line"></span> Né le {{ info_user.length > 0 ?
+                                info_user[0].date_of_birth : null }}
+                        </p>
+                        <p>
+                            <span class="ri-mail-line"></span> {{ info_user.length > 0 ? info_user[0].email : null }}
+                        </p>
+                        <p>
+                            <span class="ri-phone-line"></span> {{ info_user.length > 0 ? info_user[0].phone_number :
+                                null
+                            }}
+                        </p>
+                    </div>
+                    <div class="debts">
+                        <h3>DEBTS</h3>
+                        <p>
+                            <span class="ri-"></span> {{ info_user.length > 0 ?
+                                (info_user[0].sumUnpaid).toLocaleString('fr-FR') : null }} Ar
+                        </p>
+                    </div>
                 </div>
-                <div class="container-info-client">
-                    <statistics-vue v-if="titleInfo == 'Statistiques'" />
-
-                    <personal-info-vue v-if="titleInfo == 'Basic information'" :first_name="info_user[0].first_name" :last_name="info_user[0].last_name" :title="info_user[0].title" :birth="info_user[0].date_of_birth" :phone_number="info_user[0].phone_number" :email="info_user[0].email" :address="info_user[0].address" :city="info_user[0].city" :code="info_user[0].postal_code" :nationality="info_user[0].nationality" />
-
-                    <booking-vue v-if="titleInfo == 'Booking story'" :data="info_user[0].reservations"/>
-                    <personal-story-vue v-if="titleInfo == 'Story personal'" />
-                    <chat-vue v-if="titleInfo == 'Chat'" />
+                <div class="info-reservation">
+                    <h2>Reservations that the client has already made</h2>
+                    <div class="container-table">
+                        <div class="nav-plus">
+                            <ul>
+                                <li :class="{ active: infoNavActive == 'all' }" @click="activeNavItemMOreInfo('all')">
+                                    all
+                                    <span>{{ info_reservations_principal.length }}</span>
+                                </li>
+                                <li :class="{ active: infoNavActive == 'paid' }" @click="activeNavItemMOreInfo('paid')">
+                                    paid
+                                    <span>{{ (this.info_reservations_principal.filter(res => res.unpaid > 0)).length
+                                        }}</span>
+                                </li>
+                                <li :class="{ active: infoNavActive == 'unpaid' }"
+                                    @click="activeNavItemMOreInfo('unpaid')">
+                                    Unpaid
+                                    <span>{{ (this.info_reservations_principal.filter(res => res.unpaid === 0)).length
+                                        }}</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <table class="listes-reservation-customer">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Date</th>
+                                    <th>Train</th>
+                                    <th>From</th>
+                                    <th>to</th>
+                                    <th>Seats</th>
+                                    <th>Rate</th>
+                                    <th>Paid</th>
+                                    <th>Unpaid</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-if="info_reservations.length > 0" v-for="info in info_reservations"
+                                    :key="info.id">
+                                    <td>{{ info.id }}</td>
+                                    <td>{{ formattedDate(info.trips[0].departure_date) }} <br> à
+                                        <small>{{ info.trips[0].departure_time }}</small>
+                                    </td>
+                                    <td>{{ info.trips[0].trains[0].design }} <br>
+                                    <small>{{ info.trips[0].trains[0].train_matricule }}</small></td>
+                                    <td>{{ info.trips[0].from[0].localisation_city }} {{ info.trips[0].from[0].localisation_postal_code }}</td>
+                                    <td>{{ info.trips[0].to[0].localisation_city }} {{ info.trips[0].to[0].localisation_postal_code }}</td>
+                                    <td>{{ info.number_of_seats }}</td>
+                                    <td>{{ (info.paid + info.unpaid).toLocaleString('fr-FR') }} Ar</td>
+                                    <td>{{ (info.paid).toLocaleString('fr-FR') }} Ar</td>
+                                    <td>{{ (info.unpaid).toLocaleString('fr-FR') }} Ar</td>
+                                    <td><span :class="info.unpaid > 0 ? 'unpaid' : 'paid'">{{ info.unpaid > 0 ? 'unpaid'
+                                        : 'paid' }}</span></td>
+                                </tr>
+                                <tr v-else>
+                                    <td colspan="6">This client has never made any bookings with this company.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -250,8 +355,8 @@ export default {
 .modal-wrapper {
     position: relative;
     background: var(--color-white);
-    display: flex;
-    width: 90%;
+    padding: 2rem;
+    width: 95%;
     height: 600px;
     border-radius: 10px;
     overflow: hidden;
@@ -271,69 +376,141 @@ export default {
     color: var(--color-danger);
 }
 
-.nav {
-    min-width: 250px;
-    background: var(--color-dark);
-    height: 100%;
-    padding: 1.6rem;
+.modal-wrapper h2 {
+    font-size: 1.4rem;
+    color: var(--color-info-dark);
+    font-weight: 600;
 }
 
-.nav .avatar-client {
-    width: 75px;
-    height: 75px;
+.info {
+    display: grid;
+    grid-template-columns: 100px auto 140px;
+    gap: 2rem;
+    margin-top: 1rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--color-info-dark);
+    margin-bottom: 1rem;
+}
+
+.image-profile {
     border-radius: 50%;
     overflow: hidden;
-    margin: 1rem auto;
 }
 
-.nav h3 {
+.info-customer h3 {
+    font-size: 1.2rem;
+    color: var(--color-dark);
+    margin-bottom: 0.6rem;
+}
+
+.info-customer p {
+    font-size: 1rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.info-customer p span:nth-child(1) {
     font-size: 1.3rem;
-    font-weight: 600;
-    color: var(--color-white);
+    color: var(--color-dark);
+}
+
+.info-reservation h2 {
+    color: var(--color-primary-variant);
+    font-size: 1.2rem;
+    text-decoration: underline;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.info-reservation .container-table {
+    max-height: 350px;
+    overflow-y: overlay;
+}
+
+.debts {
     text-align: center;
 }
 
-hr {
-    width: 100%;
-    border: 1px solid var(--color-info-light);
-    margin-top: 2rem;
-}
-
-.nav ul {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 2rem;
-}
-
-.nav ul li {
-    font-size: 1.1rem;
+.debts p {
+    font-size: 1.4rem;
     font-weight: 600;
-    padding: .6rem 1rem;
-    color: var(--color-white);
-    border-radius: 7px;
+}
+
+.debts h3 {
+    font-size: 1.3rem;
+    color: var(--color-warning);
+    margin-top: 1rem;
+    margin-bottom: .5rem;
+    text-decoration: underline;
+}
+
+.nav-plus {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 1rem;
+    margin-bottom: 1rem;
+}
+
+.nav-plus ul {
+    display: flex;
+    align-items: center;
+    height: 30px;
+    gap: 1rem;
+}
+
+.nav-plus li {
+    padding: 5px 1rem;
+    display: flex;
+    gap: 10px;
+    color: var(--color-info-dark);
+    font-weight: 600;
+    font-size: 1.1rem;
+    border-radius: 50px;
     cursor: pointer;
     transition: all .3s ease;
 }
 
-.nav ul li:hover,
-.nav ul li.active {
-    background: var(--color-primary);
-    color: #ffff;
+.nav-plus li.active {
+    background: var(--color-light);
+    color: var(--color-primary);
 }
 
-.container-info-client {
-    width: 100%;
-    padding: 2rem 3rem 2rem 1.5rem;
+.nav-plus li span {
+    background: var(--color-info-light);
+    padding: 0 4px;
+    border-radius: 6px;
+    color: var(--color-dark);
 }
 
-.container {
-    border-radius: 10px;
-    background: var(--color-white);
-    box-shadow: var(--box-shadow);
-    transition: all 0.3s ease;
-    overflow: hidden;
+.paid:hover {
+    background: var(--color-success);
+    color: #fff;
 }
+
+.unpaid:hover {
+    background: var(--color-warning);
+    color: #fff;
+}
+
+.paid {
+    font-size: 0.9rem;
+    padding: 1px 10px;
+    border-radius: 15px;
+    background: var(--color-success);
+    color: #fff;
+    font-weight: 600;
+}
+
+.unpaid {
+    font-size: 0.9rem;
+    padding: 1px 10px;
+    border-radius: 15px;
+    background: var(--color-warning);
+    color: #fff;
+    font-weight: 600;
+}
+
 
 nav {
     display: flex;
@@ -497,12 +674,12 @@ th {
 }
 
 td {
-    height: 3rem;
+    height: 3.4rem;
     padding: 7px 0;
     border-bottom: 1px solid var(--color-light);
     color: var(--color-dark);
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 td:nth-child(2) {

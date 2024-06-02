@@ -3,14 +3,30 @@ export default {
     data() {
         return {
             navItemActive: 'All',
+            openModal: false,
             openFilter: false,
             trips_lists: [],
             trips: [],
             search: '',
+            stations_lists: [],
+            stations_from: [],
+            stations_to: [],
+            loc_from: '',
+            loc_to: '',
+            dateFilter: "",
+            trains: [],
+            train_id: '',
+            from: '',
+            to: '',
+            departure_date: '',
+            departure_time: '',
+            price: 0,
         }
     },
     mounted() {
-        this.allTrips()
+        this.allTrips();
+        this.getStationsLists();
+        this.getAllTrain();
     },
     methods: {
         setActiveNavItem(navItem) {
@@ -31,6 +47,7 @@ export default {
                 const response = await axios.get('/trips/get-all-trips');
                 this.trips_lists = response.data.data;
                 this.trips = response.data.data;
+                //console.log(this.trips)
             } catch (err) {
                 console.log(err.message)
             }
@@ -47,18 +64,123 @@ export default {
             try {
                 const searchValue = this.search.toLowerCase();
                 const tripsFiltered = this.trips_lists.filter(trip => {
-                    return trip.train.design.toLowerCase().includes(searchValue) ||
-                        trip.train.train_matricule.toLowerCase().includes(searchValue) ||
+                    return trip.train[0].design.toLowerCase().includes(searchValue) ||
+                        trip.train[0].train_matricule.toLowerCase().includes(searchValue) ||
                         trip.departure_date.includes(searchValue) ||
                         trip.departure_time.includes(searchValue) ||
-                        trip.from.toLowerCase().includes(searchValue) ||
-                        trip.to.toLowerCase().includes(searchValue);
+                        trip.from[0].localisation_city.toLowerCase().includes(searchValue) ||
+                        trip.to[0].localisation_city.toLowerCase().includes(searchValue);
                 });
                 this.trips = tripsFiltered;
             } catch (err) {
                 console.log(err.message);
             }
-        }
+        },
+        formattedDate(date) {
+            return new Date(date).toLocaleDateString('en-US', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+            });
+        },
+        async getStationsLists() {
+            try {
+                const response = await axios.get('/trips/get-all-stations');
+                //console.log(response.data.data);
+                this.stations_lists = response.data.data
+                this.stations_from = response.data.data
+                this.stations_to = response.data.data
+            } catch (err) {
+                console.log(err.message)
+            }
+        },
+        filterByLocalisation() {
+            if (this.navItemActive === 'All') {
+                this.trips = this.trips_lists.filter(trip => {
+                    return trip.from[0].id === this.loc_from && trip.to[0].id === this.loc_to
+                });
+            } else if (this.navItemActive === 'Available') {
+                this.trips = this.trips_lists.filter(trip => {
+                    return trip.from[0].id === this.loc_from && trip.to[0].id === this.loc_to && trip.is_available === 1
+                });
+            } else {
+                this.trips = this.trips_lists.filter(trip => {
+                    return trip.from[0].id === this.loc_from && trip.to[0].id === this.loc_to && trip.is_available === 0
+                });
+            }
+        },
+        filterByDate() {
+            if (this.navItemActive === 'All') {
+                this.trips = this.trips_lists.filter(trip => {
+                    return this.formattedDate(trip.departure_date) === this.formattedDate(this.dateFilter)
+                });
+            } else if (this.navItemActive === 'Available') {
+                this.trips = this.trips_lists.filter(trip => {
+                    return this.formattedDate(trip.departure_date) === this.formattedDate(this.dateFilter) && trip.is_available === 1
+                });
+            } else {
+                this.trips = this.trips_lists.filter(trip => {
+                    return this.formattedDate(trip.departure_date) === this.formattedDate(this.dateFilter) && trip.is_available === 0
+                });
+            }
+        },
+        async addTrip() {
+            try {
+                const response = await axios.post('/trips/add-trip', {
+                    train_id: this.train_id, from: this.from, to: this.to, departure_date: this.departure_date,
+                    departure_time: this.departure_time, price: this.price
+                });
+                console.log(response.data.data);
+                this.allTrips();
+            } catch (err) {
+                console.log(err.message)
+            }
+        },
+        toggleModal() {
+            this.openModal = !this.openModal
+        },
+        async getAllTrain() {
+            try {
+                const response = await axios.get('/trips/get-all-trains');
+                this.trains = response.data.data
+            } catch (err) {
+                console.log(err.message)
+            }
+        },
+        async deleteTrip(tripId) {
+            const result = await mySwal.fire({
+                icon: 'warning',
+                title: 'Êtes-vous sûr de vouloir supprimer cet voyage ?',
+                text: 'Cette action est irréversible !',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Supprimer',
+                cancelButtonText: 'Annuler',
+            });
+
+            if (result.isConfirmed) {
+                try {
+                    const response = await axios.delete(`/trips/delete-trip/${tripId}`);
+                    if (response.data.status) {
+                        Toast.fire({
+                            icon: 'success',
+                            title: response.data.data.message,
+                        });
+                    } else {
+                        Toast.fire({
+                            icon: 'error',
+                            title: response.data.data.message,
+                        });
+                    }
+                    this.allTrips();
+                } catch (error) {
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Une erreur s\'est produite lors de la suppression du voyage.',
+                    });
+                }
+            }
+        },
     }
 }
 </script>
@@ -67,7 +189,7 @@ export default {
     <div class="left">
         <div class="header">
             <h1>The lists of trips</h1>
-            <a href="#"><i class="ri-add-fill"></i> <span>add new trip</span></a>
+            <a href="#" @click="toggleModal"><i class="ri-add-fill"></i> <span>add new trip</span></a>
         </div>
         <div class="trips">
             <nav>
@@ -101,23 +223,28 @@ export default {
                         <form action="">
                             <form-group>
                                 <label for="">From: </label>
-                                <select name="" id="">
+                                <select v-model="loc_from">
                                     <option value="">Select</option>
+                                    <option v-if="stations_from.length > 0" v-for="station in stations_from"
+                                        :key="station.id" :value="station.id">{{
+                                            station.localisation_city }}</option>
                                 </select>
                             </form-group>
                             <form-group>
                                 <label for="">To: </label>
-                                <select name="" id="">
+                                <select v-model="loc_to" id="">
                                     <option value="">Select</option>
+                                    <option v-if="stations_to.length > 0" v-for="station in stations_to"
+                                        :key="station.id" :value="station.id">{{ station.localisation_city }}</option>
                                 </select>
                             </form-group>
                             <form-group>
-                                <button class="submit">filter</button>
+                                <button class="submit" @click.prevent="filterByLocalisation">filter</button>
                             </form-group>
                         </form>
                     </div>
                     <div class="date">
-                        <input type="date">
+                        <input type="date" v-model="dateFilter" @change="filterByDate">
                     </div>
                 </div>
             </nav>
@@ -147,23 +274,25 @@ export default {
                             <td>{{ trip.id }}</td>
                             <td>
                                 <div>
-                                    <span>{{ trip.train.design }}</span> <br> <small>mat: {{ trip.train.train_matricule
-                                        }}</small>
+                                    <span>{{ trip.train[0].design }}</span> <br> <small>mat: {{
+                                        trip.train[0].train_matricule
+                                    }}</small>
                                 </div>
                             </td>
                             <td>
                                 <div>
-                                    <span>{{ trip.departure_date }}</span> <br> <small>{{ trip.departure_time }}</small>
+                                    <span>{{ formattedDate(trip.departure_date) }}</span> <br> <small>{{
+                                        trip.departure_time }}</small>
                                 </div>
                             </td>
-                            <td>{{ trip.from }}</td>
-                            <td>{{ trip.to }}</td>
+                            <td>{{ trip.from[0].localisation_city }} {{ trip.from[0].localisation_postal_code }}</td>
+                            <td>{{ trip.to[0].localisation_city }} {{ trip.to[0].localisation_postal_code }}</td>
                             <td><span
                                     :class="{ available: trip.is_available === 1, unavailable: trip.is_available !== 1 }">{{
                                         trip.is_available === 1 ? 'available' : 'unavailable' }}</span></td>
                             <td class="action">
-                                <i class="ri-pages-line"></i>
-                                <i class="ri-delete-bin-3-line"></i>
+                                <!-- <i class="ri-pages-line"></i> -->
+                                <i class="ri-delete-bin-3-line" @click.prevent="deleteTrip(trip.id)"></i>
                             </td>
                         </tr>
                         <tr v-else>
@@ -173,10 +302,162 @@ export default {
                 </table>
             </div>
         </div>
+
+        <div id="modal" :class="{ open: openModal }" @click="toggleModal">
+            <div class="modal-wrapper" @click="toggleModal">
+                <i class="ri-close-fill" @click="toggleModal"></i>
+                <h2>ADDITIONAL FORM</h2>
+                <form>
+                    <div class="form-grou">
+                        <label for="">Train</label>
+                        <select v-model="train_id">
+                            <option value="">Select</option>
+                            <option v-if="trains.length > 0" v-for="train in trains" :key="train.id" :value="train.id">
+                                {{ train.design }} ( matricule: {{ train.train_matricule }} )</option>
+                        </select>
+                    </div>
+                    <div class="form-grou">
+                        <label for="">From (departure)</label>
+                        <select v-model="from">
+                            <option value="">Select</option>
+                            <option v-if="stations_from.length > 0" v-for="station in stations_from" :key="station.id"
+                                :value="station.id">{{
+                                    station.localisation_city }}</option>
+                        </select>
+                    </div>
+                    <div class="form-grou">
+                        <label for="">To (destination)</label>
+                        <select v-model="to">
+                            <option value="">Select</option>
+                            <option v-if="stations_to.length > 0" v-for="station in stations_to" :key="station.id"
+                                :value="station.id">{{ station.localisation_city }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div>
+                            <label for="">Date</label>
+                            <input type="date" v-model="departure_date">
+                        </div>
+                        <div>
+                            <label for="">Time</label>
+                            <input type="time" v-model="departure_time">
+                        </div>
+                    </div>
+                    <div class="form-grou">
+                        <label for="">Price</label>
+                        <input type="number" v-model="price">
+                    </div>
+                    <div class="form-grou">
+                        <button @click.prevent="addTrip">save trip</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </template>
 
 <style scoped>
+#modal {
+    position: absolute;
+    display: none;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(3px);
+}
+
+#modal.open {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-wrapper {
+    position: relative;
+    background: var(--color-white);
+    padding: 2rem;
+    width: 400px;
+    height: auto;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.modal-wrapper .ri-close-fill {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--color-info-dark);
+    transition: all .2s ease;
+}
+
+.modal-wrapper .ri-close-fill:hover {
+    color: var(--color-danger);
+}
+
+.modal-wrapper h2 {
+    color: var(--color-dark);
+    margin-bottom: 2rem;
+}
+
+.modal-wrapper .form-grou {
+    width: 100%;
+    display: flex;
+    gap: 7px;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.modal-wrapper .form-grou label,
+.modal-wrapper .form-group label {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-info-dark);
+}
+
+.modal-wrapper .form-grou input,
+.modal-wrapper .form-group input,
+.modal-wrapper .form-grou select {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-dark);
+    padding: 10px 1.4rem;
+    border: 1px solid var(--color-info-dark);
+    border-radius: 10px;
+    background: var(--color-light);
+}
+
+.modal-wrapper .form-group {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 2fr 1fr;
+}
+
+.form-group div {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-grou button {
+    padding: 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-dark);
+    transition: all .3s ease;
+}
+
+.form-grou button:hover {
+    color: #ffff;
+    background: var(--color-primary);
+}
+
+
+
 .header {
     display: flex;
     align-items: center;

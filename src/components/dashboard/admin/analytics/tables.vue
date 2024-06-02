@@ -15,6 +15,7 @@ export default {
                 const response = await axios.get(`/dashboard/get-data-in-analytics`);
                 this.listes = response.data.data;
                 this.analytics = response.data.data;
+                console.log(this.analytics)
             } catch (err) {
                 console.log(err.message)
             }
@@ -24,13 +25,6 @@ export default {
                 day: 'numeric',
                 month: 'long',
                 year: 'numeric',
-            });
-        },
-        formattedTime(time) {
-            return new Date(time).toLocaleTimeString('en-US', {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
             });
         },
     }
@@ -44,12 +38,13 @@ export default {
                 <tr>
                     <th rowspan="2">#</th>
                     <th rowspan="2">Train design</th>
+                    <th rowspan="2">Train matricule</th>
+                    <th rowspan="2">From</th>
+                    <th rowspan="2">to</th>
                     <th rowspan="2">Departure date & time</th>
-                    <th rowspan="2">Departure</th>
-                    <th rowspan="2">Destination</th>
                     <th rowspan="1" colspan="3">Seats</th>
                     <th rowspan="2">%</th>
-                    <th rowspan="2">Status</th>
+                    <!-- <th rowspan="2">Status</th> -->
                 </tr>
                 <tr>
                     <th>Total</th>
@@ -60,22 +55,23 @@ export default {
             <tbody>
                 <tr v-if="analytics.length > 0" v-for="analytic in analytics" :key="analytic.id">
                     <td>{{ analytic.id }}</td>
-                    <td>{{ analytic.train.design }}</td>
+                    <td>{{ analytic.train[0].design }}</td>
+                    <td>{{ analytic.train[0].train_matricule }}</td>
+                    <td>{{ analytic.from[0].localisation_city }} {{ analytic.from[0].localisation_postal_code }}</td>
+                    <td>{{ analytic.to[0].localisation_city }} {{ analytic.to[0].localisation_postal_code }}</td>
                     <td>{{ formattedDate(analytic.departure_date) }} à {{ analytic.departure_time }}</td>
-                    <td>{{ analytic.from.localisation_city }}</td>
-                    <td>{{ analytic.to.localisation_city }}</td>
-                    <td>{{ analytic.train.siege }}</td>
-                    <td>{{ analytic.train.siege - (analytic.seatUnavailable ? analytic.seatUnavailable : 0) }}</td>
+                    <td>{{ analytic.train[0].siege }}</td>
+                    <td>{{ analytic.train[0].siege - (analytic.seatUnavailable ? analytic.seatUnavailable : 0) }}</td>
                     <td>{{ analytic.seatUnavailable ? analytic.seatUnavailable : 0 }}</td>
-                    <td>{{ ((analytic.seatUnavailable ? analytic.seatUnavailable : 0) * 100) / analytic.train.siege }}%
+                    <td>{{ ((analytic.seatUnavailable ? analytic.seatUnavailable : 0) * 100) / analytic.train[0].siege }}%
                         <i v-if="((analytic.seatUnavailable ? analytic.seatUnavailable : 0) * 100) / analytic.train.siege > 50"
                             class="ri-arrow-up-fill"></i>
                         <i v-else
                             class="ri-arrow-down-fill"></i></td>
-                    <td><span class="pending">pending</span></td>
+                    <!-- <td><span class="pending">pending</span></td> -->
                 </tr>
                 <tr v-else>
-                    <td colspan="10" style="text-align:center;">Data not found or database is empty!</td>
+                    <td colspan="9" style="text-align:center;">Data not found or database is empty!</td>
                 </tr>
             </tbody>
         </table>

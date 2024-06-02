@@ -2,7 +2,73 @@
 export default {
     data() {
         return {
-            filter: 'All'
+            filter: 'All',
+            reservations_lists: [],
+            reservations: [],
+            date_value: '',
+            searchValue: '',
+        }
+    },
+    mounted() {
+        this.getReservations();
+    },
+    methods: {
+        async getReservations() {
+            try {
+                const response = await axios.get('/reservations/all-reservations');
+                //console.log(response.data.data)
+                this.reservations_lists = response.data.data
+                this.reservations = response.data.data
+            } catch (err) {
+                console.log(err.messange)
+            }
+        },
+        formattedDate(date) {
+            return new Date(date).toLocaleDateString('en-US', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+            });
+        },
+        formattedTime(time) {
+            return new Date(time).toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+            });
+        },
+        filterByOption() {
+            if (this.filter === 'All') {
+                this.reservations = this.reservations_lists
+            } else if (this.filter === 'Paid') {
+                this.reservations = this.reservations_lists.filter(res => res.unpaid === 0)
+            } else {
+                this.reservations = this.reservations_lists.filter(res => res.unpaid > 0)
+            }
+        },
+        filterByDate() {
+            if (this.filter === 'All') {
+                this.reservations = this.reservations_lists.filter(res => this.formattedDate(res.createdAt) === this.formattedDate(this.date_value))
+            } else if (this.filter === 'Paid') {
+                this.reservations = this.reservations_lists.filter(res => {
+                    return this.formattedDate(res.createdAt) === this.formattedDate(this.date_value) && res.unpaid === 0
+                })
+            } else {
+                this.reservations = this.reservations_lists.filter(res => {
+                    this.formattedDate(res.createdAt) === this.formattedDate(this.date_value) && res.unpaid > 0
+                })
+            }
+        },
+        search(){
+            const search = this.searchValue.toLowerCase();
+            const data = this.reservations_lists.filter(res => {
+                return res.client[0].last_name.toLowerCase().includes(search) ||
+                res.trip[0].from[0].localisation_city.toLowerCase().includes(search) ||
+                res.trip[0].from[0].localisation_postal_code.includes(search) || 
+                res.trip[0].to[0].localisation_city.includes(search) || 
+                res.trip[0].to[0].localisation_postal_code.includes(search)
+            })
+            this.reservations = data;
         }
     }
 }
@@ -14,11 +80,11 @@ export default {
             <h1>{{ filter ? filter : 'All' }} reservations</h1>
             <div class="filter">
                 <div class="input-search">
-                    <input type="search" name="" placeholder="search">
+                    <input type="search" v-model="searchValue" placeholder="search" @input="search">
                     <i class="ri-search-line"></i>
                 </div>
                 <div class="option">
-                    <select v-model="filter">
+                    <select v-model="filter" @change="filterByOption">
                         <option value="" disabled selected>Filter</option>
                         <option value="All">All</option>
                         <option value="Paid">Paid</option>
@@ -26,12 +92,8 @@ export default {
                     </select>
                     <i class="ri-equalizer-fill"></i>
                 </div>
-                <div class="option">
-                    <select name="">
-                        <option value="" disabled selected>Sort by</option>
-                        <option value="">ID</option>
-                    </select>
-                    <i class="ri-arrow-drop-down-line"></i>
+                <div class="date">
+                    <input type="date" v-model="date_value" @input="filterByDate">
                 </div>
             </div>
         </div>
@@ -50,33 +112,27 @@ export default {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Joshué Agapé</td>
-                        <td><span>24 Mey 2024</span><br> <small>13h 56</small></td>
-                        <td><span>29 Mey 2024</span><br> <small>05h 00</small></td>
-                        <td>Fianarantsoa</td>
-                        <td>Manakara</td>
-                        <td><span class="paid">paid</span></td>
+                    <tr v-if="reservations.length > 0" v-for="reservation in reservations" :key="reservation.id">
+                        <td>{{ reservation.id }}</td>
+                        <td>{{ reservation.client[0].last_name }}</td>
+                        <td><span>{{ formattedDate(reservation.createdAt) }}</span><br> <small>{{
+                            formattedTime(reservation.createdAt) }}</small></td>
+                        <td><span>{{ formattedDate(reservation.trip[0].departure_date) }}</span><br> <small>{{
+                            reservation.trip[0].departure_time }}</small></td>
+                        <td>{{ reservation.trip[0].from[0].localisation_city }} {{
+                            reservation.trip[0].from[0].localisation_postal_code }}</td>
+                        <td>{{ reservation.trip[0].to[0].localisation_city }} {{
+                            reservation.trip[0].to[0].localisation_postal_code }}</td>
+                        <td><span :class="reservation.unpaid > 0 ? 'unpaid' : 'paid'">{{ reservation.unpaid > 0 ?
+                            'unpaid' : 'paid' }}</span></td>
                         <td class="action">
                             <i class="ri-eye-line"></i>
                             <i class="ri-edit-circle-line"></i>
                             <i class="ri-download-2-line"></i>
                         </td>
                     </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Joshué Agapé</td>
-                        <td><span>24 Mey 2024</span><br> <small>13h 56</small></td>
-                        <td><span>29 Mey 2024</span><br> <small>05h 00</small></td>
-                        <td>Fianarantsoa</td>
-                        <td>Manakara</td>
-                        <td><span class="unpaid">unpaid</span></td>
-                        <td class="action">
-                            <i class="ri-eye-line"></i>
-                            <i class="ri-edit-circle-line"></i>
-                            <i class="ri-download-2-line"></i>
-                        </td>
+                    <tr v-else>
+                        <td colspan="8">No reseravtion found!</td>
                     </tr>
                 </tbody>
             </table>
@@ -85,6 +141,19 @@ export default {
 </template>
 
 <style scoped>
+.date {
+    display: inline-block;
+    background: var(--color-light);
+    border-radius: var(--border-radius-1);
+    padding: 0.8rem 1.8rem;
+}
+
+.date input[type="date"] {
+    background: transparent;
+    color: var(--color-dark);
+    font-size: 1.1rem;
+}
+
 .container .header {
     margin-top: .6rem;
 }
@@ -192,7 +261,7 @@ select option {
     padding: 0 0 1rem;
     padding-bottom: 1rem;
     width: 100%;
-    height: 88vh;
+    max-height: 88vh;
     border-radius: 10px;
     overflow-y: auto;
     text-align: left;
@@ -225,9 +294,11 @@ tbody tr td {
     font-weight: 600;
     border-bottom: 1px solid var(--color-info-dark);
 }
+
 tr:last-child td {
     border-bottom: none;
 }
+
 td:nth-child(2) {
     font-weight: bold;
     font-size: 1.1rem;
@@ -262,12 +333,15 @@ td i {
     color: var(--color-info-dark);
     transition: all .3s ease;
 }
+
 .ri-eye-line:hover {
     color: var(--color-dark);
 }
+
 .ri-edit-circle-line:hover {
     color: var(--color-success);
 }
+
 .ri-download-2-line:hover {
     color: var(--color-primary);
 }
