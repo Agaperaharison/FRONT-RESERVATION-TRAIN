@@ -7,6 +7,8 @@ export default {
             reservations: [],
             date_value: '',
             searchValue: '',
+            openModal: false,
+            moreInfo: [],
         }
     },
     mounted() {
@@ -59,16 +61,24 @@ export default {
                 })
             }
         },
-        search(){
+        search() {
             const search = this.searchValue.toLowerCase();
             const data = this.reservations_lists.filter(res => {
                 return res.client[0].last_name.toLowerCase().includes(search) ||
-                res.trip[0].from[0].localisation_city.toLowerCase().includes(search) ||
-                res.trip[0].from[0].localisation_postal_code.includes(search) || 
-                res.trip[0].to[0].localisation_city.includes(search) || 
-                res.trip[0].to[0].localisation_postal_code.includes(search)
+                    res.trip[0].from[0].localisation_city.toLowerCase().includes(search) ||
+                    res.trip[0].from[0].localisation_postal_code.includes(search) ||
+                    res.trip[0].to[0].localisation_city.includes(search) ||
+                    res.trip[0].to[0].localisation_postal_code.includes(search)
             })
             this.reservations = data;
+        },
+        toggleModal() {
+            this.openModal = !this.openModal
+        },
+        filterMoreInfo(id) {/*  */
+            this.moreInfo = this.reservations_lists.filter(res => res.id === id);
+            this.toggleModal();
+            console.log(this.moreInfo)
         }
     }
 }
@@ -126,7 +136,7 @@ export default {
                         <td><span :class="reservation.unpaid > 0 ? 'unpaid' : 'paid'">{{ reservation.unpaid > 0 ?
                             'unpaid' : 'paid' }}</span></td>
                         <td class="action">
-                            <i class="ri-eye-line"></i>
+                            <i class="ri-eye-line" @click="filterMoreInfo(reservation.id)"></i>
                             <i class="ri-edit-circle-line"></i>
                             <i class="ri-download-2-line"></i>
                         </td>
@@ -137,10 +147,328 @@ export default {
                 </tbody>
             </table>
         </div>
+
+        <div id="modal" :class="{ open: openModal }" @click="toggleModal">
+            <div class="modal-wrapper1" @click="toggleModal">
+                <i class="ri-close-fill" @click="toggleModal"></i>
+                <h2>MORE INFO</h2>
+                <div class="info-client">
+                    <div class="avatar-client">
+                        <img src="../../assets/imgs/1869679.png" alt="">
+                    </div>
+                    <div class="name-client">
+                        <h3>
+                            <span>{{ moreInfo.length > 0 ? moreInfo[0].client[0].first_name : null }} {{ moreInfo.length
+                                > 0 ?
+                                moreInfo[0].client[0].last_name : null }}</span><br>
+                            <small>{{ moreInfo.length > 0 ? moreInfo[0].client[0].email : null }}</small>
+                        </h3>
+                    </div>
+                </div>
+                <div class="more-info-user">
+                    <div class="div">
+                        <h3>
+                            <span>Habite à : </span>
+                            <small>{{ moreInfo.length > 0 ? moreInfo[0].client[0].city : null }}</small>
+                        </h3>
+                        <h3>
+                            <span>Domicile : </span>
+                            <small>{{ moreInfo.length > 0 ? moreInfo[0].client[0].address : null }}</small>
+                        </h3>
+                        <h3>
+                            <span>phone numbre : </span>
+                            <small>{{ moreInfo.length > 0 ? moreInfo[0].client[0].phone_number : null }}</small>
+                        </h3>
+                        <h3>
+                            <span>Nationality : </span>
+                            <small>{{ moreInfo.length > 0 ? moreInfo[0].client[0].nationality : null }}</small>
+                        </h3>
+                        <h3>
+                            <span>Sexe : </span>
+                            <small>{{ moreInfo.length > 0 ? moreInfo[0].client[0].sexe : null }}</small>
+                        </h3>
+                    </div>
+                    <div class="verify" v-if="moreInfo.length > 0">
+                        <h3
+                            :class="{ 'invalide': moreInfo[0].client[0].is_validate === 0, 'validate': moreInfo[0].client[0].is_validate === 1 }">
+                            <i
+                                :class="{ 'ri-alert-line': moreInfo[0].client[0].is_validate === 0, 'ri-check-fill': moreInfo[0].client[0].is_validate === 1 }"></i>
+                            <small>{{ moreInfo[0].client[0].is_validate === 0 ? 'unvalidate' : 'validate' }}</small>
+                        </h3>
+                    </div>
+                </div>
+                <div class="activity">
+                    <div class="div">
+                        <i class="ri-calendar-todo-line"></i>
+                        <h2>0</h2>
+                    </div>
+                    <div class="div">
+                        <i class="ri-money-euro-circle-line"></i>
+                        <h2>{{ moreInfo.length > 0 ? (moreInfo[0].paid).toLocaleString('fr-FR') : null }} Ar</h2>
+                    </div>
+                    <div class="div">
+                        <i class="ri-money-euro-circle-line"></i>
+                        <h2>{{ moreInfo.length > 0 ? (moreInfo[0].unpaid).toLocaleString('fr-FR') : null }} Ar</h2>
+                    </div>
+                </div>
+                <div class="info-trip">
+                    <div class="div">
+                        <h3>TRAIN INFO:</h3>
+                        <table>
+                            <tr>
+                                <th>matricule</th>
+                                <th>design</th>
+                                <th>Seat</th>
+                            </tr>
+                            <tr>
+                                <td>{{ moreInfo.length > 0 ? moreInfo[0].trip[0].trains[0].train_matricule : null }}
+                                </td>
+                                <td>{{ moreInfo.length > 0 ? moreInfo[0].trip[0].trains[0].design : null }}</td>
+                                <td>{{ moreInfo.length > 0 ? moreInfo[0].trip[0].trains[0].siege : null }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="div">
+                        <h3>TRIP INFO:</h3>
+                        <table>
+                            <tr>
+                                <!-- <th>#</th> -->
+                                <th>date</th>
+                                <th>time</th>
+                                <th>price</th>
+                            </tr>
+                            <tr>
+                                <!-- <td>{{ moreInfo.length > 0 ? moreInfo[0].trip[0].id : null }}</td> -->
+                                <td>{{ moreInfo.length > 0 ? formattedDate(moreInfo[0].trip[0].departure_date) : null }} </td>
+                                <td>{{ moreInfo.length > 0 ? moreInfo[0].trip[0].departure_time : null }}</td>
+                                <td>{{ moreInfo.length > 0 ? (moreInfo[0].trip[0].price).toLocaleString('fr-FR') : null
+                                    }} Ar</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="div">
+                        <h3>RESERVATION INFO:</h3>
+                        <table>
+                            <tr>
+                                <th>N°</th>
+                                <th>Seats</th>
+                                <th>Rate</th>
+                                <th>Total</th>
+                            </tr>
+                            <tr>
+                                <td>{{ moreInfo.length > 0 ? moreInfo[0].id : null }}</td>
+                                <td>{{ moreInfo.length > 0 ? moreInfo[0].number_of_seats : null }}</td>
+                                <td>{{ moreInfo.length > 0 ? (moreInfo[0].trip[0].price).toLocaleString('fr-FR') : null }} Ar x {{ moreInfo.length
+                                    > 0 ? moreInfo[0].number_of_seats : null }}</td>
+                                <td>{{ moreInfo.length > 0 ? (moreInfo[0].trip[0].price * moreInfo[0].number_of_seats).toLocaleString('fr-FR') :
+                                    null }} Ar</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <style scoped>
+.info-trip table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+}
+
+.info-trip th {
+    background: var(--color-light);
+    height: 30px;
+}
+
+.info-trip td {
+    text-align: center;
+    height: 30px;
+    font-weight: 600;
+    border-bottom: 1px solid var(--color-light);
+}
+
+.info-trip .div h3 {
+    text-align: left;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: underline;
+    color: var(--color-primary-variant);
+}
+
+.info-trip h2 {
+    text-decoration: underline;
+    color: var(--color-primary);
+}
+
+.activity .div:nth-child(1),
+.activity .div:nth-child(2) {
+    border-right: 1px solid var(--color-light);
+}
+
+.activity .div:nth-child(1) i,
+.activity .div:nth-child(1) h2 {
+    color: var(--color-primary-variant);
+}
+
+.activity .div:nth-child(2) i,
+.activity .div:nth-child(2) h2 {
+    color: var(--color-success);
+}
+
+.activity .div:nth-child(3) i,
+.activity .div:nth-child(3) h2 {
+    color: var(--color-warning);
+}
+
+.activity .div i {
+    font-size: 1.8rem;
+    padding: 8px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    background: var(--color-light);
+}
+
+.activity .div {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+}
+
+.activity {
+    margin-top: 2rem;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+}
+
+.more-info-user .div h3 span {
+    font-size: 1rem;
+    color: var(--color-info-dark);
+}
+
+.more-info-user .div h3 small {
+    font-size: .9rem;
+    color: var(--color-dark);
+}
+
+.more-info-user .div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.verify h3 i {
+    font-size: 1.8rem;
+}
+
+.verify h3 i {
+    font-weight: 100;
+}
+
+.verify h3.invalide {
+    color: var(--color-warning);
+}
+
+.verify h3.validate {
+    color: var(--color-success);
+}
+
+.verify h3 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.more-info-user {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: auto 5rem;
+    align-items: center;
+}
+
+.info-client {
+    display: grid;
+    grid-template-columns: 5rem auto;
+    gap: 1rem;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--color-light);
+}
+
+.name-client h3 span {
+    font-size: 1.2rem;
+    color: var(--color-dark);
+}
+
+.name-client h3 small {
+    font-size: 1rem;
+    color: var(--color-info-dark);
+}
+
+.avatar-client {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+#modal {
+    position: absolute;
+    display: none;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(3px);
+}
+
+#modal.open {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-wrapper1 {
+    position: relative;
+    background: var(--color-white);
+    padding: 2rem;
+    width: 500px;
+    height: auto;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.modal-wrapper1 .ri-close-fill {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--color-info-dark);
+    transition: all .2s ease;
+}
+
+.modal-wrapper1 .ri-close-fill:hover {
+    color: var(--color-danger);
+}
+
+.modal-wrapper1 h2 {
+    color: var(--color-dark);
+    margin-bottom: 2rem;
+}
+
+
+
+
+
 .date {
     display: inline-block;
     background: var(--color-light);

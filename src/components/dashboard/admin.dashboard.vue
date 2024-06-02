@@ -16,7 +16,7 @@ export default {
     data() {
         return {
             currentDate: new Date(),
-            date_value: '',
+            date_value:  new Date().toISOString().substr(0, 10),
             salesArray: [],
             amountArray: [],
             graphValue: [],
@@ -61,24 +61,19 @@ export default {
         },
         async getTotalAmount() {
             const response = await axios.get('/reservations/get-total-amount');
-            //console.log(response.data.data);
             this.amountArray = response.data.data;
             this.filterAndCalculateTotal();
         },
         async filterAndCalculateTotal() {
             const targetDate = this.date_value ? new Date(this.date_value) : this.currentDate;
-            this.amountArray.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            this.amountArray.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
             const lastFiveItems = this.amountArray.filter(item => new Date(item.createdAt) <= targetDate).slice(0, 5);
             this.graphValue = lastFiveItems;
             const highestTotalAmount = lastFiveItems.reduce((maxTotalAmount, currentItem) => {
                 return Math.max(maxTotalAmount, currentItem.totalAmount);
             }, 0);
-            //console.log(lastFiveItems);
-            //console.log(highestTotalAmount);
             this.maxAmount = highestTotalAmount;
         },
-
-        // response.data.data : total, total_valid, total_invalid
         async customers_count() {
             try {
                 const response = await axios.get('/users/count-users');
@@ -88,7 +83,6 @@ export default {
                 console.log(err.message)
             }
         },
-        // response.data.data : total, tripsDeleted, tripsNotDeleted
         async trips_count() {
             try {
                 const response = await axios.get('/trips/count-trips');
@@ -97,7 +91,6 @@ export default {
                 console.log(err.message);
             }
         },
-        // response.data.data : isNotReset, isReset, total
         async reservations_count() {
             try {
                 const response = await axios.get('/reservations/count-reservations');

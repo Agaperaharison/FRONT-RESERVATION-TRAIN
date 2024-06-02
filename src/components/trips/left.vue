@@ -29,6 +29,14 @@ export default {
         this.getAllTrain();
     },
     methods: {
+        fireToast(title, message, icon, btn) {
+            Toast.fire({
+                title: title,
+                text: message,
+                icon: icon,
+                confirmButtonText: btn
+            });
+        },
         setActiveNavItem(navItem) {
             this.navItemActive = navItem;
             if (navItem === 'Available') {
@@ -130,7 +138,18 @@ export default {
                     train_id: this.train_id, from: this.from, to: this.to, departure_date: this.departure_date,
                     departure_time: this.departure_time, price: this.price
                 });
-                console.log(response.data.data);
+                //console.log(response.data.data);
+                if (response.data.status) {
+                    this.fireToast('Success', response.data.data.message, 'success', 'ok');
+                    this.train_id = '';
+                    this.from = '';
+                    this.to = '';
+                    this.departure_date = '';
+                    this.departure_time = '';
+                    this.price = '';
+                } else {
+                    this.fireToast('ERROR!', response.data.data, 'error', 'ok');
+                }
                 this.allTrips();
             } catch (err) {
                 console.log(err.message)
@@ -276,7 +295,7 @@ export default {
                                 <div>
                                     <span>{{ trip.train[0].design }}</span> <br> <small>mat: {{
                                         trip.train[0].train_matricule
-                                    }}</small>
+                                        }}</small>
                                 </div>
                             </td>
                             <td>

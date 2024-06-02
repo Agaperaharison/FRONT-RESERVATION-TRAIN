@@ -74,7 +74,7 @@ h1 {
     padding: 0;
     margin: 0;
     padding: 0 8px 0 0;
-    text-align: center;
+    text-align: left;
 }
 .value-item div small{
     font-weight: 600;

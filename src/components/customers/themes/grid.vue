@@ -67,7 +67,7 @@ export default {
     </nav>
     <div class="cards">
         <card-customer-vue v-if="agents.length > 0" v-for="agent in agents" :key="agent.id"
-            :old="agent.title" :tache="0" :matricule="agent.matricule" :last_name="agent.last_name"
+            :old="agent.title" :tache="agent.nombre_de_tache" :matricule="agent.matricule" :last_name="agent.last_name"
             :email="agent.email" />
 
         <div class="card-add-new-agent">

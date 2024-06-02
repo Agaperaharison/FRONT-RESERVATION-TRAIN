@@ -116,10 +116,10 @@ export default {
             this.info_reservations = this.info_reservations_principal;
         },
         filterPaidMoreInfo() {
-            this.info_reservations = this.info_reservations_principal.filter(res => res.unpaid > 0);
+            this.info_reservations = this.info_reservations_principal.filter(res => res.unpaid === 0);
         },
         filterUnpaidMoreInfo() {
-            this.info_reservations = this.info_reservations_principal.filter(res => res.unpaid === 0);
+            this.info_reservations = this.info_reservations_principal.filter(res => res.unpaid > 0);
         },
         formattedDate(date) {
             return new Date(date).toLocaleDateString('en-US', {
@@ -248,7 +248,7 @@ export default {
                         </p>
                         <p>
                             <span class="ri-map-pin-user-line"></span> Né le {{ info_user.length > 0 ?
-                                info_user[0].date_of_birth : null }}
+                                formattedDate(info_user[0].date_of_birth) : null }}
                         </p>
                         <p>
                             <span class="ri-mail-line"></span> {{ info_user.length > 0 ? info_user[0].email : null }}
@@ -278,13 +278,13 @@ export default {
                                 </li>
                                 <li :class="{ active: infoNavActive == 'paid' }" @click="activeNavItemMOreInfo('paid')">
                                     paid
-                                    <span>{{ (this.info_reservations_principal.filter(res => res.unpaid > 0)).length
+                                    <span>{{ (this.info_reservations_principal.filter(res => res.unpaid === 0)).length
                                         }}</span>
                                 </li>
                                 <li :class="{ active: infoNavActive == 'unpaid' }"
                                     @click="activeNavItemMOreInfo('unpaid')">
                                     Unpaid
-                                    <span>{{ (this.info_reservations_principal.filter(res => res.unpaid === 0)).length
+                                    <span>{{ (this.info_reservations_principal.filter(res => res.unpaid > 0)).length
                                         }}</span>
                                 </li>
                             </ul>
