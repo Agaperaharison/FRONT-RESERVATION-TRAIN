@@ -60,9 +60,9 @@ export default {
                     <td>{{ analytic.from[0].localisation_city }} {{ analytic.from[0].localisation_postal_code }}</td>
                     <td>{{ analytic.to[0].localisation_city }} {{ analytic.to[0].localisation_postal_code }}</td>
                     <td>{{ formattedDate(analytic.departure_date) }} à {{ analytic.departure_time }}</td>
-                    <td>{{ analytic.train[0].siege }}</td>
-                    <td>{{ analytic.train[0].siege - (analytic.seatUnavailable ? analytic.seatUnavailable : 0) }}</td>
-                    <td>{{ analytic.seatUnavailable ? analytic.seatUnavailable : 0 }}</td>
+                    <td>{{ (analytic.train[0].siege).toLocaleString('fr-FR') }}</td>
+                    <td>{{ (analytic.train[0].siege - (analytic.seatUnavailable ? analytic.seatUnavailable : 0)).toLocaleString('fr-FR') }}</td>
+                    <td>{{ analytic.seatUnavailable ? (analytic.seatUnavailable).toLocaleString('fr-FR') : 0 }}</td>
                     <td>{{ ((analytic.seatUnavailable ? analytic.seatUnavailable : 0) * 100) / analytic.train[0].siege }}%
                         <i v-if="((analytic.seatUnavailable ? analytic.seatUnavailable : 0) * 100) / analytic.train.siege > 50"
                             class="ri-arrow-up-fill"></i>

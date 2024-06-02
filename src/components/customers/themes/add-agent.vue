@@ -1,6 +1,6 @@
 <script>
 export default {
-    data(){
+    data() {
         return {
             nationality: '',
             first_name: '',
@@ -15,14 +15,22 @@ export default {
         }
     },
     methods: {
-        async addAgent(){
-            try{
+        fireToast(title, message, icon, btn) {
+            Toast.fire({
+                title: title,
+                text: message,
+                icon: icon,
+                confirmButtonText: btn
+            });
+        },
+        async addAgent() {
+            try {
                 const response = await axios.post('/users/add-new-agent', {
                     email: this.email,
                     first_name: this.first_name,
                     last_name: this.last_name,
                     sexe: this.sexe,
-                    phone_number: this.phone_number,
+                    phone_number: this.formaterNumero(this.phone_number),
                     date_of_birth: this.date_of_birth,
                     address: this.domicile,
                     city: this.city,
@@ -30,11 +38,38 @@ export default {
                     nationality: this.nationality,
 
                 });
-                console.log(response.data.data);
-            }catch(err){
+                if (response.data.status) {
+                    this.fireToast("Success", response.data.data.message, 'success', 'ok')
+                    this.nationality = ''
+                    this.first_name = ''
+                    this.last_name = ''
+                    this.email = ''
+                    this.phone_number = ''
+                    //this.sexe= '',
+                    this.date_of_birth = ''
+                    this.domicile = ''
+                    this.city = ''
+                    this.code = ''
+                } else {
+                    this.fireToast("ERROR!", response.data.data.message, 'error', 'ok')
+                }
+
+            } catch (err) {
                 console.log(err.message)
             }
+        },
+        formaterNumero(numero) {
+            numero = numero.replace(/\D/g, '');
+            if (numero.startsWith('0')) {
+                numero = numero.slice(1);
+                numero = '+261' + numero;
+            } else if (!numero.startsWith('+261')) {
+                numero = '+261' + numero;
+            }
+            numero = numero.replace(/(\+\d{3})(\d{2})(\d{2})(\d{3})(\d{2})/, '$1 $2 $3 $4 $5');
+            return numero;
         }
+
     }
 }
 </script>
@@ -110,6 +145,7 @@ export default {
 .container {
     width: 100%;
 }
+
 .return {
     display: flex;
     align-items: center;
@@ -118,9 +154,11 @@ export default {
     cursor: pointer;
     transition: all .3s ease;
 }
+
 .return:hover {
     color: var(--color-dark);
 }
+
 .ri-arrow-left-circle-line {
     font-size: 2rem;
 }
@@ -129,6 +167,7 @@ span {
     font-size: 1.2rem;
     font-weight: 600;
 }
+
 form {
     background: var(--color-white);
     width: 730px;

@@ -1,6 +1,52 @@
 <script>
+import io from 'socket.io-client';
 export default {
-
+    data() {
+        return {
+            socket: null,
+            notifications: [],
+        }
+    },
+    mounted() {
+        this.getNotif();
+    },
+    created() {
+        this.socket = io('http://localhost:8081');
+        this.socket.on('connect_error', error => {
+            console.error('Socket.io connection error:', error);
+        });
+        this.socket.on('haveNotif', players => {
+            this.notifications = players;
+        });
+    },
+    beforeDestroy() {
+        this.socket.close();
+    },
+    methods: {
+        async getNotif() {
+            try {
+                const response = await axios.get(`/dashboard/get-notification/admin`);
+                //console.log(response.data.data)
+                this.notifications = response.data.data
+            } catch (err) {
+                console.log(err.message)
+            }
+        },
+        formattedDate(date) {
+            return new Date(date).toLocaleDateString('en-US', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+            });
+        },
+        formattedTime(time) {
+            return new Date(time).toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+            });
+        },
+    }
 }
 </script>
 
@@ -9,20 +55,16 @@ export default {
         <h2>Notifications</h2>
         <div class="lists">
             <ul>
-                <li>
-                    <span class="title"> <b>N</b> New customers</span>
-                    <span>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</span>
-                    <small>last 4 min ago</small>
+                <li v-if="notifications.length > 0" v-for="notification in notifications" :key="notification.id">
+                    <span class="title"> <b>N</b> {{ notification.notification_info.title }}</span>
+                    <span>{{ notification.notification_info.description }}</span>
+                    <small>{{ formattedDate(notification.createdAt) }}, {{ formattedTime(notification.createdAt)
+                        }}</small>
                 </li>
-                <li>
-                    <span class="title"> <b>N</b> New customers</span>
+                <li v-else>
+                    <span class="title"> <b>N</b> Title</span>
                     <span>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</span>
-                    <small>last 4 min ago</small>
-                </li>
-                <li>
-                    <span class="title"> <b>N</b> New customers</span>
-                    <span>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</span>
-                    <small>last 4 min ago</small>
+                    <small></small>
                 </li>
             </ul>
         </div>
