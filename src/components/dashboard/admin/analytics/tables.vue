@@ -12,7 +12,7 @@ export default {
     methods: {
         async getLists() {
             try {
-                const response = await axios.get(`/dashboard/get-data-in-analytics`);
+                const response = await axios.get(`/dashboard/get-data-in-analytics`, { withCredentials: true, });
                 this.listes = response.data.data;
                 this.analytics = response.data.data;
                 //console.log(this.analytics)

@@ -52,7 +52,7 @@ export default {
         },
         async allTrips() {
             try {
-                const response = await axios.get('/trips/get-all-trips');
+                const response = await axios.get('/trips/get-all-trips', { withCredentials: true, });
                 this.trips_lists = response.data.data;
                 this.trips = response.data.data;
                 //console.log(this.trips)
@@ -93,7 +93,7 @@ export default {
         },
         async getStationsLists() {
             try {
-                const response = await axios.get('/trips/get-all-stations');
+                const response = await axios.get('/trips/get-all-stations', { withCredentials: true, });
                 //console.log(response.data.data);
                 this.stations_lists = response.data.data
                 this.stations_from = response.data.data
@@ -137,7 +137,7 @@ export default {
                 const response = await axios.post('/trips/add-trip', {
                     train_id: this.train_id, from: this.from, to: this.to, departure_date: this.departure_date,
                     departure_time: this.departure_time, price: this.price
-                });
+                }, { withCredentials: true, });
                 //console.log(response.data.data);
                 if (response.data.status) {
                     this.fireToast('Success', response.data.data.message, 'success', 'ok');
@@ -160,7 +160,7 @@ export default {
         },
         async getAllTrain() {
             try {
-                const response = await axios.get('/trips/get-all-trains');
+                const response = await axios.get('/trips/get-all-trains', { withCredentials: true, });
                 this.trains = response.data.data
             } catch (err) {
                 console.log(err.message)
@@ -179,7 +179,7 @@ export default {
 
             if (result.isConfirmed) {
                 try {
-                    const response = await axios.delete(`/trips/delete-trip/${tripId}`);
+                    const response = await axios.delete(`/trips/delete-trip/${tripId}`, { withCredentials: true, });
                     if (response.data.status) {
                         Toast.fire({
                             icon: 'success',

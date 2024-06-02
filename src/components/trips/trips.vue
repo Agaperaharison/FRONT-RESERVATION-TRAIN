@@ -6,12 +6,6 @@ export default {
     components: {
         leftVue, rightVue
     },
-    data() {
-        return {
-        }
-    },
-    methods: {
-    }
 }
 </script>
 

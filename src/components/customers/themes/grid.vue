@@ -25,14 +25,14 @@ export default {
         },
         async agentsLists() {
             try {
-                const response = await axios.get('/users/get-customers-lists/AGENT');
+                const response = await axios.get('/users/get-customers-lists/AGENT', { withCredentials: true, });
                 this.lists_agents = response.data.data;
                 this.agents = response.data.data;
             } catch (err) {
                 console.log(err.message)
             }
         },
-        async filter(value) {
+        filter(value) {
             try {
                 const agentFiltered = this.lists_agents.filter(agent => agent.sexe === value);
                 this.agents = agentFiltered

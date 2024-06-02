@@ -25,7 +25,7 @@ export default {
     methods: {
         async getNotif() {
             try {
-                const response = await axios.get(`/dashboard/get-notification/admin`);
+                const response = await axios.get(`/dashboard/get-notification/admin`, { withCredentials: true, });
                 //console.log(response.data.data)
                 this.notifications = response.data.data
             } catch (err) {

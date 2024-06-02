@@ -17,7 +17,7 @@ export default {
     methods: {
         async getReservations() {
             try {
-                const response = await axios.get('/reservations/all-reservations');
+                const response = await axios.get('/reservations/all-reservations', { withCredentials: true, });
                 //console.log(response.data.data)
                 this.reservations_lists = response.data.data
                 this.reservations = response.data.data
@@ -78,7 +78,7 @@ export default {
         filterMoreInfo(id) {/*  */
             this.moreInfo = this.reservations_lists.filter(res => res.id === id);
             this.toggleModal();
-            console.log(this.moreInfo)
+            //console.log(this.moreInfo)
         }
     }
 }

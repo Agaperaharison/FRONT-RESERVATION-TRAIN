@@ -41,7 +41,7 @@ export default {
     methods: {
         async getSales() {
             try {
-                const response = await axios.get(`/reservations/get-sales`);
+                const response = await axios.get(`/reservations/get-sales`, { withCredentials: true, });
                 this.salesArray = response.data.data;
                 const targetDate = this.date_value ? this.date_value : this.currentDate;
                 const data = this.salesArray.find(sale => this.formattedDate(sale.createdAt) === this.formattedDate(targetDate));
@@ -60,7 +60,7 @@ export default {
             }
         },
         async getTotalAmount() {
-            const response = await axios.get('/reservations/get-total-amount');
+            const response = await axios.get('/reservations/get-total-amount', { withCredentials: true, });
             this.amountArray = response.data.data;
             this.filterAndCalculateTotal();
         },
@@ -76,7 +76,7 @@ export default {
         },
         async customers_count() {
             try {
-                const response = await axios.get('/users/count-users');
+                const response = await axios.get('/users/count-users', { withCredentials: true, });
                 this.total_customers = response.data.data.total;
                 this.valid_customer = response.data.data.total_valid;
             } catch (err) {
@@ -85,7 +85,7 @@ export default {
         },
         async trips_count() {
             try {
-                const response = await axios.get('/trips/count-trips');
+                const response = await axios.get('/trips/count-trips', { withCredentials: true, });
                 this.total_trips = response.data.data.total;
             } catch (err) {
                 console.log(err.message);
@@ -93,7 +93,7 @@ export default {
         },
         async reservations_count() {
             try {
-                const response = await axios.get('/reservations/count-reservations');
+                const response = await axios.get('/reservations/count-reservations', { withCredentials: true, });
                 this.total_reservation = response.data.data.total
             } catch (err) {
                 console.log(err.message);

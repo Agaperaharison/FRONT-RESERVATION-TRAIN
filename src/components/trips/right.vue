@@ -28,7 +28,7 @@ export default {
         },
         async getListsTrain(){
             try{
-                const response = await axios.get('/trips/get-all-trains');
+                const response = await axios.get('/trips/get-all-trains', { withCredentials: true, });
                 this.train_lists = response.data.data;
                 this.count = response.data.data.length
                 this.name = 'trains'
@@ -38,7 +38,7 @@ export default {
         },
         async getListsStations(){
             try{
-                const response = await axios.get('/trips/get-all-stations');
+                const response = await axios.get('/trips/get-all-stations', { withCredentials: true, });
                 this.stations_lists = response.data.data;
                 this.count = response.data.data.length
                 this.name = 'stations'

@@ -57,7 +57,7 @@ export default {
         },
         async showAllClients() {
             try {
-                const response = await axios.get('/users/get-customers-lists/CLIENT');
+                const response = await axios.get('/users/get-customers-lists/CLIENT', { withCredentials: true, });
                 this.clients_lists = response.data.data;
                 this.clients = response.data.data;
                 //console.log(response.data.data);
