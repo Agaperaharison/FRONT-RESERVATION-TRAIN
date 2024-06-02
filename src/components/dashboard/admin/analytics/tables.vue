@@ -15,7 +15,7 @@ export default {
                 const response = await axios.get(`/dashboard/get-data-in-analytics`);
                 this.listes = response.data.data;
                 this.analytics = response.data.data;
-                console.log(this.analytics)
+                //console.log(this.analytics)
             } catch (err) {
                 console.log(err.message)
             }

@@ -1,6 +1,26 @@
 <script>
 export default {
-    props: ["value"],
+    props: ["value", 'total'],
+    data() {
+        return {
+            totalAmount: 0,
+            totalUnpaid: 0,
+        }
+    },
+    watch: {
+        total: {
+            handler(newVal) {
+                this.totalAmount = newVal;
+            },
+            immediate: true
+        },
+        value: {
+            handler(newVal) {
+                this.totalUnpaid = newVal;
+            },
+            immediate: true
+        }
+    },
 }
 </script>
 
@@ -15,10 +35,10 @@ export default {
             <div class="progress">
                 <svg>
                     <circle cx="38" cy="38" r="36" />
-                    <circle cx="38" cy="38" r="36" class="animated-circle" />
+                    <circle cx="38" cy="38" r="36" class="animated-circle" :style="{ strokeDashoffset: value > 0 ? (222 - ((this.totalUnpaid * 222) / this.totalAmount) - 3).toFixed(0) : '222px' }" />
                 </svg>
                 <div class="number">
-                    <p>0%</p>
+                    <p>{{ value > 0 ? ((this.totalUnpaid * 100) / this.totalAmount).toFixed(2) : 0 }}%</p>
                 </div>
             </div>
         </div>
@@ -91,7 +111,7 @@ svg circle.animated-circle {
 .number {
     position: absolute;
     top: 0;
-    left: 0;
+    left: 6px;
     width: 100%;
     height: 100%;
     display: flex;

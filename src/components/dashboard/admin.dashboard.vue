@@ -15,6 +15,11 @@ export default {
     },
     data() {
         return {
+            currentDate: new Date(),
+            date_value: '',
+            salesArray: [],
+            amountArray: [],
+            graphValue: [],
             amount: 0,
             paid: 0,
             unpaid: 0,
@@ -22,24 +27,57 @@ export default {
             valid_customer: 0,
             total_trips: 0,
             total_reservation: 0,
-            date_value: '',
+
+            maxAmount: 0,
         }
     },
     mounted() {
         this.customers_count();
         this.trips_count();
         this.reservations_count();
-        this.sales();
+        this.getSales();
+        this.getTotalAmount();
     },
     methods: {
-        async sales(date) {
+        async getSales() {
             try {
-                const response = await axios.get(`/reservations/total-sales/${date}`)
-                console.log(response.data.data);
+                const response = await axios.get(`/reservations/get-sales`);
+                this.salesArray = response.data.data;
+                const targetDate = this.date_value ? this.date_value : this.currentDate;
+                const data = this.salesArray.find(sale => this.formattedDate(sale.createdAt) === this.formattedDate(targetDate));
+                if (data) {
+                    this.amount = data.totalAmount;
+                    this.paid = data.paidAmount;
+                    this.unpaid = data.unpaidAmount;
+                } else {
+                    this.amount = 0;
+                    this.paid = 0;
+                    this.unpaid = 0;
+                }
+                this.filterAndCalculateTotal();
             } catch (err) {
-                console.log(err.message)
+                console.log(err.message);
             }
         },
+        async getTotalAmount() {
+            const response = await axios.get('/reservations/get-total-amount');
+            //console.log(response.data.data);
+            this.amountArray = response.data.data;
+            this.filterAndCalculateTotal();
+        },
+        async filterAndCalculateTotal() {
+            const targetDate = this.date_value ? new Date(this.date_value) : this.currentDate;
+            this.amountArray.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            const lastFiveItems = this.amountArray.filter(item => new Date(item.createdAt) <= targetDate).slice(0, 5);
+            this.graphValue = lastFiveItems;
+            const highestTotalAmount = lastFiveItems.reduce((maxTotalAmount, currentItem) => {
+                return Math.max(maxTotalAmount, currentItem.totalAmount);
+            }, 0);
+            //console.log(lastFiveItems);
+            //console.log(highestTotalAmount);
+            this.maxAmount = highestTotalAmount;
+        },
+
         // response.data.data : total, total_valid, total_invalid
         async customers_count() {
             try {
@@ -68,6 +106,13 @@ export default {
                 console.log(err.message);
             }
         },
+        formattedDate(date) {
+            return new Date(date).toLocaleDateString('en-US', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+            });
+        },
     }
 }
 </script>
@@ -79,13 +124,13 @@ export default {
                 <div class="header">
                     <h1>DASHBOARD</h1>
                     <div class="date">
-                        <input type="date" v-model="date_value">
+                        <input type="date" v-model="date_value" @change="getSales">
                     </div>
                 </div>
                 <div class="insights">
-                    <amount-vue :value="amount" />
-                    <paid-vue :value="paid" />
-                    <unpaid-vue :value="unpaid" />
+                    <amount-vue :value="amount" :max="maxAmount" :graph="graphValue" />
+                    <paid-vue :value="paid" :total="amount" />
+                    <unpaid-vue :value="unpaid" :total="amount" />
                     <customers-vue :total="total_customers" :valid="valid_customer" />
                     <trips-vue :value="total_trips" />
                     <reservation-vue :value="total_reservation" />

@@ -1,6 +1,26 @@
 <script>
 export default {
-    props: ["value"],
+    props: ["value", "max", "graph"],
+    data() {
+        return {
+            graphValue: [],
+            valeurMax: 0,
+        }
+    },
+    watch: {
+        graph: {
+            handler(newVal) {
+                this.graphValue = newVal;
+            },
+            immediate: true
+        },
+        max: {
+            handler(newVal) {
+                this.valeurMax = newVal;
+            },
+            immediate: true
+        }
+    },
 }
 </script>
 
@@ -13,20 +33,9 @@ export default {
                 <h1>{{ value.toLocaleString('fr-FR') }} Ar</h1>
             </div>
             <div class="chart">
-                <div class="container-chart">
-                    <span style="height: 34%;"></span>
-                </div>
-                <div class="container-chart">
-                    <span style="height: 90%;"></span>
-                </div>
-                <div class="container-chart">
-                    <span style="height: 67%;"></span>
-                </div>
-                <div class="container-chart">
-                    <span style="height: 57%;"></span>
-                </div>
-                <div class="container-chart">
-                    <span style="height: 100%;"></span>
+                <div class="container-chart" v-for="graph in graphValue" :key="graph.createdAt">
+                    <span
+                        :style="{ height: this.graphValue.length > 0 ? ((graph.totalAmount * 100) / valeurMax) + '%' : '0%' }"></span>
                 </div>
             </div>
         </div>
@@ -67,6 +76,7 @@ h3 {
     font-size: 1.2rem;
     color: var(--color-info-dark);
 }
+
 .chart {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
