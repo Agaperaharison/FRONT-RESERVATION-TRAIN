@@ -210,8 +210,8 @@ export default {
                                 <img src="../../../assets/imgs/1869679.png" alt="">
                             </div>
                         </td>
-                        <td>{{ client.address }}<br>{{ client.city }}</td>
-                        <td>{{ client.phone_number }}</td>
+                        <td>{{ client.address ? client.address : 'non configured' }}<br>{{ client.address ? client.city : null }}</td>
+                        <td>{{ client.phone_number ? client.phone_number : 'non configured' }}</td>
                         <td>{{ client.sexe }}</td>
                         <td>{{ client.is_validate === 1 ? true : false }}</td>
                         <td>{{ client.debs }}</td>

@@ -1,4 +1,5 @@
 <script>
+import jsPDF from 'jspdf';
 export default {
     data() {
         return {
@@ -75,10 +76,60 @@ export default {
         toggleModal() {
             this.openModal = !this.openModal
         },
-        filterMoreInfo(id) {/*  */
+        filterMoreInfo(id) {
             this.moreInfo = this.reservations_lists.filter(res => res.id === id);
             this.toggleModal();
             //console.log(this.moreInfo)
+        },
+        async generatePDF(id) {
+            try {
+                this.openModal = true
+                this.filterMoreInfo(id);
+                if (this.moreInfo) {
+                    const doc = new jsPDF();
+                    const content = `
+                        MORE INFORMATION ABOUT THE RESERVATION
+
+                        Reservation N°${this.moreInfo[0].id}
+                        - Reservation date: ${this.formattedDate(this.moreInfo[0].createdAt)}
+                        - Number of seat reserved: ${this.moreInfo[0].number_of_seats} seats
+                        - Paid: ${this.moreInfo[0].paid} Ar
+                        - Unpaid: ${this.moreInfo[0].unpaid} Ar
+                        - Rates: ${this.moreInfo[0].number_of_seats} place x ${this.moreInfo[0].trip[0].price} Ar
+                        - Total fees: ${(this.moreInfo[0].number_of_seats * this.moreInfo[0].trip[0].price)} Ar
+                        - Status: ${this.moreInfo[0].unpaid > 0 ? 'unpaid' : 'paid'}
+
+                        Trips
+                        - From: ${this.moreInfo[0].trip[0].from[0].localisation_city}
+                        - To: ${this.moreInfo[0].trip[0].to[0].localisation_city}
+                        - Departure date: ${this.formattedDate(this.moreInfo[0].trip[0].departure_date)}
+                        - Departure Time: ${this.moreInfo[0].trip[0].departure_time}
+
+                        Train
+                        - Train ID: ${this.moreInfo[0].trip[0].trains[0].train_matricule}
+                        - Train design: ${this.moreInfo[0].trip[0].trains[0].design}
+                        - Total seats: ${this.moreInfo[0].trip[0].trains[0].siege}
+
+                        Client
+                        - Client name : ${this.moreInfo[0].client[0].first_name + ' ' + this.moreInfo[0].client[0].last_name}
+                        - Address: ${this.moreInfo[0].client[0].address} ${this.moreInfo[0].client[0].city} ${this.moreInfo[0].client[0].postal_code}
+                        - Email: ${this.moreInfo[0].client[0].email} 
+                        - Phone: ${this.moreInfo[0].client[0].phone_number}
+                        - Sexe: ${this.moreInfo[0].client[0].sexe}
+                        - Nationality: ${this.moreInfo[0].client[0].nationality}
+                        - date of Birth: ${this.moreInfo[0].client[0].date_of_birth}
+
+                        DEBTS
+                        - Values: ${this.moreInfo[0].unpaid} Ar
+                    `;
+                    doc.text(content, 5, 10);
+                    doc.setFontSize(10);
+                    doc.setFont('time new roman')
+                    doc.save(`reservation_information_${this.moreInfo[0].id}.pdf`);
+                }
+            } catch (err) {
+                console.log(err);
+            }
         }
     }
 }
@@ -139,7 +190,7 @@ export default {
                             <td class="action">
                                 <i class="ri-eye-line" @click="filterMoreInfo(reservation.id)"></i>
                                 <i class="ri-edit-circle-line"></i>
-                                <i class="ri-download-2-line"></i>
+                                <i class="ri-download-2-line" @click="generatePDF(reservation.id)"></i>
                             </td>
                         </tr>
                         <tr v-else>
@@ -162,7 +213,7 @@ export default {
                                 <span>{{ moreInfo.length > 0 ? moreInfo[0].client[0].first_name : null }} {{
                                     moreInfo.length
                                         > 0 ?
-                                    moreInfo[0].client[0].last_name : null }}</span><br>
+                                        moreInfo[0].client[0].last_name : null }}</span><br>
                                 <small>{{ moreInfo.length > 0 ? moreInfo[0].client[0].email : null }}</small>
                             </h3>
                         </div>

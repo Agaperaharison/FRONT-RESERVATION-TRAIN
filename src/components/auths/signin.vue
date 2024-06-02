@@ -132,8 +132,9 @@ form .user-box input {
     background: transparent;
     font-size: 1.1rem;
     font-weight: 600;
-    border: 2px solid var(--color-info-dark);
+    color: var(--color-white);
     border-radius: 8px;
+    border: 1px solid var(--color-info-dark);
 }
 
 form .user-box input:focus {
@@ -145,7 +146,7 @@ form .user-box label {
     top: 1rem;
     left: 1rem;
     font-size: 1.2rem;
-    color: var(--color-info-dark);
+    color: var(--color-white);
     pointer-events: none;
     transition: all .5s ease;
 }

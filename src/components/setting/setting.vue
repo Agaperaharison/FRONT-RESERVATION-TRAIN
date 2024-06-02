@@ -4,8 +4,12 @@
 
 <template>
     <div class="main">
-        <h1>SETTING</h1>
+        <div class="container">
+            <h1>SETTING</h1>
+            
+        </div>
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>
