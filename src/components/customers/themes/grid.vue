@@ -45,7 +45,7 @@ export default {
 </script>
 
 <template>
-    <div>
+    <div class="main">
         <nav>
             <ul>
                 <li :class="{ active: active_item_nav_bar == 'all' }" @click="activeItemBar('all')">

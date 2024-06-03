@@ -138,7 +138,7 @@ form .user-box input {
 }
 
 form .user-box input:focus {
-    border: 2px solid var(--color-white);
+    border: 1px solid var(--color-white);
 }
 
 form .user-box label {

@@ -18,7 +18,7 @@ export default {
         this.socket.on('haveNotif', players => {
             this.notifications = players;
         });
-    },
+    }, 
     beforeDestroy() {
         this.socket.close();
     },
@@ -26,7 +26,7 @@ export default {
         async getNotif() {
             try {
                 const response = await axios.get(`/dashboard/get-notification/admin`, { withCredentials: true, });
-                //console.log(response.data.data)
+                console.log(response.data.data)
                 this.notifications = response.data.data
             } catch (err) {
                 console.log(err.message)
@@ -57,7 +57,9 @@ export default {
             <ul>
                 <li v-if="notifications.length > 0" v-for="notification in notifications" :key="notification.id">
                     <span class="title"> <b>N</b> {{ notification.notification_info.title }}</span>
-                    <span>{{ notification.notification_info.description }}</span>
+                    <p>{{ notification.notification_info.description }}</p><br>
+                    <span>{{ notification.newUser[0].title }} {{ notification.newUser[0].first_name }} {{ notification.newUser[0].last_name }}</span>
+                    <span v-if="notification.newUser[0].city">Habite à {{ notification.newUser[0].city }} {{ notification.newUser[0].postal_code }}</span>
                     <small>{{ formattedDate(notification.createdAt) }}, {{ formattedTime(notification.createdAt)
                         }}</small>
                 </li>

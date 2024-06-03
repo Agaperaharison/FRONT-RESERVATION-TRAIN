@@ -75,69 +75,71 @@ export default {
 </script>
 
 <template>
-    <div class="container">
-        <router-link to="/admin-page/customers/agents" class="return">
-            <i class="ri-arrow-left-circle-line"> </i> <span>back</span>
-        </router-link>
-        <form>
-            <h1>ADDITIONAL FORM</h1>
-            <div class="form-container">
-                <div class="left">
-                    <div class="form-group">
-                        <label for="">Nationality</label>
-                        <input type="text" v-model="nationality" id="">
-                    </div>
-                    <div class="form-group">
-                        <label for="">First name</label>
-                        <input type="text" v-model="first_name" id="">
-                    </div>
-                    <div class="form-group">
-                        <label for="">Last name</label>
-                        <input type="text" v-model="last_name" id="">
-                    </div>
-                    <div class="form-group">
-                        <label for="">Address e-mail</label>
-                        <input type="text" v-model="email" id="">
-                    </div>
-                    <div class="form-group">
-                        <label for="">Phone number</label>
-                        <input type="text" v-model="phone_number" id="">
-                    </div>
-                </div>
-                <div class="right">
-                    <div class="form-group">
-                        <label for="">Sexe</label>
-                        <div class="input-radio">
-                            <div class="homme">
-                                <input type="radio" name="sexe" id="homme" value="homme">
-                                <label for="homme">homme</label>
-                            </div>
-                            <div class="homme">
-                                <input type="radio" name="sexe" id="femme" value="femme">
-                                <label for="femme">femme</label>
-                            </div>
+    <div class="main">
+        <div class="container">
+            <router-link to="/admin-page/customers/agents" class="return">
+                <i class="ri-arrow-left-circle-line"> </i> <span>back</span>
+            </router-link>
+            <form>
+                <h1>ADDITIONAL FORM</h1>
+                <div class="form-container">
+                    <div class="left">
+                        <div class="form-group">
+                            <label for="">Nationality</label>
+                            <input type="text" v-model="nationality" id="">
+                        </div>
+                        <div class="form-group">
+                            <label for="">First name</label>
+                            <input type="text" v-model="first_name" id="">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Last name</label>
+                            <input type="text" v-model="last_name" id="">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Address e-mail</label>
+                            <input type="text" v-model="email" id="">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Phone number</label>
+                            <input type="text" v-model="phone_number" id="">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="">Date of birth</label>
-                        <input type="date" v-model="date_of_birth" id="">
-                    </div>
-                    <div class="form-group">
-                        <label for="">Domicile</label>
-                        <input type="text" v-model="domicile" id="">
-                    </div>
-                    <div class="form-group">
-                        <label for="">City</label>
-                        <input type="text" v-model="city" id="">
-                    </div>
-                    <div class="form-group">
-                        <label for="">Postal code</label>
-                        <input type="number" v-model="code" id="">
+                    <div class="right">
+                        <div class="form-group">
+                            <label for="">Sexe</label>
+                            <div class="input-radio">
+                                <div class="homme">
+                                    <input type="radio" name="sexe" id="homme" value="homme">
+                                    <label for="homme">homme</label>
+                                </div>
+                                <div class="homme">
+                                    <input type="radio" name="sexe" id="femme" value="femme">
+                                    <label for="femme">femme</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Date of birth</label>
+                            <input type="date" v-model="date_of_birth" id="">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Domicile</label>
+                            <input type="text" v-model="domicile" id="">
+                        </div>
+                        <div class="form-group">
+                            <label for="">City</label>
+                            <input type="text" v-model="city" id="">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Postal code</label>
+                            <input type="number" v-model="code" id="">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <button class="btn-add" @click.prevent="addAgent">save</button>
-        </form>
+                <button class="btn-add" @click.prevent="addAgent">save</button>
+            </form>
+        </div>
     </div>
 </template>
 

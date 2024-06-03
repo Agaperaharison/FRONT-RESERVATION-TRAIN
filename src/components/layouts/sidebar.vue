@@ -1,12 +1,23 @@
 <script>
-export default {
+import io from 'socket.io-client'; 
+export default { 
     data() {
         return {
+            socket: null,
             open: true,
             modeDark: false,
             theme: 'Dark mode',
-            info_user_connected: []
+            info_user_connected: [],
         }
+    },
+    created() {
+        this.socket = io('http://localhost:8081');
+        this.socket.on('connect_error', error => {
+            console.error('Socket.io connection error:', error);
+        });
+    }, 
+    beforeDestroy() {
+        this.socket.close();
     },
     mounted() {
         this.getTheme();
@@ -15,6 +26,14 @@ export default {
         this.infoAdmin();
     },
     methods: {
+        fireToast(title, message, icon, btn) {
+            Toast2.fire({
+                title: title,
+                text: message,
+                icon: icon,
+                confirmButtonText: btn
+            });
+        },
         getThemeSidebar() {
             var themeSidebar = localStorage.getItem('themeSidebar');
             if (themeSidebar == "close") {

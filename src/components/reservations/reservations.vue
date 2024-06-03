@@ -1,8 +1,10 @@
 <script>
 import jsPDF from 'jspdf';
+import io from 'socket.io-client'; 
 export default {
     data() {
         return {
+            socket: null,
             filter: 'All',
             reservations_lists: [],
             reservations: [],
@@ -12,10 +14,30 @@ export default {
             moreInfo: [],
         }
     },
+    created() {
+        this.socket = io('http://localhost:8081');
+        this.socket.on('connect_error', error => {
+            console.error('Socket.io connection error:', error);
+        });
+        this.socket.on('haveNotif', players => {
+            //this.fireToast(players[0].notification_info.title ,players[0].notification_info.description, 'success', 'ok')
+        });
+    }, 
+    beforeDestroy() {
+        this.socket.close();
+    },
     mounted() {
         this.getReservations();
     },
     methods: {
+        fireToast(title, message, icon, btn) {
+            Toast2.fire({
+                title: title,
+                text: message,
+                icon: icon,
+                confirmButtonText: btn
+            });
+        },
         async getReservations() {
             try {
                 const response = await axios.get('/reservations/all-reservations', { withCredentials: true, });

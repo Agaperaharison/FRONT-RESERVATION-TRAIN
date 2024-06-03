@@ -14,6 +14,12 @@ var Toast = Swal.mixin({
     showConfirmButton: true,
     timer: 5000
 });
+var Toast2 = Swal.mixin({
+    toast: true,
+    position: 'bottom-right',
+    showConfirmButton: true,
+    timer: 5000
+});
 
 var mySwal = Swal.mixin({
     toast: true,
@@ -29,5 +35,6 @@ createApp(App).use(router).mount('#app')
 
 window.$ = $;
 window.Toast = Toast;
+window.Toast2 = Toast2;
 window.mySwal = mySwal;
 window.axios = axios;

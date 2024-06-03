@@ -46,6 +46,7 @@ export default {
                         sexe: this.sexe,
                         title: this.sexe === "homme" ? 'Mr' : 'Mm/Mll',
                     });
+                    //console.log(response.data.data)
                     if (response.data.status) {
                         this.first_name = '';
                         this.last_name = '';
@@ -237,7 +238,7 @@ form .user-box input {
 }
 
 form .user-box input:focus {
-    border: 2px solid var(--color-white);
+    border: 1px solid var(--color-white);
 }
 
 form .user-box label {
