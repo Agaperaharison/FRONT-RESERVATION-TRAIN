@@ -1,9 +1,12 @@
 :root {
     --color-primary: #7380ec;
+    --color-info-primary: #cacaf749;
     --color-danger: #ff7782;
+    --color-info-danger: #ffe4e6;
     --color-message : #e7e7e7;
     --color-danger-variant: #ff3041;
     --color-success: #0db474;
+    --color-info-success: #b5ffe3;
     --color-success-variant: #006b0e;
     --color-warning: #ffbb55;
     --color-white: #fff;
@@ -21,6 +24,7 @@
     --border-radius-3: 1.2rem;
     --card-padding: 1.8rem;
     --padding-1: 1.2rem;
+    --padding-2: 1.6rem;
     --box-shadow: 0 2rem 3rem var(--color-light);
     --color-item-sidebar: #dac7c727;
     --color-paid: #4dff562c;

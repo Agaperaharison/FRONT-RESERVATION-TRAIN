@@ -12,7 +12,14 @@ import addAgent from './components/customers/themes/add-agent.vue'
 import analytiques from './components/analytiques/analytiques.vue'
 import trips from './components/trips/trips.vue'
 import reservations from './components/reservations/reservations.vue'
+
 import setting from './components/setting/setting.vue'
+import updateName from './components/setting/formulaire/form-name.vue'
+import updateEmail from './components/setting/formulaire/form-email.vue'
+import updatePhone from './components/setting/formulaire/form-phone.vue'
+import updateAddress from './components/setting/formulaire/form-address.vue'
+import updatePassword from './components/setting/formulaire/form-password.vue'
+
 import help from './components/helps/helps.vue'
 
 import appPageClient from './pages/client.page.vue'
@@ -44,7 +51,17 @@ const routes = [
             { path: 'analytiques', component: analytiques },
             { path: 'trips', component: trips },
             { path: 'reservations', component: reservations },
-            { path: 'setting', component: setting },
+            {
+                path: 'setting', component: setting,
+                children: [
+                    {path: '', component: updateName },
+                    {path: 'update/name', component: updateName },
+                    {path: 'update/email', component: updateEmail },
+                    {path: 'update/phone', component: updatePhone },
+                    {path: 'update/address', component: updateAddress },
+                    {path: 'update/password', component: updatePassword },
+                ]
+            },
             { path: 'help', component: help },
         ]
     },

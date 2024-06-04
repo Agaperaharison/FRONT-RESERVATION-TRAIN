@@ -1,6 +1,6 @@
 <script>
-import io from 'socket.io-client'; 
-export default { 
+import io from 'socket.io-client';
+export default {
     data() {
         return {
             socket: null,
@@ -15,7 +15,7 @@ export default {
         this.socket.on('connect_error', error => {
             console.error('Socket.io connection error:', error);
         });
-    }, 
+    },
     beforeDestroy() {
         this.socket.close();
     },
@@ -124,7 +124,7 @@ export default {
         async infoAdmin() {
             try {
                 const response = await axios.get(`/auth/get-info-admin`, { withCredentials: true });
-                console.log(response.data.data)
+                //console.log(response.data.data)
                 this.info_user_connected = response.data.data;
             } catch (err) {
                 console.log(err.message);
@@ -149,8 +149,12 @@ export default {
                 </router-link>
                 <span class="tooltip">Dashboard</span>
             </li>
-            <li
-                :class="{ active: $route.path === '/admin-page/new-agent' || $route.path === '/admin-page/customers/clients' || $route.path === '/admin-page/customers/agents' || $route.path === '/admin-page/customers/more-info' }">
+            <li :class="{
+                active: $route.path === '/admin-page/new-agent'
+                    || $route.path === '/admin-page/customers/clients'
+                    || $route.path === '/admin-page/customers/agents'
+                    || $route.path === '/admin-page/customers/more-info'
+            }">
                 <router-link to="/admin-page/customers/clients">
                     <i class="ri-team-line"></i>
                     <span class="link_name">Customers</span>
@@ -171,7 +175,14 @@ export default {
                 </router-link>
                 <span class="tooltip">Reservations</span>
             </li>
-            <li :class="{ active: $route.path === '/admin-page/setting' }">
+            <li :class="{
+                active: $route.path === '/admin-page/setting'
+                    || $route.path === '/admin-page/setting/update/name' 
+                    || $route.path === '/admin-page/setting/update/email'
+                    || $route.path === '/admin-page/setting/update/phone' 
+                    || $route.path === '/admin-page/setting/update/address'
+                    || $route.path === '/admin-page/setting/update/password'
+            }">
                 <router-link to="/admin-page/setting">
                     <i class="ri-settings-4-line"></i>
                     <span class="link_name">Setting</span>
