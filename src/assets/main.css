@@ -91,7 +91,7 @@ body {
     padding: 1rem 2rem;
 }
 
-.message {
+#message {
     display: flex;
     align-items: center;
     gap: .6rem;
@@ -110,4 +110,3 @@ body {
 .error-message {
     background: var(--color-info-danger);
 }
-

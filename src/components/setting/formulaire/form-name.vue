@@ -1,5 +1,73 @@
 <script>
-
+export default {
+    data() {
+        return {
+            info_user: [],
+            first_name: '',
+            last_name: '',
+            password: '',
+            alert_message_type: '',
+            alert_message: '',
+        }
+    },
+    mounted() {
+        this.infoAdmin();
+    },
+    methods: {
+        async infoAdmin() {
+            try {
+                const response = await axios.get(`/auth/get-info-admin`, { withCredentials: true });
+                //console.log(response.data.data)
+                this.info_user = response.data.data;
+                this.first_name = response.data.data.first_name
+                this.last_name = response.data.data.last_name
+            } catch (err) {
+                console.log(err.message);
+            }
+        },
+        async updateName() {
+            try {
+                const verify = await this.verifyPassword(this.info_user.id, this.password);
+                if (!verify) {
+                    this.password = '';
+                    this.alert_message_type = 'error';
+                    this.alert_message = "Incorrect password !";
+                    return
+                }
+                let updated;
+                if (this.info_user.first_name != this.first_name || this.info_user.last_name != this.last_name) {
+                    if (this.info_user.first_name != this.first_name && this.info_user.last_name == this.last_name) {
+                        updated = 'first name'
+                    } else if (this.info_user.first_name == this.first_name && this.info_user.last_name != this.last_name) {
+                        updated = 'last name'
+                    } else if (this.info_user.first_name != this.first_name && this.info_user.last_name != this.last_name) {
+                        updated = 'first/last name'
+                    }
+                    const response = await axios.post(`/auth/update-name-user/${this.info_user.id}`, {
+                        first_name: this.first_name, last_name: this.last_name
+                    });
+                    //console.log(response.data);
+                    if (response.data.status) {
+                        this.password = '';
+                        this.alert_message_type = 'success';
+                        this.alert_message = "Success! your " + updated + " has updated successfuly";
+                    }
+                    this.infoAdmin();
+                }
+            } catch (err) {
+                console.log(err.message)
+            }
+        },
+        async verifyPassword(id, password) {
+            try {
+                const response = await axios.get(`/auth/verify-password/${id}/${password}`);
+                return response.data.data;
+            } catch (err) {
+                console.log(err.message)
+            }
+        },
+    },
+}
 </script>
 
 <template>
@@ -7,28 +75,26 @@
         <h2>Update personal info</h2>
         <p>You can change your first and last name as often as you like!</p>
         <form action="#">
-            <div class="message error-message">
+            <div v-if="alert_message_type !== ''"
+                :class="{ 'error-message': alert_message_type == 'error', 'success-message': alert_message_type == 'success' }"
+                id="message">
                 <i class="ri-alert-line"></i>
-                <p>Incorrect password !</p>
-            </div>
-            <div class="message success-message">
-                <i class="ri-check-fill"></i>
-                <p>Success! your name/first name has updated successfuly</p>
+                <p>{{ alert_message }}</p>
             </div>
             <div class="form-group">
                 <label for="first_name">First name</label>
-                <input type="text" name="first_name" id="first_name">
+                <input type="text" v-model="first_name" id="first_name">
             </div>
             <div class="form-group">
                 <label for="last_name">Last name</label>
-                <input type="text" name="last_name" id="last_name">
+                <input type="text" v-model="last_name" id="last_name">
             </div>
             <div class="form-group">
                 <label for="password">Enter the password to confirm</label>
-                <input type="password" name="password" id="password">
+                <input type="password" v-model="password" id="password">
             </div>
             <div class="form-group">
-                <button>save</button>
+                <button @click.prevent="updateName">save</button>
             </div>
         </form>
     </div>
@@ -39,9 +105,11 @@
     color: var(--color-info-dark);
     font-size: 1.2rem;
 }
+
 form {
     margin-top: 1rem;
 }
+
 i {
     color: var(--color-info-dark);
     font-size: 1.3rem;

@@ -1,5 +1,103 @@
 <script>
+export default {
+    data() {
+        return {
+            info_user: [],
+            id: '',
+            current_password: '',
+            new_password: '',
+            cpassword: '',
+            alert_message_type: '',
+            alert_message: '',
+        }
+    },
+    mounted() {
+        this.infoAdmin();
+    },
+    methods: {
+        async infoAdmin() {
+            try {
+                const response = await axios.get(`/auth/get-info-admin`, { withCredentials: true });
+                this.info_user = response.data.data;
+                this.id = response.data.data.id;
+            } catch (err) {
+                console.log(err.message);
+            }
+        },
+        async verifyPassword(id, password) {
+            try {
+                const response = await axios.get(`/auth/verify-password/${id}/${password}`);
+                return response.data.data;
+            } catch (err) {
+                console.log(err.message)
+            }
+        },
+        async updatePassword() {
+            try {
+                const verify = await this.verifyPassword(this.id, this.current_password);
+                if (!verify) {
+                    this.current_password = '';
+                    this.new_password = '';
+                    this.cpassword = '';
+                    this.alert_message_type = 'error';
+                    this.alert_message = "Incorrect password !";
+                    return
+                }
+                if (this.current_password != this.new_password) {
+                    const verifyPassword = this.verifyPasswordN();
 
+                    if (verifyPassword.status) {
+                        const response = await axios.post(`/auth/update-password-user/${this.id}`, {
+                            password: this.new_password
+                        });
+                        if (response.data.status) {
+                            this.current_password = '';
+                            this.new_password = '';
+                            this.cpassword = '';
+                            this.alert_message_type = 'success';
+                            this.alert_message = "Success! your domicile address has updated successfuly";
+                        }
+                    } else {
+                        this.current_password = '';
+                        this.new_password = '';
+                        this.cpassword = '';
+                        this.alert_message_type = 'error';
+                        this.alert_message = verifyPassword.message;
+                    }
+                }else{
+                        this.current_password = '';
+                        this.new_password = '';
+                        this.cpassword = '';
+                        this.alert_message_type = 'error';
+                        this.alert_message = "You cannot use the old password!";
+                }
+            } catch (err) {
+                console.log(err.message);
+            }
+        },
+        verifyPasswordN() {
+            if (this.new_password.length < 8) {
+                const res = {
+                    status: false,
+                    message: "The passwords is invalid"
+                };
+                return res
+            } else if (this.new_password !== this.cpassword) {
+                const res = {
+                    status: false,
+                    message: "Passwords do not match"
+                };
+                return res
+            } else {
+                const res = {
+                    status: true,
+                    message: "Password accepted"
+                };
+                return res
+            }
+        },
+    },
+}
 </script>
 
 <template>
@@ -7,28 +105,26 @@
         <h2>Update personal info</h2>
         <p>You can change your password as often as you like!</p>
         <form action="#">
-            <div class="message error-message">
+            <div v-if="alert_message_type !== ''"
+                :class="{ 'error-message': alert_message_type == 'error', 'success-message': alert_message_type == 'success' }"
+                id="message">
                 <i class="ri-alert-line"></i>
-                <p>Incorrect password !</p>
-            </div>
-            <div class="message success-message">
-                <i class="ri-check-fill"></i>
-                <p>Success! your password has updated successfuly</p>
+                <p>{{ alert_message }}</p>
             </div>
             <div class="form-group">
                 <label for="current_password">Enter your current password</label>
-                <input type="password" name="current_password" id="current_password">
+                <input type="password" v-model="current_password" id="current_password">
             </div>
             <div class="form-group">
                 <label for="last_name">New password</label>
-                <input type="password" name="new_password" id="new_password">
+                <input type="password" v-model="new_password" id="new_password">
             </div>
             <div class="form-group">
                 <label for="cpassword">Repete the new password</label>
-                <input type="password" name="cpassword" id="cpassword">
+                <input type="password" v-model="cpassword" id="cpassword">
             </div>
             <div class="form-group">
-                <button>save</button>
+                <button @click.prevent="updatePassword">save</button>
             </div>
         </form>
     </div>
@@ -39,9 +135,11 @@
     color: var(--color-info-dark);
     font-size: 1.2rem;
 }
+
 form {
     margin-top: 1rem;
 }
+
 i {
     color: var(--color-info-dark);
     font-size: 1.3rem;

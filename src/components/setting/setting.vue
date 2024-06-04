@@ -34,7 +34,7 @@ export default {
 }
 
 .param h1 {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .cards {
