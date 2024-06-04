@@ -12,7 +12,7 @@ export default {
                 <h1>PROFIL ADMIN</h1>
             </div>
             <div class="param">
-                <h1>Setting</h1>
+                <h1>Profile settings</h1>
                 <div class="cards">
                     <router-view></router-view>
                 </div>
@@ -35,6 +35,7 @@ export default {
 
 .param h1 {
     margin-bottom: 1rem;
+    color: var(--color-info-dark);
 }
 
 .cards {

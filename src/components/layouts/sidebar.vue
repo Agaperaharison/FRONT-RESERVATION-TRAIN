@@ -183,7 +183,7 @@ export default {
                     || $route.path === '/admin-page/setting/update/address'
                     || $route.path === '/admin-page/setting/update/password'
             }">
-                <router-link to="/admin-page/setting">
+                <router-link to="/admin-page/setting/update/name">
                     <i class="ri-settings-4-line"></i>
                     <span class="link_name">Setting</span>
                 </router-link>
