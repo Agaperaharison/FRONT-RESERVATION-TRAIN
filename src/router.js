@@ -19,7 +19,7 @@ import updateEmail from './components/setting/formulaire/form-email.vue'
 import updatePhone from './components/setting/formulaire/form-phone.vue'
 import updateAddress from './components/setting/formulaire/form-address.vue'
 import updatePassword from './components/setting/formulaire/form-password.vue'
-
+import profilPage from './components/profil/profil.vue'
 import help from './components/helps/helps.vue'
 
 import appPageClient from './pages/client.page.vue'
@@ -62,6 +62,7 @@ const routes = [
                     {path: 'update/password', component: updatePassword },
                 ]
             },
+            { path: 'profil', component: profilPage },
             { path: 'help', component: help },
         ]
     },

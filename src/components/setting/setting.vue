@@ -1,40 +1,48 @@
 <script>
 import navVue from './nav.vue'
+import navBarVue from './navbar.vue'
+import allInfoVue from './formulaire/all-info.vue'
 export default {
-    components: { navVue }
+    components: { navVue, navBarVue, allInfoVue }
 }
 </script>
 
 <template>
     <div class="main">
+        <div class="header">
+            <h1>Profile settings</h1>
+            <nav-bar-vue/>
+        </div>
         <div class="container">
-            <div class="container-params">
-                <h1>PROFIL ADMIN</h1>
+            <div>
+                <all-info-vue/>
             </div>
             <div class="param">
-                <h1>Profile settings</h1>
                 <div class="cards">
                     <router-view></router-view>
                 </div>
-            </div>
-            <div>
-                <nav-vue />
             </div>
         </div>
     </div>
 </template>
 
 <style scoped>
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
 .container {
     display: grid;
     grid-template-columns: auto 30rem 16rem;
-    gap: 1rem;
+    gap: 2rem;
     width: 100%;
     height: 100%;
 }
 
-.param h1 {
-    margin-bottom: 1rem;
+h1 {
     color: var(--color-info-dark);
 }
 

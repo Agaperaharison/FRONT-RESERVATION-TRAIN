@@ -175,6 +175,13 @@ export default {
                 </router-link>
                 <span class="tooltip">Reservations</span>
             </li>
+            <li :class="{ active : $route.path === '/admin-page/profil' }">
+                <router-link to="/admin-page/profil">
+                    <i class="ri-user-line"></i>
+                    <span class="link_name">Your profil</span>
+                </router-link>
+                <span class="tooltip">Your profil</span>
+            </li>
             <li :class="{
                 active: $route.path === '/admin-page/setting'
                     || $route.path === '/admin-page/setting/update/name' 

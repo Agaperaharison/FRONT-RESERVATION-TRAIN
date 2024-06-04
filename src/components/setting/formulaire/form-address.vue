@@ -145,8 +145,11 @@ input {
     margin-bottom: 1rem;
     transition: all .3s ease;
 }
+.form-groupG input#city {
+    width: 100%;
+}
 .form-groupG input#code {
-    width: 93px;
+    width: 140px;
 }
 input:focus {
     border: 1px solid var(--color-primary);
