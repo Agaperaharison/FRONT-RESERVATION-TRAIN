@@ -12,11 +12,11 @@ export default {
                 <h1>Customers</h1>
                 <div class="value-item">
                     <div>
-                        <small>Total</small>
+                        <small>Client</small>
                         <h3>{{ total.toLocaleString('fr-FR') }}</h3>
                     </div>
                     <div>
-                        <small>Validate</small>
+                        <small>Agents</small>
                         <h3>{{ valid.toLocaleString('fr-FR') }}</h3>
                     </div>
                 </div>

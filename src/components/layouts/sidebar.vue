@@ -135,108 +135,134 @@ export default {
 </script>
 
 <template>
-    <div id="sidebar" :class="{ open: this.open }">
-        <div class="logo_details">
-            <i class="ri-train-line icone"></i>
-            <div class="logo_name">I'm <span>ADMIN</span></div>
-            <i id="btn" class="ri-menu-4-fill" @click="toggleSidebar"></i>
-        </div>
-        <ul class="nav-list">
-            <li :class="{ active: $route.path === '/admin-page/dashboard' }">
-                <router-link to="/admin-page/dashboard">
-                    <i class="ri-dashboard-3-line"></i>
-                    <span class="link_name">Dashboard</span>
-                </router-link>
-                <span class="tooltip">Dashboard</span>
-            </li>
-            <li :class="{
-                active: $route.path === '/admin-page/new-agent'
-                    || $route.path === '/admin-page/customers/clients'
-                    || $route.path === '/admin-page/customers/agents'
-                    || $route.path === '/admin-page/customers/more-info'
-            }">
-                <router-link to="/admin-page/customers/clients">
-                    <i class="ri-team-line"></i>
-                    <span class="link_name">Customers</span>
-                </router-link>
-                <span class="tooltip">Customers</span>
-            </li>
-            <li :class="{ active: $route.path === '/admin-page/trips' }">
-                <router-link to="/admin-page/trips">
-                    <i class="ri-map-pin-line"></i>
-                    <span class="link_name">Trips</span>
-                </router-link>
-                <span class="tooltip">Trips</span>
-            </li>
-            <li :class="{ active: $route.path === '/admin-page/reservations' }">
-                <router-link to="/admin-page/reservations">
-                    <i class="ri-calendar-todo-fill"></i>
-                    <span class="link_name">Reservations</span>
-                </router-link>
-                <span class="tooltip">Reservations</span>
-            </li>
-            <li :class="{ active : $route.path === '/admin-page/profil' }">
-                <router-link to="/admin-page/profil">
-                    <i class="ri-user-line"></i>
-                    <span class="link_name">Your profil</span>
-                </router-link>
-                <span class="tooltip">Your profil</span>
-            </li>
-            <li :class="{
-                active: $route.path === '/admin-page/setting'
-                    || $route.path === '/admin-page/setting/update/name' 
-                    || $route.path === '/admin-page/setting/update/email'
-                    || $route.path === '/admin-page/setting/update/phone' 
-                    || $route.path === '/admin-page/setting/update/address'
-                    || $route.path === '/admin-page/setting/update/password'
-            }">
-                <router-link to="/admin-page/setting/update/name">
-                    <i class="ri-settings-4-line"></i>
-                    <span class="link_name">Setting</span>
-                </router-link>
-                <span class="tooltip">Setting</span>
-            </li>
-            <!-- <li :class="{ active : $route.path === '/admin-page/help' }">
+    <div>
+        <div id="sidebar" :class="{ open: this.open }">
+            <div class="logo_details">
+                <i class="ri-train-line icone"></i>
+                <div class="logo_name">I'm <span>ADMIN</span></div>
+                <i id="btn" class="ri-menu-4-fill" @click="toggleSidebar"></i>
+            </div>
+            <ul class="nav-list">
+                <li :class="{ active: $route.path === '/admin-page/dashboard' }">
+                    <router-link to="/admin-page/dashboard">
+                        <i class="ri-dashboard-3-line"></i>
+                        <span class="link_name">Dashboard</span>
+                    </router-link>
+                    <span class="tooltip">Dashboard</span>
+                </li>
+                <li :class="{
+                    active: $route.path === '/admin-page/new-agent'
+                        || $route.path === '/admin-page/customers/clients'
+                        || $route.path === '/admin-page/customers/agents'
+                        || $route.path === '/admin-page/customers/more-info'
+                }">
+                    <router-link to="/admin-page/customers/clients">
+                        <i class="ri-team-line"></i>
+                        <span class="link_name">Customers</span>
+                    </router-link>
+                    <span class="tooltip">Customers</span>
+                </li>
+                <li :class="{ active: $route.path === '/admin-page/trips' }">
+                    <router-link to="/admin-page/trips">
+                        <i class="ri-map-pin-line"></i>
+                        <span class="link_name">Trips</span>
+                    </router-link>
+                    <span class="tooltip">Trips</span>
+                </li>
+                <li :class="{ active: $route.path === '/admin-page/reservations' }">
+                    <router-link to="/admin-page/reservations">
+                        <i class="ri-calendar-todo-fill"></i>
+                        <span class="link_name">Reservations</span>
+                    </router-link>
+                    <span class="tooltip">Reservations</span>
+                </li>
+                <!-- <li :class="{ active: $route.path === '/admin-page/chats' }">
+                    <router-link to="/admin-page/chats">
+                        <i class="ri-chat-3-line"></i>
+                        <span class="link_name">Chats</span>
+                        <span class="nbr">34</span>
+                    </router-link>
+                    <span class="tooltip">Chats</span>
+                </li> -->
+                <li :class="{ active: $route.path === '/admin-page/profil' }">
+                    <router-link to="/admin-page/profil">
+                        <i class="ri-user-line"></i>
+                        <span class="link_name">Your profil</span>
+                    </router-link>
+                    <span class="tooltip">Your profil</span>
+                </li>
+                <li :class="{
+                    active: $route.path === '/admin-page/setting'
+                        || $route.path === '/admin-page/setting/update/name'
+                        || $route.path === '/admin-page/setting/update/email'
+                        || $route.path === '/admin-page/setting/update/phone'
+                        || $route.path === '/admin-page/setting/update/address'
+                        || $route.path === '/admin-page/setting/update/password'
+                }">
+                    <router-link to="/admin-page/setting/update/name">
+                        <i class="ri-settings-4-line"></i>
+                        <span class="link_name">Setting</span>
+                    </router-link>
+                    <span class="tooltip">Setting</span>
+                </li>
+                <!-- <li :class="{ active : $route.path === '/admin-page/help' }">
                 <router-link to="/admin-page/help">
                     <i class="ri-lightbulb-fill"></i>
                     <span class="link_name">help?</span>
                 </router-link>
                 <span class="tooltip">help?</span>
             </li> -->
-            <li>
-                <div class="mode" :class="{ dark: modeDark }">
-                    <div class="moon-sun">
-                        <i class="ri-moon-fill icon moon"></i>
-                        <i class="ri-sun-line icon sun"></i>
-                    </div>
-                    <span class="mode-text nameTheme">{{ theme }}</span>
-                    <div class="toggle-switch" @click="toggleThemPage">
-                        <span class="switch"></span>
-                    </div>
-                </div>
-                <span class="tooltip nameTheme2">{{ theme }}</span>
-            </li>
-            <li class="profile">
-                <div class="profile_detail">
-                    <div class="img-profil">
-                        <img src="../../assets/imgs/pexels-mtcd-5588646.jpg" alt="profile image">
-                    </div>
-                    <div class="profile_content">
-                        <div class="name">{{ info_user_connected ? info_user_connected.last_name : null }}
+                <li>
+                    <div class="mode" :class="{ dark: modeDark }">
+                        <div class="moon-sun">
+                            <i class="ri-moon-fill icon moon"></i>
+                            <i class="ri-sun-line icon sun"></i>
                         </div>
-                        <div class="designation">{{ info_user_connected ? info_user_connected.email : null }}</div>
+                        <span class="mode-text nameTheme">{{ theme }}</span>
+                        <div class="toggle-switch" @click="toggleThemPage">
+                            <span class="switch"></span>
+                        </div>
                     </div>
-                    <i class="ri-logout-circle-r-line" id="log_out" @click="logout"></i>
-                </div>
-            </li>
-        </ul>
+                    <span class="tooltip nameTheme2">{{ theme }}</span>
+                </li>
+                <li class="profile">
+                    <div class="profile_detail">
+                        <div class="img-profil">
+                            <img src="../../assets/imgs/pexels-mtcd-5588646.jpg" alt="profile image">
+                        </div>
+                        <div class="profile_content">
+                            <div class="name">{{ info_user_connected ? info_user_connected.last_name : null }}
+                            </div>
+                            <div class="designation">{{ info_user_connected ? info_user_connected.email : null }}</div>
+                        </div>
+                        <i class="ri-logout-circle-r-line" id="log_out" @click="logout"></i>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <section id="section">
+            <router-view></router-view>
+        </section>
     </div>
-    <section id="section">
-        <router-view></router-view>
-    </section>
 </template>
 
-<style>
+<style scoped>
+.nbr {
+    position: absolute;
+    right: 1rem;
+    background: var(--color-light);
+    padding: 3px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--color-primary);
+}
+
+li:hover .nbr,
+li.active .nbr {
+    color: #fff;
+}
+
 #sidebar {
     min-height: 100vh;
     width: 76px;

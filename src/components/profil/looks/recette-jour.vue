@@ -3,7 +3,6 @@ export default {
     data() {
         return {
             currentDate: new Date(),
-            date_value: new Date().toISOString().substr(0, 10),
             salesArray: [],
             amount: 0,
             paid: 0,
@@ -18,8 +17,9 @@ export default {
             try {
                 const response = await axios.get(`/reservations/get-sales`, { withCredentials: true, });
                 this.salesArray = response.data.data;
-                const targetDate = this.date_value ? this.date_value : this.currentDate;
+                const targetDate = this.currentDate;
                 const data = this.salesArray.find(sale => this.formattedDate(sale.createdAt) === this.formattedDate(targetDate));
+                console.log(data);
                 if (data) {
                     this.amount = data.totalAmount;
                     this.paid = data.paidAmount;
@@ -32,6 +32,13 @@ export default {
             } catch (err) {
                 console.log(err.message);
             }
+        },
+        formattedDate(date) {
+            return new Date(date).toLocaleDateString('en-US', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+            });
         },
     },
 }
@@ -69,22 +76,30 @@ export default {
     transition: all 0.3s ease;
 }
 
+.recettes:hover {
+    box-shadow: none;
+}
+
 .recettes h1:nth-child(1) {
     margin-top: 1.6rem;
     margin-left: 2rem;
     color: var(--color-primary);
 }
+
 h1:nth-child(2) {
     margin-top: 1rem;
 }
+
 .entete {
     display: flex;
     align-items: center;
     gap: 2rem;
 }
+
 .sales {
     padding: var(--card-padding);
 }
+
 .sales:hover {
     box-shadow: none;
 }
@@ -95,9 +110,11 @@ i {
     color: var(--color-white);
     font-size: 2rem;
 }
+
 #paid {
     background: var(--color-success);
 }
+
 #unpaid {
     background: var(--color-warning);
 }

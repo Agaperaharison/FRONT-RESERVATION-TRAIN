@@ -19,10 +19,15 @@ import updateEmail from './components/setting/formulaire/form-email.vue'
 import updatePhone from './components/setting/formulaire/form-phone.vue'
 import updateAddress from './components/setting/formulaire/form-address.vue'
 import updatePassword from './components/setting/formulaire/form-password.vue'
+import chats from './components/chats/chats.vue'
 import profilPage from './components/profil/profil.vue'
 import help from './components/helps/helps.vue'
 
 import appPageClient from './pages/client.page.vue'
+import homePageClient from './components/dashboard/clients/home.vue'
+import tripsPageClient from './components/trips/trips-client.vue'
+import reservationsPageClient from './components/reservations/reservation-client.vue'
+import profilPageClient from './components/profil/client.profil.vue'
 
 
 const routes = [
@@ -62,13 +67,21 @@ const routes = [
                     {path: 'update/password', component: updatePassword },
                 ]
             },
+            { path: 'chats', component: chats },
             { path: 'profil', component: profilPage },
             { path: 'help', component: help },
         ]
     },
     {
         path: '/client-page',
-        component: appPageClient
+        component: appPageClient,
+        children: [
+            { path: '', component: homePageClient },
+            { path: 'home-page', component: homePageClient },
+            { path: 'trips-page', component: tripsPageClient },
+            { path: 'reservations-page', component: reservationsPageClient },
+            { path: 'profil-page', component: profilPageClient },
+        ]
 
     }
 ];

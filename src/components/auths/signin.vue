@@ -6,7 +6,7 @@ export default {
             password: ''
         }
     },
-    mounted(){
+    mounted() {
         this.verifySession();
     },
     methods: {
@@ -23,11 +23,15 @@ export default {
                 const response = await axios.post('/auth/login', {
                     email: this.email, password: this.password
                 }, { withCredentials: true });
-                if(response.data.status && response.data.data.role==="ADMIN"){
+                if (response.data.status && response.data.data.role === "ADMIN") {
                     this.$router.push('/admin-page/dashboard');
-                    this.email= '';
+                    this.email = '';
                     this.password = '';
-                }else{
+                /* } else if (response.data.status && response.data.data.role === "CLIENT") {
+                    this.$router.push('/client-page/home-page');
+                    this.email = '';
+                    this.password = ''; */
+                } else {
                     this.fireToast('ERROR!', response.data.message, 'error', 'ok')
                 }
             } catch (err) {
@@ -38,7 +42,7 @@ export default {
             try {
                 const response = await axios.get('/auth/verify-session-admin', { withCredentials: true, });
                 console.log(response.data)
-                if (response.data.status && response.data.data.role==="ADMIN") {
+                if (response.data.status && response.data.data.role === "ADMIN") {
                     this.$router.push('/admin-page/dashboard');
                 } else {
                     this.$router.push('/');

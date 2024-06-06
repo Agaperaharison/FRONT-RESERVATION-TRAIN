@@ -738,11 +738,12 @@ button.submit {
     width: 100%;
     background: var(--color-white);
     max-height: 74vh;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden;
     padding-bottom: 1.5rem;
 }
-
+.list-trips:hover {
+    overflow-y: overlay;
+}
 table {
     width: 100%;
     border-collapse: collapse;

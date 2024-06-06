@@ -36,6 +36,8 @@ export default {
                 this.showAllClients()
             } else if (navItem == 'debs') {
                 this.filterHaveDebs();
+            } else if (navItem == 'Ndebs') {
+                this.filterDontHaveDebs();
             } else if (navItem == 'is_validate' || navItem == 'not_validate') {
                 this.filterClientByValidation(navItem);
             } else {
@@ -68,6 +70,14 @@ export default {
         filterHaveDebs() {
             try {
                 const clients_haveDebs = this.clients_lists.filter(client => client.debs === true);
+                this.clients = clients_haveDebs
+            } catch (err) {
+                console.log(err.message)
+            }
+        },
+        filterDontHaveDebs() {
+            try {
+                const clients_haveDebs = this.clients_lists.filter(client => client.debs === false);
                 this.clients = clients_haveDebs
             } catch (err) {
                 console.log(err.message)
@@ -153,7 +163,12 @@ export default {
                     <span>{{ this.clients_lists.filter(client => client.debs === true).length }}</span>
                     <span class="line"></span>
                 </li>
-                <li :class="{ active: active_item_nav_bar == 'is_validate' }" @click="activeItemBar('is_validate')">
+                <li :class="{ active: active_item_nav_bar == 'Ndebs' }" @click="activeItemBar('Ndebs')">
+                    <span>Don't have a debs</span>
+                    <span>{{ this.clients_lists.filter(client => client.debs === false).length }}</span>
+                    <span class="line"></span>
+                </li>
+                <!-- <li :class="{ active: active_item_nav_bar == 'is_validate' }" @click="activeItemBar('is_validate')">
                     <span>Is validate</span>
                     <span>{{ this.clients_lists.filter(client => client.is_validate === 1).length }}</span>
                     <span class="line"></span>
@@ -162,8 +177,8 @@ export default {
                     <span>Is not validate</span>
                     <span>{{ this.clients_lists.filter(client => client.is_validate === 0).length }}</span>
                     <span class="line"></span>
-                </li>
-                <li :class="{ active: active_item_nav_bar == 'femme' }" @click="activeItemBar('femme')">
+                </li> -->
+                <!-- <li :class="{ active: active_item_nav_bar == 'femme' }" @click="activeItemBar('femme')">
                     <span>Woman</span>
                     <span>{{ this.clients_lists.filter(client => client.sexe === 'femme').length }}</span>
                     <span class="line"></span>
@@ -172,7 +187,7 @@ export default {
                     <span>Man</span>
                     <span>{{ this.clients_lists.filter(client => client.sexe === 'homme').length }}</span>
                     <span class="line"></span>
-                </li>
+                </li> -->
             </ul>
             <div class="count">
                 <span>COUNT : </span>
@@ -192,11 +207,11 @@ export default {
                     <tr>
                         <th>#</th>
                         <th>Name</th>
-                        <th>Avatar</th>
+                        <!-- <th>Avatar</th> -->
                         <th>Address</th>
                         <th>Contact</th>
-                        <th>Sexe</th>
-                        <th>is validate</th>
+                        <!-- <th>Sexe</th> -->
+                        <!-- <th>is validate</th> -->
                         <th>have a debs</th>
                         <th>Action</th>
                     </tr>
@@ -204,16 +219,16 @@ export default {
                 <tbody>
                     <tr v-if="clients.length > 0" v-for="client in clients" :key="client.id">
                         <td>{{ client.id }}</td>
-                        <td>{{ client.last_name }}</td>
-                        <td>
+                        <td>{{ client.first_name }} {{ client.last_name }}</td>
+                        <!-- <td>
                             <div class="avatar">
                                 <img src="../../../assets/imgs/1869679.png" alt="">
                             </div>
-                        </td>
+                        </td> -->
                         <td>{{ client.address ? client.address : 'non configured' }}<br>{{ client.address ? client.city : null }}</td>
                         <td>{{ client.phone_number ? client.phone_number : 'non configured' }}</td>
-                        <td>{{ client.sexe }}</td>
-                        <td>{{ client.is_validate === 1 ? true : false }}</td>
+                       <!--  <td>{{ client.sexe }}</td> -->
+                        <!-- <td>{{ client.is_validate === 1 ? true : false }}</td> -->
                         <td>{{ client.debs }}</td>
                         <td class="btn">
                             <button @click="filterClientById(client.id)">
@@ -246,13 +261,13 @@ export default {
                                 null }} {{ info_user.length > 0 ? info_user[0].city : null }} {{ info_user.length > 0 ?
                                 info_user[0].postal_code : null }}
                         </p>
-                        <p>
+                        <!-- <p>
                             <span class="ri-map-pin-user-line"></span> Né le {{ info_user.length > 0 ?
                                 formattedDate(info_user[0].date_of_birth) : null }}
-                        </p>
-                        <p>
+                        </p> -->
+                        <!-- <p>
                             <span class="ri-mail-line"></span> {{ info_user.length > 0 ? info_user[0].email : null }}
-                        </p>
+                        </p> -->
                         <p>
                             <span class="ri-phone-line"></span> {{ info_user.length > 0 ? info_user[0].phone_number :
                                 null

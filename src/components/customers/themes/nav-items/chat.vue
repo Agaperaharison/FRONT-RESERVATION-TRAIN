@@ -1,42 +1,40 @@
-<script>
-
-</script>
-
 <template>
-    <h1>Discussion</h1>
-    <div class="chat-container">
-        <div class="messages">
-            <div class="message">
-                <p class="received">Hello there!</p>
+    <div>
+        <h1>Discussion</h1>
+        <div class="chat-container">
+            <div class="messages">
+                <div class="message">
+                    <p class="received">Hello there!</p>
+                </div>
+                <div class="message">
+                    <p class="sent">Hi! How can I help you?</p>
+                </div>
+                <div class="message">
+                    <p class=" sent">Hi! How can I help you?</p>
+                </div>
+                <div class="message">
+                    <p class="received">Hello there!</p>
+                </div>
+                <div class="message">
+                    <p class="sent">Hi! How can I help you?</p>
+                </div>
+                <div class="message">
+                    <p class="received">Hello there!</p>
+                </div>
+                <div class="message">
+                    <p class="sent">Hi! How can I help you?</p>
+                </div>
+                <div class="message">
+                    <p class="sent">Hi! How can I help you?</p>
+                </div>
             </div>
-            <div class="message">
-                <p class="sent">Hi! How can I help you?</p>
+            <div class="write-message">
+                <textarea name="" id=""></textarea>
+                <button>
+                    <span>send</span>
+                    <i class="ri-send-plane-line"></i>
+                </button>
             </div>
-            <div class="message">
-                <p class=" sent">Hi! How can I help you?</p>
-            </div>
-            <div class="message">
-                <p class="received">Hello there!</p>
-            </div>
-            <div class="message">
-                <p class="sent">Hi! How can I help you?</p>
-            </div>
-            <div class="message">
-                <p class="received">Hello there!</p>
-            </div>
-            <div class="message">
-                <p class="sent">Hi! How can I help you?</p>
-            </div>
-            <div class="message">
-                <p class="sent">Hi! How can I help you?</p>
-            </div>
-        </div>
-        <div class="write-message">
-            <textarea name="" id=""></textarea>
-            <button>
-                <span>send</span>
-                <i class="ri-send-plane-line"></i>
-            </button>
         </div>
     </div>
 </template>
@@ -127,11 +125,13 @@ button {
     background: var(--color-primary);
     height: 50%;
 }
+
 span {
     font-size: 1.3rem;
     font-weight: 600;
     color: #fff;
 }
+
 i {
     font-size: 1.5rem;
     color: #fff;

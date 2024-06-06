@@ -1,8 +1,9 @@
 <script>
+import chartVue from './looks/charts.vue';
 import profilVue from './looks/info-profil.vue';
 import recetteJourVue from './looks/recette-jour.vue';
 export default {
-    components: { profilVue, recetteJourVue }
+    components: { profilVue, recetteJourVue, chartVue }
 }
 </script>
 
@@ -13,6 +14,7 @@ export default {
             <profil-vue />
             <recette-jour-vue />
         </div>
+        <chart-vue/>
     </div>
 </template>
 
@@ -25,5 +27,6 @@ h1 {
     display: grid;
     gap: 3rem;
     grid-template-columns: auto 35rem;
+    margin-bottom: 3rem;
 }
 </style>

@@ -52,7 +52,7 @@ export default {
 
 <template>
     <div class="notifications">
-        <h2>Story</h2>
+        <h2>Notifications</h2>
         <div class="lists">
             <ul>
                 <li v-if="notifications.length > 0" v-for="notification in notifications" :key="notification.id">

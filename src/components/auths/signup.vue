@@ -12,7 +12,7 @@ export default {
             nationality: '',
             socket: null
         }
-    },
+    }, 
     created() {
         this.socket = io('http://localhost:8081');
         this.socket.on('connect_error', error => {

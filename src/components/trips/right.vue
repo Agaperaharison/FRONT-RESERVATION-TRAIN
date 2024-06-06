@@ -82,23 +82,6 @@ export default {
                         </p>
                     </div>
                 </div>
-                <!-- <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">Gare de FIANARANTSOA</h4>
-                        <h4 class="card-title">301</h4>
-                    </div>
-                    <div class="card-body">
-                        <h4>Localisation</h4>
-                        <p>
-                            <span>Latitude :</span>
-                            <span>545545.6656</span>
-                        </p>
-                        <p>
-                            <span>Longitude :</span>
-                            <span>545545.6656</span>
-                        </p>
-                    </div>
-                </div> -->
             </div>
             <div id="lists" :class="{ show: itemNavActive == 'train' }">
                 <div class="card" v-for="train in train_lists" :key="train.id">
@@ -205,8 +188,11 @@ h3 span {
     gap: 1rem;
     display: none;
     max-height: 78vh;
-    overflow-y: auto;
+    overflow-y: hidden;
     padding-right: 1rem;
+}
+#lists:hover {
+    overflow-y: overlay;
 }
 
 #lists.show {

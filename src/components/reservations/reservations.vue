@@ -1,6 +1,6 @@
 <script>
 import jsPDF from 'jspdf';
-import io from 'socket.io-client'; 
+import io from 'socket.io-client';
 export default {
     data() {
         return {
@@ -11,7 +11,25 @@ export default {
             date_value: '',
             searchValue: '',
             openModal: false,
+            openModal2: false,
+            openModal3: false,
             moreInfo: [],
+
+            trips: [],
+            trip_id: '',
+            cin: '',
+            first_name: '',
+            last_name: '',
+            phone_number: '',
+            address: '',
+            contry: '',
+            postal_code: '',
+            seat: 1,
+            paid: '',
+
+            id_res: '',
+            unpaid: 0,
+            paid_update: 0,
         }
     },
     created() {
@@ -22,12 +40,13 @@ export default {
         this.socket.on('haveNotif', players => {
             //this.fireToast(players[0].notification_info.title ,players[0].notification_info.description, 'success', 'ok')
         });
-    }, 
+    },
     beforeDestroy() {
         this.socket.close();
     },
     mounted() {
         this.getReservations();
+        this.allTrips();
     },
     methods: {
         fireToast(title, message, icon, btn) {
@@ -46,6 +65,53 @@ export default {
                 this.reservations = response.data.data
             } catch (err) {
                 console.log(err.messange)
+            }
+        },
+        formaterNumero(numero) {
+            numero = numero.replace(/\D/g, '');
+            if (numero.startsWith('0')) {
+                numero = numero.slice(1);
+                numero = '+261' + numero;
+            } else if (!numero.startsWith('+261')) {
+                numero = '+261' + numero;
+            }
+            numero = numero.replace(/(\+\d{3})(\d{2})(\d{2})(\d{3})(\d{2})/, '$1 $2 $3 $4 $5');
+            return numero;
+        },
+        async addReservation() {
+            try {
+                const response = await axios.post('/reservations/add-reservation', {
+                    trip_id: this.trip_id,
+                    cin: this.cin, first_name: this.first_name, last_name: this.last_name,
+                    phone_number: this.formaterNumero(this.phone_number), address: this.address, contry: this.contry,
+                    postal_code: this.postal_code, seat: this.seat, paid: this.paid
+                });
+                console.log(response.data.data);
+                if (response.data.status) {
+                    this.getReservations();
+                    this.fireToast('Success!', response.data.data.message, 'success', 'ok');
+                    this.cin = '';
+                    this.first_name = '';
+                    this.last_name = '';
+                    this.phone_number = '';
+                    this.address = '';
+                    this.contry = '';
+                    this.postal_code = '';
+                    this.seat = 1;
+                    this.paid = '';
+                } else {
+                    this.fireToast('ERROR!', response.data.data.message, 'error', 'ok');
+                }
+            } catch (err) {
+                console.log(err.message);
+            }
+        },
+        async allTrips() {
+            try {
+                const response = await axios.get('/trips/get-all-trips', { withCredentials: true, });
+                this.trips = response.data.data;
+            } catch (err) {
+                console.log(err.message)
             }
         },
         formattedDate(date) {
@@ -152,6 +218,41 @@ export default {
             } catch (err) {
                 console.log(err);
             }
+        },
+        toogleModal2() {
+            this.openModal2 = !this.openModal2
+        },
+        toogleModal3() {
+            this.openModal3 = !this.openModal3
+        },
+        openModalUpdate(id, unpaid) {
+            this.toogleModal3();
+            this.id_res = id;
+            this.unpaid = unpaid;
+        },
+        async updateSales() {
+            try {
+                if (this.paid_update > this.unpaid || this.paid_update < 0) {
+                    this.fireToast('WARNING!', 'Veuillez verifier la valeur entrer!', 'warning', 'ok');
+                } else {
+                    const response = await axios.post('/reservations/update-sale', {
+                        paid_update: this.paid_update,
+                        unpaid: this.unpaid,
+                        id_res: this.id_res
+                    });
+                    if (response.data.status) {
+                        this.getReservations();
+                        this.fireToast('Success!', response.data.data.message, 'success', 'ok');
+                        this.paid_update = '';
+                        this.unpaid = '';
+                        this.id_res = '';
+                    } else {
+                        this.fireToast('ERROR!', response.data.data.message, 'error', 'ok');
+                    }
+                }
+            } catch (err) {
+                console.log(err.message)
+            }
         }
     }
 }
@@ -211,7 +312,8 @@ export default {
                                 'unpaid' : 'paid' }}</span></td>
                             <td class="action">
                                 <i class="ri-eye-line" @click="filterMoreInfo(reservation.id)"></i>
-                                <i class="ri-edit-circle-line"></i>
+                                <i class="ri-edit-circle-line"
+                                    @click="openModalUpdate(reservation.id, reservation.unpaid)"></i>
                                 <i class="ri-download-2-line" @click="generatePDF(reservation.id)"></i>
                             </td>
                         </tr>
@@ -254,22 +356,26 @@ export default {
                                 <span>phone numbre : </span>
                                 <small>{{ moreInfo.length > 0 ? moreInfo[0].client[0].phone_number : null }}</small>
                             </h3>
-                            <h3>
+                            <!-- <h3>
                                 <span>Nationality : </span>
                                 <small>{{ moreInfo.length > 0 ? moreInfo[0].client[0].nationality : null }}</small>
                             </h3>
                             <h3>
                                 <span>Sexe : </span>
                                 <small>{{ moreInfo.length > 0 ? moreInfo[0].client[0].sexe : null }}</small>
-                            </h3>
+                            </h3> -->
                         </div>
                         <div class="verify" v-if="moreInfo.length > 0">
-                            <h3
+                            <h3 class="success">
+                                <i class="ri-check-double-line"></i>
+                                <small>validated</small>
+                            </h3>
+                            <!-- <h3
                                 :class="{ 'invalide': moreInfo[0].client[0].is_validate === 0, 'validate': moreInfo[0].client[0].is_validate === 1 }">
                                 <i
                                     :class="{ 'ri-alert-line': moreInfo[0].client[0].is_validate === 0, 'ri-check-fill': moreInfo[0].client[0].is_validate === 1 }"></i>
                                 <small>{{ moreInfo[0].client[0].is_validate === 0 ? 'unvalidate' : 'validate' }}</small>
-                            </h3>
+                            </h3> -->
                         </div>
                     </div>
                     <div class="activity">
@@ -347,11 +453,185 @@ export default {
                     </div>
                 </div>
             </div>
+            <div id="modal" :class="{ open: openModal2 }" @click="toogleModal2">
+                <div class="modal-wrapper1 witdh" @click="toogleModal2">
+                    <i class="ri-close-fill" @click="toogleModal2"></i>
+                    <h2>New reservation</h2>
+                    <form action="#">
+                        <div class="form-group">
+                            <select v-model="trip_id" id="trip_id">
+                                <option value="">Select a trip</option>
+                                <option v-if="trips.length > 0" v-for="trip in trips" :key="trip.id" :value="trip.id">{{
+                                    trip.from[0].localisation_city }} to {{ trip.to[0].localisation_city }}</option>
+                                <option v-else>emplty</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="cin">CIN</label>
+                            <input type="number" v-model="cin" id="cin" placeholder="cin number">
+                        </div>
+                        <div class="form-group">
+                            <label for="first_name">First name</label>
+                            <input type="text" v-model="first_name" id="first_name" placeholder="first name">
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name">Last name</label>
+                            <input type="text" v-model="last_name" id="last_name" placeholder="last name">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone_number">Phone number</label>
+                            <input type="text" v-model="phone_number" id="phone_number" placeholder="phone number">
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Address domicile</label>
+                            <input type="text" v-model="address" id="address" placeholder="Domicile address">
+                        </div>
+                        <div class="form-groupG">
+                            <div class="left">
+                                <label for="contry">Contry</label>
+                                <input type="text" v-model="contry" id="contry" placeholder="contry">
+                            </div>
+                            <div class="right">
+                                <label for="code">Postal code</label>
+                                <input type="number" v-model="postal_code" id="code" placeholder="postale code">
+                            </div>
+                        </div>
+                        <div class="form-groupG">
+                            <div class="left">
+                                <label for="seat">Seat</label>
+                                <input type="number" v-model="seat" id="seat" placeholder="nomber of seat">
+                            </div>
+                            <div class="right">
+                                <label for="paid">Total paid</label>
+                                <input type="number" v-model="paid" id="paid" placeholder="total paid">
+                            </div>
+                        </div>
+                        <div class="form-group" id="foot">
+                            <button @click.prevent="addReservation">save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div id="modal" :class="{ open: openModal3 }" @click="toogleModal3">
+                <div class="modal-wrapper1 witdh" @click="toogleModal3">
+                    <i class="ri-close-fill" @click="toogleModal3"></i>
+                    <h2>New reservation</h2>
+                    <h3 class="warning" style="text-align:center; font-size:1.3rem;">debs: {{ (unpaid -
+                        paid_update).toLocaleString('fr-FR') }} AR</h3>
+                    <form action="#">
+                        <div class="form-group">
+                            <label for="paid_update">Total paid</label>
+                            <input type="number" v-model="paid_update" id="paid_update" placeholder="total paid">
+                        </div>
+                        <div class="form-group" id="foot">
+                            <button @click.prevent="updateSales">update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
+        <button class="add" @click="toogleModal2"><i class="ri-add-fill"></i></button>
     </div>
 </template>
 
 <style scoped>
+#foot {
+    margin-bottom: 2rem;
+}
+
+.form-group button {
+    position: absolute;
+    right: 0;
+    padding: .6rem 1rem;
+    border-radius: 7px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    background: var(--color-info-light);
+    color: var(--color-dark);
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+.dark-theme-variables .form-group button {
+    color: black;
+}
+
+.form-group button:hover {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.form-groupG div,
+.form-group {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.form-groupG {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.form-groupG label,
+.form-group label {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--color-dark);
+}
+
+.form-group select,
+.form-groupG input,
+.form-group input {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-dark);
+    background: var(--color-white);
+    border: 2px solid var(--color-info-light);
+    padding: 10px 1rem;
+    border-radius: 8px;
+    transition: all .3s ease;
+}
+
+#seat,
+#code {
+    width: 90px;
+}
+
+#seat {}
+
+.form-groupG input:focus,
+.form-group input:focus {
+    border: 2px solid var(--color-primary);
+}
+
+.witdh {
+    max-width: 400px;
+}
+
+.add {
+    position: absolute;
+    bottom: 3rem;
+    right: 3rem;
+    width: 50px;
+    height: 50px;
+    font-size: 2rem;
+    font-weight: 500;
+    border-radius: 50%;
+    cursor: pointer;
+    background: var(--color-info-dark);
+    color: var(--color-white);
+    transition: all .3s ease;
+}
+
+.add:hover {
+    background: var(--color-primary);
+    color: #fff;
+}
+
 .info-trip table {
     width: 100%;
     border-collapse: collapse;

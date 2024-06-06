@@ -11,3 +11,10 @@ export default {
         <router-view></router-view>
     </section>
 </template>
+
+<style scoped>
+section {
+    padding: 20px 10% 0;
+    height: 100vh;
+}
+</style>
